@@ -7,6 +7,7 @@ with Ada.Text_IO;
 package Hilbert.Pool is
 
    use all type Hilbert.Item.Object;
+   use all type Ada.Containers.Count_Type;
 
    package Item_Vector_Type is new
      Ada.Containers.Vectors
@@ -18,6 +19,12 @@ package Hilbert.Pool is
    with Put_Image => Put_Image_Pool;
 
    procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type);
+
+   procedure Make_Exams
+     (Self           : Object;
+      Num_Exams      : Positive;
+      Items_Per_Exam : Positive;
+      Output_File    : Ada.Text_IO.File_Type);
 
    procedure Put_Image_Pool
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;

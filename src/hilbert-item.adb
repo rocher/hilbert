@@ -5,6 +5,10 @@ use Ada.Strings.UTF_Encoding.Wide_Wide_Strings;
 
 package body Hilbert.Item is
 
+   ----------
+   -- Read --
+   ----------
+
    procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type) is
    begin
       Self :=
@@ -71,6 +75,39 @@ package body Hilbert.Item is
          File.Skip_Line;
       end if;
    end Read;
+
+   ---------------------
+   -- Shuffle_Options --
+   ---------------------
+
+   procedure Shuffle_Options (Self : in out Object) is
+
+      procedure Swap (A, B : in out Option_Type) is
+         Temp : Option_Type := A;
+      begin
+         A := B;
+         B := Temp;
+      end Swap;
+
+      function Random_Index (Low, High : Positive) return Positive is
+      begin
+         return Low + Positive (Integer'Random (Integer (High - Low + 1)));
+      end Random_Index;
+      Num_Swaps : constant Positive := Self.Number_Options * 10;
+   begin
+      for I in 1 .. Num_Swaps loop
+         declare
+            Index1 : constant Positive := Random_Index (1, Self.Number_Options);
+            Index2 : constant Positive := Random_Index (1, Self.Number_Options);
+         begin
+            Swap (Self.Options (Index1), Self.Options (Index2));
+         end;
+      end loop;
+   end Shuffle_Options;
+
+   --------------------
+   -- Put_Image_Item --
+   --------------------
 
    procedure Put_Image_Item
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;

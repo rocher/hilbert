@@ -1,3 +1,4 @@
+with Ada.Containers;
 with Hilbert.Strings; use Hilbert.Strings;
 
 with Ada.Strings.Text_Buffers;
@@ -36,6 +37,8 @@ package Hilbert.Item is
        and then Left.Options = Right.Options);
 
    procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type);
+
+   procedure Shuffle_Options (Self : in out Object);
 
    procedure Put_Image_Item
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
