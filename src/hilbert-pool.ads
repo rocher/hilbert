@@ -12,8 +12,8 @@ package Hilbert.Pool is
    package Item_Vector_Type is new
      Ada.Containers.Vectors
        (Index_Type   => Positive,
-        Element_Type => Item.Object,
-        "="          => Item."=");
+        Element_Type => Hilbert.Item.Object,
+        "="          => Hilbert.Item."=");
 
    type Object is new Item_Vector_Type.Vector with null record
    with Put_Image => Put_Image_Pool;
@@ -21,10 +21,10 @@ package Hilbert.Pool is
    procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type);
 
    procedure Make_Exams
-     (Self           : Object;
-      Num_Exams      : Positive;
-      Items_Per_Exam : Positive;
-      Output_File    : Ada.Text_IO.File_Type);
+     (Self      : Object;
+      Num_Exams : Positive;
+      Num_Items : Positive;
+      Out_File  : Ada.Text_IO.File_Type);
 
    procedure Put_Image_Pool
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;

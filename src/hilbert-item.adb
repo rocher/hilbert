@@ -1,3 +1,5 @@
+with Hilbert.Random; use Hilbert.Random;
+
 with Ada.Strings.UTF_Encoding; use Ada.Strings.UTF_Encoding;
 
 with Ada.Strings.UTF_Encoding.Wide_Wide_Strings;
@@ -13,10 +15,10 @@ package body Hilbert.Item is
    begin
       Self :=
         (Difficulty     => Easy,
-         Question       => Null_UString,
-         Number_Options => 1,
+         Question       => Null_UWWString,
+         Num_Options => 1,
          Options        =>
-           [others => (Text => Null_UString, Is_Correct => False)]);
+           [others => (Text => Null_UWWString, Is_Correct => False)]);
 
       declare
          --  Read Difficulty + Question
@@ -48,11 +50,11 @@ package body Hilbert.Item is
          if Num_Options_Int < 1 or else Num_Options_Int > Max_Options then
             raise Constraint_Error with "Number of options out of range";
          end if;
-         Self.Number_Options := Number_Options_Type (Num_Options_Int);
+         Self.Num_Options := Num_Options_Type (Num_Options_Int);
       end;
 
       --  Read Options
-      for I in 1 .. Self.Number_Options loop
+      for I in 1 .. Self.Num_Options loop
          --  Read Option Text prefixed by 0 or 1 (indicating correctness)
          declare
             Line_UTF8 : constant UTF_8_String := Ada.Text_IO.Get_Line (File);
@@ -89,16 +91,13 @@ package body Hilbert.Item is
          B := Temp;
       end Swap;
 
-      function Random_Index (Low, High : Positive) return Positive is
-      begin
-         return Low + Positive (Integer'Random (Integer (High - Low + 1)));
-      end Random_Index;
-      Num_Swaps : constant Positive := Self.Number_Options * 10;
+      Num_Swaps : constant Positive := Self.Num_Options * 10;
+
    begin
       for I in 1 .. Num_Swaps loop
          declare
-            Index1 : constant Positive := Random_Index (1, Self.Number_Options);
-            Index2 : constant Positive := Random_Index (1, Self.Number_Options);
+            Index1 : constant Positive := Random_Index (Self.Num_Options);
+            Index2 : constant Positive := Random_Index (Self.Num_Options);
          begin
             Swap (Self.Options (Index1), Self.Options (Index2));
          end;
@@ -124,13 +123,13 @@ package body Hilbert.Item is
       Output.Wide_Wide_Put (To_WWString (Self.Question));
       Output.New_Line;
       Output.Put
-        (Self.Number_Options'Image (2 .. Self.Number_Options'Image'Length));
+        (Self.Num_Options'Image (2 .. Self.Num_Options'Image'Length));
       Output.New_Line;
 
-      for I in 1 .. Self.Number_Options loop
+      for I in 1 .. Self.Num_Options loop
          Output.Put ((if Self.Options (I).Is_Correct then '1' else '0') & " ");
          Output.Wide_Wide_Put (To_WWString (Self.Options (I).Text));
-         if I < Self.Number_Options then
+         if I < Self.Num_Options then
             Output.New_Line;
          end if;
       end loop;
