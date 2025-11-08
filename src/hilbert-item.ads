@@ -1,11 +1,10 @@
 with Hilbert.Strings; use Hilbert.Strings;
 
 with Ada.Strings.Text_Buffers;
-with Ada.Text_IO;
 
 package Hilbert.Item is
 
-   use all type UWWString;
+   use all type UString;
 
    Max_Options : constant Positive := 16;
 
@@ -15,14 +14,15 @@ package Hilbert.Item is
 
    type Option_Type is record
       Is_Correct : Boolean;
-      Text       : UWWString;
+      Text       : UString;
    end record;
 
    type Options_Type is array (Num_Options_Type) of Option_Type;
 
    type Object is record
+      Number      : Natural := 0;
       Difficulty  : Difficulty_Type;
-      Question    : UWWString;
+      Question    : UString;
       Num_Options : Num_Options_Type;
       Options     : Options_Type;
    end record
@@ -35,14 +35,8 @@ package Hilbert.Item is
        and then Left.Num_Options = Right.Num_Options
        and then Left.Options = Right.Options);
 
-   --  package Container is new Ada.Containers.Vectors
-   --    (Index_Type   => Positive,
-   --     Element_Type => Object,
-   --     "="          => Object."=");
-
-   --  type Vector is new Container.Vector with null record;
-
-   procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type);
+   procedure Read (Self : out Object; In_File : in out WIO.File_Type);
+   procedure Write (Self : Object; Out_File : in out WIO.File_Type);
 
    procedure Shuffle_Options (Self : in out Object);
 

@@ -56,25 +56,26 @@ package body Hilbert.Exam is
    is
       use all type Hilbert.Item.Difficulty_Type;
 
+      Origin   : Hilbert.Pool.Object := Pool;
+      New_Exam : Object;
+
+      Item_Number  : Natural := 1;
       Σ_Difficulty : Float := 0.0;
-      Origin       : Hilbert.Pool.Object := Pool;
-      New_Exam     : Object;
    begin
       if Num_Items > Positive (Pool.Length) then
          raise Constraint_Error with "Not enough items in pool";
       end if;
 
-      for I in 1 .. Num_Items - 1 loop
+      for I in 1 .. Num_Items loop
          declare
-            Index    : Positive;
-            New_Item : Hilbert.Item.Object;
+            Index    : constant Positive :=
+              Random_Index (Positive (Origin.Length));
+            New_Item : Hilbert.Item.Object := Origin.Element (Index);
          begin
-            Index := Random_Index (Positive (Origin.Length));
-            New_Item := Origin.Element (Index);
-            Origin.Delete (Index);
-
             New_Item.Shuffle_Options;
-            New_Exam.Pool.Append (New_Item, 1);
+            New_Item.Number := Item_Number;
+
+            Item_Number := @ + 1;
             Σ_Difficulty :=
               @
               + (if New_Item.Difficulty = Easy
@@ -82,15 +83,49 @@ package body Hilbert.Exam is
                  elsif New_Item.Difficulty = Medium
                  then 2.0
                  else 3.0);
+
+            New_Exam.Pool.Append (New_Item, 1);
+            Origin.Delete (Index);
          end;
       end loop;
-      New_Exam.Pool.Append (Origin.Element (1));
 
       New_Exam.Difficulty := Σ_Difficulty / Float (Num_Items);
       Compute_Signature (New_Exam);
 
       return New_Exam;
    end Create_Exam;
+
+   ----------------
+   -- Set_Number --
+   ----------------
+
+   procedure Set_Number (Self : in out Object; New_Number : Natural) is
+   begin
+      Self.Number := New_Number;
+   end Set_Number;
+
+   -----------
+   -- Write --
+   -----------
+
+   procedure Write (Self : Object; Out_File : in out WIO.File_Type) is
+      Title_Line : constant BString :=
+        "EXAM"
+        & Integer'Wide_Image (Integer (Self.Number))
+        & Integer'Wide_Image (Integer (Self.Pool.Length))
+        & Integer'Wide_Image (Integer (Self.Difficulty * 100.0))
+        & " "
+        & To_BString (Self.Signature);
+   begin
+      Out_File.Put_Line (Title_Line);
+      for I in 1 .. Positive (Self.Pool.Length) loop
+         declare
+            Item : constant Hilbert.Item.Object := Self.Pool.Element (I);
+         begin
+            Item.Write (Out_File);
+         end;
+      end loop;
+   end Write;
 
    --------------------
    -- Put_Image_Exam --
@@ -100,12 +135,12 @@ package body Hilbert.Exam is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       Self   : Object) is
    begin
-      Output.Put
-        ("EXAM"
-         & Self.Pool.Length'Image
-         & " "
-         & To_String (Self.Signature)
-         & Integer'Image (Integer (Self.Difficulty * 100.0)));
+      Output.Put ("EXAM");
+      Output.Put (Self.Number'Image);
+      Output.Put (Self.Pool.Length'Image);
+      Output.Wide_Put (Integer'Wide_Image (Integer (Self.Difficulty * 100.0)));
+      Output.Put (" ");
+      Output.Wide_Put (To_BString (Self.Signature));
    end Put_Image_Exam;
 
 end Hilbert.Exam;

@@ -1,29 +1,23 @@
 with Hilbert.Random; use Hilbert.Random;
 
-with Ada.Strings.UTF_Encoding; use Ada.Strings.UTF_Encoding;
-
-with Ada.Strings.UTF_Encoding.Wide_Wide_Strings;
-use Ada.Strings.UTF_Encoding.Wide_Wide_Strings;
-
 package body Hilbert.Item is
 
    ----------
    -- Read --
    ----------
 
-   procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type) is
+   procedure Read (Self : out Object; In_File : in out WIO.File_Type) is
    begin
       Self :=
-        (Difficulty     => Easy,
-         Question       => Null_UWWString,
+        (Number      => 0,
+         Difficulty  => Easy,
+         Question    => Null_UString,
          Num_Options => 1,
-         Options        =>
-           [others => (Text => Null_UWWString, Is_Correct => False)]);
+         Options     =>
+           [others => (Text => Null_UString, Is_Correct => False)]);
 
       declare
-         --  Read Difficulty + Question
-         Line_UTF8 : constant UTF_8_String := Ada.Text_IO.Get_Line (File);
-         Line      : constant WWString := Decode (Line_UTF8);
+         Line : constant BString := In_File.Get_Line;
       begin
          if Line (1) = '1' then
             Self.Difficulty := Easy;
@@ -36,13 +30,12 @@ package body Hilbert.Item is
          end if;
 
          --  Discard difficulty prefix
-         Self.Question := To_UWWString (Line (3 .. Line'Length));
+         Self.Question := To_UString (Line (3 .. Line'Length));
       end;
 
       --  Read Number of Options
       declare
-         Line_UTF8 : constant UTF_8_String := Ada.Text_IO.Get_Line (File);
-         Line      : constant WWString := Decode (Line_UTF8);
+         Line : constant BString := WIO.Get_Line (In_File);
 
          Num_Options_Int : constant Integer :=
            Integer'Value (Line'Image (2 .. 2));
@@ -57,10 +50,9 @@ package body Hilbert.Item is
       for I in 1 .. Self.Num_Options loop
          --  Read Option Text prefixed by 0 or 1 (indicating correctness)
          declare
-            Line_UTF8 : constant UTF_8_String := Ada.Text_IO.Get_Line (File);
-            Line      : constant WWString := Decode (Line_UTF8);
+            Line : constant BString := WIO.Get_Line (In_File);
          begin
-            Self.Options (I).Text := To_UWWString (Line (3 .. Line'Length));
+            Self.Options (I).Text := To_UString (Line (3 .. Line'Length));
 
             if Line (1) = '0' then
                Self.Options (I).Is_Correct := False;
@@ -73,10 +65,24 @@ package body Hilbert.Item is
       end loop;
 
       --  Skip blank line between items
-      if not Ada.Text_IO.End_Of_File (File) then
-         File.Skip_Line;
+      if not WIO.End_Of_File (In_File) then
+         In_File.Skip_Line;
       end if;
    end Read;
+
+   -----------
+   -- Write --
+   -----------
+
+   procedure Write (Self : Object; Out_File : in out WIO.File_Type) is
+   begin
+      Out_File.Put (Self.Number'Wide_Image & " ");
+      Out_File.Put_Line (To_BString (Self.Question));
+      for I in 1 .. Self.Num_Options loop
+         Out_File.Put ("    " & To_BString (Self.Options (I).Text));
+         Out_File.New_Line;
+      end loop;
+   end Write;
 
    ---------------------
    -- Shuffle_Options --
@@ -120,15 +126,14 @@ package body Hilbert.Item is
          else '3');
    begin
       Output.Put (Difficulty_Char & " ");
-      Output.Wide_Wide_Put (To_WWString (Self.Question));
+      Output.Wide_Put (To_BString (Self.Question));
       Output.New_Line;
-      Output.Put
-        (Self.Num_Options'Image (2 .. Self.Num_Options'Image'Length));
+      Output.Put (Self.Num_Options'Image (2 .. Self.Num_Options'Image'Length));
       Output.New_Line;
 
       for I in 1 .. Self.Num_Options loop
          Output.Put ((if Self.Options (I).Is_Correct then '1' else '0') & " ");
-         Output.Wide_Wide_Put (To_WWString (Self.Options (I).Text));
+         Output.Wide_Put (To_BString (Self.Options (I).Text));
          if I < Self.Num_Options then
             Output.New_Line;
          end if;

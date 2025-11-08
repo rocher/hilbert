@@ -1,21 +1,26 @@
-with Hilbert.Exam; use Hilbert.Exam;
+with Hilbert.Exam;    use Hilbert.Exam;
+with Hilbert.Strings; use Hilbert.Strings;
 
 package body Hilbert.Pool is
 
-   ----------
-   -- Read --
-   ----------
+   --------------------
+   -- Read_From_File --
+   --------------------
 
-   procedure Read (Self : out Object; File : in out Ada.Text_IO.File_Type) is
+   procedure Read_From_File (Self : out Object; Filename : String) is
+      In_File  : WIO.File_Type;
       New_Item : Item.Object;
    begin
       Self.Clear;
+
+      In_File.Open (Name => Filename, Mode => WIO.In_File);
       loop
-         exit when Ada.Text_IO.End_Of_File (File);
-         New_Item.Read (File);
+         exit when In_File.End_Of_File;
+         New_Item.Read (In_File);
          Self.Append (New_Item);
       end loop;
-   end Read;
+      In_File.Close;
+   end Read_From_File;
 
    ----------------
    -- Make_Exams --
@@ -23,22 +28,33 @@ package body Hilbert.Pool is
 
    procedure Make_Exams
      (Self      : Pool.Object;
+      Name      : String;
       Num_Exams : Positive;
-      Num_Items : Positive;
-      Out_File  : Ada.Text_IO.File_Type) is
+      Num_Items : Positive)
+   is
+      Exams_File : WIO.File_Type;
+      Batch_File : WIO.File_Type;
    begin
       if Num_Items > Positive (Self.Length) then
          raise Constraint_Error with "Not enough items in pool";
       end if;
 
-      for Exam in 1 .. Num_Exams loop
+      Exams_File.Create (Name => Name & "_exams.txt", Mode => WIO.Out_File);
+      Batch_File.Create (Name => Name & "_batch.txt", Mode => WIO.Out_File);
+
+      for I in 1 .. Num_Exams loop
          declare
-            New_Exam : constant Hilbert.Exam.Object :=
+            New_Exam : Hilbert.Exam.Object :=
               Create_Exam (Pool => Self, Num_Items => Num_Items);
          begin
-            Out_File.Put_Line (New_Exam'Image);
+            New_Exam.Set_Number (I);
+            New_Exam.Write (Exams_File);
+            Batch_File.Put_Line (New_Exam'Wide_Image);
          end;
       end loop;
+
+      Exams_File.Close;
+      Batch_File.Close;
    end Make_Exams;
 
    --------------------

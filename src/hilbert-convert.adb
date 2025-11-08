@@ -1,8 +1,10 @@
-with Ada.Integer_Text_IO;
+--  with Ada.Integer_Text_IO;
+with Ada.Integer_Wide_Text_IO;
 
 package body Hilbert.Convert is
 
-   package IntIO renames Ada.Integer_Text_IO;
+   --  package IntIO renames Ada.Integer_Text_IO;
+   package IntIO renames Ada.Integer_Wide_Text_IO;
 
    ---------------------
    -- Byte_To_Integer --
@@ -11,7 +13,7 @@ package body Hilbert.Convert is
    function Byte_To_Integer (Byte : UString) return Integer is
       Int    : Integer;
       Pos    : Positive;
-      In_Str : constant String (1 .. 11) := "2#" & To_String (Byte) & "#";
+      In_Str : constant BString (1 .. 11) := "2#" & To_BString (Byte) & "#";
    begin
       IntIO.Get (In_Str, Int, Pos);
       return Int;
@@ -24,8 +26,8 @@ package body Hilbert.Convert is
    function Byte_To_Hexadecimal (Byte : UString) return UString is
       Int     : Integer;
       Pos     : Positive;
-      In_Str  : constant String (1 .. 11) := "2#" & To_String (Byte) & "#";
-      Out_Str : String (1 .. 6);
+      In_Str  : constant BString (1 .. 11) := "2#" & To_BString (Byte) & "#";
+      Out_Str : BString (1 .. 6);
       Hex     : UString;
    begin
       IntIO.Get (In_Str, Int, Pos);
@@ -43,7 +45,7 @@ package body Hilbert.Convert is
    ---------------------
 
    function Integer_To_Byte (Int : Integer) return UString is
-      Str  : String (1 .. 11);
+      Str  : BString (1 .. 11);
       UStr : UString;
    begin
       IntIO.Put (Str, Int, 2);
@@ -61,7 +63,7 @@ package body Hilbert.Convert is
    -----------------------
 
    function Integer_To_Nibble (Int : Integer) return UString is
-      Str  : String (1 .. 7);
+      Str  : BString (1 .. 7);
       UStr : UString;
    begin
       IntIO.Put (Str, Int, 2);
@@ -81,7 +83,7 @@ package body Hilbert.Convert is
    function Nibble_To_Integer (Nibble : UString) return Integer is
       Int    : Integer;
       Pos    : Positive;
-      In_Str : constant String (1 .. 7) := "2#" & To_String (Nibble) & "#";
+      In_Str : constant BString (1 .. 7) := "2#" & To_BString (Nibble) & "#";
    begin
       IntIO.Get (In_Str, Int, Pos);
       return Int;
