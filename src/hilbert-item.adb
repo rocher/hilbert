@@ -1,3 +1,4 @@
+with Hilbert.Convert; use Hilbert.Convert;
 with Hilbert.Random; use Hilbert.Random;
 
 package body Hilbert.Item is
@@ -76,7 +77,7 @@ package body Hilbert.Item is
 
    procedure Write (Self : Object; Out_File : in out WIO.File_Type) is
    begin
-      Out_File.Put (Self.Number'Wide_Image & " ");
+      Out_File.Put (Trim (Self.Number) & " ");
       Out_File.Put_Line (To_BString (Self.Question));
       for I in 1 .. Self.Num_Options loop
          Out_File.Put ("    " & To_BString (Self.Options (I).Text));

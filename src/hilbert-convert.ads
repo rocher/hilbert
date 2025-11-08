@@ -17,4 +17,10 @@ package Hilbert.Convert is
    function Nibble_To_Integer (Nibble : UString) return Integer
    with Pre => Nibble.Length = 4, Post => Nibble_To_Integer'Result in 0 .. 15;
 
+   function Format
+     (Int : Integer; Width : Positive; Padding : Wide_Character := ' ')
+      return BString;
+
+   function Trim (Int : Integer) return BString;
+
 end Hilbert.Convert;

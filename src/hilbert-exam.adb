@@ -110,8 +110,9 @@ package body Hilbert.Exam is
 
    procedure Write (Self : Object; Out_File : in out WIO.File_Type) is
       Title_Line : constant BString :=
-        "EXAM"
-        & Integer'Wide_Image (Integer (Self.Number))
+        "EXAM "
+        --    & Integer'Wide_Image (Integer (Self.Number))
+        & Format (Self.Number, 3, '0')
         & Integer'Wide_Image (Integer (Self.Pool.Length))
         & Integer'Wide_Image (Integer (Self.Difficulty * 100.0))
         & " "
@@ -135,8 +136,8 @@ package body Hilbert.Exam is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       Self   : Object) is
    begin
-      Output.Put ("EXAM");
-      Output.Put (Self.Number'Image);
+      Output.Put ("EXAM ");
+      Output.Wide_Put (Format (Self.Number, 3, '0'));
       Output.Put (Self.Pool.Length'Image);
       Output.Wide_Put (Integer'Wide_Image (Integer (Self.Difficulty * 100.0)));
       Output.Put (" ");

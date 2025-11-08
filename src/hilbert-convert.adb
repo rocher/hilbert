@@ -1,5 +1,10 @@
---  with Ada.Integer_Text_IO;
 with Ada.Integer_Wide_Text_IO;
+with Ada.Strings;
+with Ada.Strings.Wide_Unbounded;
+
+---------------------
+-- Hilbert.Convert --
+---------------------
 
 package body Hilbert.Convert is
 
@@ -88,5 +93,41 @@ package body Hilbert.Convert is
       IntIO.Get (In_Str, Int, Pos);
       return Int;
    end Nibble_To_Integer;
+
+   ------------
+   -- Format --
+   ------------
+
+   function Format
+     (Int : Integer; Width : Positive; Padding : Wide_Character := ' ')
+      return BString
+   is
+      Str    : BString (1 .. Width);
+   begin
+      IntIO.Put (Str, Int);
+
+      if Padding /= ' ' then
+         for I in 1 .. Width loop
+            if Str (I) = ' ' then
+               Str (I) := Padding;
+            end if;
+         end loop;
+      end if;
+      return Str;
+   end Format;
+
+   ----------
+   -- Trim --
+   ----------
+
+   function Trim (Int : Integer) return BString is
+      Str  : BString (1 .. 20);
+      UStr : UString;
+   begin
+      IntIO.Put (Str, Int);
+      UStr :=
+        Ada.Strings.Wide_Unbounded.Trim (To_UString (Str), Ada.Strings.Left);
+      return To_BString (UStr);
+   end Trim;
 
 end Hilbert.Convert;
