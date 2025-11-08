@@ -7,7 +7,7 @@ package body Hilbert.Item is
    -- Read --
    ----------
 
-   procedure Read (Self : out Object; In_File : in out WIO.File_Type) is
+   procedure Read_From (Self : out Object; In_File : in out WIO.File_Type) is
    begin
       Self :=
         (Number      => 0,
@@ -69,13 +69,13 @@ package body Hilbert.Item is
       if not WIO.End_Of_File (In_File) then
          In_File.Skip_Line;
       end if;
-   end Read;
+   end Read_From;
 
    -----------
    -- Write --
    -----------
 
-   procedure Write (Self : Object; Out_File : in out WIO.File_Type) is
+   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put (Trim (Self.Number) & " ");
       Out_File.Put_Line (To_BString (Self.Question));
@@ -83,7 +83,7 @@ package body Hilbert.Item is
          Out_File.Put ("    " & To_BString (Self.Options (I).Text));
          Out_File.New_Line;
       end loop;
-   end Write;
+   end Write_To;
 
    ---------------------
    -- Shuffle_Options --

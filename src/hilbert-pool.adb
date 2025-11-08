@@ -19,7 +19,7 @@ package body Hilbert.Pool is
       In_File.Open (Name => Filename, Mode => WIO.In_File);
       loop
          exit when In_File.End_Of_File;
-         New_Item.Read (In_File);
+         New_Item.Read_From (In_File);
          Self.Append (New_Item);
       end loop;
       In_File.Close;
@@ -51,7 +51,7 @@ package body Hilbert.Pool is
               Create_Exam (Pool => Self, Num_Items => Num_Items);
          begin
             New_Exam.Set_Id (To_UString (Name) & "/" & Format (I, 3, '0'));
-            New_Exam.Write (Exams_File);
+            New_Exam.Write_To (Exams_File);
             Batch_File.Put_Line (New_Exam'Wide_Image);
          end;
       end loop;

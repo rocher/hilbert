@@ -35,8 +35,8 @@ package Hilbert.Item is
        and then Left.Num_Options = Right.Num_Options
        and then Left.Options = Right.Options);
 
-   procedure Read (Self : out Object; In_File : in out WIO.File_Type);
-   procedure Write (Self : Object; Out_File : in out WIO.File_Type);
+   procedure Read_From (Self : out Object; In_File : in out WIO.File_Type);
+   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type);
 
    procedure Shuffle_Options (Self : in out Object);
 

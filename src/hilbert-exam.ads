@@ -23,7 +23,7 @@ package Hilbert.Exam is
 
    procedure Set_Id (Self : in out Object; Id : UString);
 
-   procedure Write (Self : Object; Out_File : in out WIO.File_Type);
+   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type);
 
    procedure Put_Image_Exam
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;

@@ -10,6 +10,15 @@ package body Hilbert.Exam is
    -- Compute_Signature --
    -----------------------
 
+   --  Signature format:
+   --  - 5 bits: Sentinel '1' + version '0000'
+   --  - 8 bits: Number of items in exam
+   --  - For each item:
+   --    - 4 bits: Number of options
+   --    - N bits: Correctness bit for each option (1 = correct, 0 = incorrect)
+   --  - Padding bits (0) to align to byte boundary
+   --  - Hexadecimal representation of the binary string
+
    procedure Compute_Signature (Exam : in out Hilbert.Exam.Object) is
       Binary : UString := Signature_Sentinel;
    begin
@@ -135,17 +144,17 @@ package body Hilbert.Exam is
    -- Write --
    -----------
 
-   procedure Write (Self : Object; Out_File : in out WIO.File_Type) is
+   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put_Line (Self.Title_Line);
       for I in 1 .. Positive (Self.Pool.Length) loop
          declare
             Item : constant Hilbert.Item.Object := Self.Pool.Element (I);
          begin
-            Item.Write (Out_File);
+            Item.Write_To (Out_File);
          end;
       end loop;
-   end Write;
+   end Write_To;
 
    --------------------
    -- Put_Image_Exam --
