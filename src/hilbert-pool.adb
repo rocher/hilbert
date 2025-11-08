@@ -1,7 +1,10 @@
+with Hilbert.Convert; use Hilbert.Convert;
 with Hilbert.Exam;    use Hilbert.Exam;
 with Hilbert.Strings; use Hilbert.Strings;
 
 package body Hilbert.Pool is
+
+   use all type UString;
 
    --------------------
    -- Read_From_File --
@@ -39,15 +42,15 @@ package body Hilbert.Pool is
          raise Constraint_Error with "Not enough items in pool";
       end if;
 
-      Exams_File.Create (Name => Name & "_exams.txt", Mode => WIO.Out_File);
-      Batch_File.Create (Name => Name & "_batch.txt", Mode => WIO.Out_File);
+      Exams_File.Create (Name => Name & "_Exams.txt", Mode => WIO.Out_File);
+      Batch_File.Create (Name => Name & "_Batch.txt", Mode => WIO.Out_File);
 
       for I in 1 .. Num_Exams loop
          declare
             New_Exam : Hilbert.Exam.Object :=
               Create_Exam (Pool => Self, Num_Items => Num_Items);
          begin
-            New_Exam.Set_Number (I);
+            New_Exam.Set_Id (To_UString (Name) & "/" & Format (I, 3, '0'));
             New_Exam.Write (Exams_File);
             Batch_File.Put_Line (New_Exam'Wide_Image);
          end;

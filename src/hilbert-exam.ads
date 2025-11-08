@@ -7,10 +7,12 @@ with Ada.Strings.Text_Buffers;
 package Hilbert.Exam is
 
    type Object is record
-      Pool       : Hilbert.Pool.Object;
-      Number     : Natural := 0;
-      Difficulty : Float := 0.0;
-      Signature  : UString := Null_UString;
+      Pool        : Hilbert.Pool.Object;
+      Id          : UString := Null_UString;
+      Signature   : UString := Null_UString;
+      Num_Options : Natural := 0;
+      Num_Trues   : Natural := 0;
+      Difficulty  : Float := 0.0;
    end record
    with Put_Image => Put_Image_Exam;
 
@@ -19,7 +21,7 @@ package Hilbert.Exam is
    with
      Pre => Num_Items <= Positive (Pool.Length) and then Num_Items in 1 .. 255;
 
-   procedure Set_Number (Self : in out Object; New_Number : Natural);
+   procedure Set_Id (Self : in out Object; Id : UString);
 
    procedure Write (Self : Object; Out_File : in out WIO.File_Type);
 

@@ -7,9 +7,14 @@ package Hilbert.Constants is
    Max_Options_Per_Item : constant Positive := 16;
    Max_Items_Per_Exam   : constant Positive := 256;
 
-   Signature_Version     : constant UString := To_UString ("0000");
+   Signature_Version_Str : constant String := "0000";
+
+   Signature_Version     : constant UString :=
+     To_UString (Signature_Version_Str);
    Signature_Sentinel    : constant UString := "1" & Signature_Version;
    Signature_Mod_Length  : constant Positive := 8;
    Signature_Padding_Bit : constant Wide_Character := '0';
+
+private
 
 end Hilbert.Constants;
