@@ -8,6 +8,9 @@ package Hilbert.Convert is
    function Byte_To_Hexadecimal (Byte : UString) return UString
    with Pre => Byte.Length = 8, Post => Byte_To_Hexadecimal'Result.Length = 2;
 
+   function Hexadecimal_To_Byte (Hex : UString) return UString
+   with Pre => Hex.Length = 2, Post => Hexadecimal_To_Byte'Result.Length = 8;
+
    function Integer_To_Byte (Int : Integer) return UString
    with Pre => Int in 0 .. 255, Post => Integer_To_Byte'Result.Length = 8;
 

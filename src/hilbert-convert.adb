@@ -45,6 +45,28 @@ package body Hilbert.Convert is
       return Hex;
    end Byte_To_Hexadecimal;
 
+   -------------------------
+   -- Hexadecimal_To_Byte --
+   -------------------------
+
+   function Hexadecimal_To_Byte (Hex : UString) return UString is
+      Int     : Integer;
+      Pos     : Positive;
+      In_Str  : constant BString (1 .. 6) := "16#" & To_BString (Hex) & "#";
+      Out_Str : BString (1 .. 11);
+      Byte    : UString;
+   begin
+      IntIO.Get (In_Str, Int, Pos);
+      IntIO.Put (Out_Str, Int, 2);
+      Byte := To_UString (Out_Str (3 .. 10));  --  Skip "2#" and last "#"
+      for I in 1 .. Byte.Length loop
+         if Byte.Element (I) /= '0' and then Byte.Element (I) /= '1' then
+            Byte.Replace_Element (I, '0');
+         end if;
+      end loop;
+      return Byte;
+   end Hexadecimal_To_Byte;
+
    ---------------------
    -- Integer_To_Byte --
    ---------------------
