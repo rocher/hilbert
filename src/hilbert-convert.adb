@@ -72,17 +72,17 @@ package body Hilbert.Convert is
    ---------------------
 
    function Integer_To_Byte (Int : Integer) return UString is
-      Str  : BString (1 .. 11);
-      UStr : UString;
+      Byte    : UString;
+      Out_Str : BString (1 .. 11);
    begin
-      IntIO.Put (Str, Int, 2);
-      UStr := To_UString (Str (3 .. 10));  --  Skip "2#" and last "#"
-      for I in 1 .. UStr.Length loop
-         if UStr.Element (I) /= '0' and then UStr.Element (I) /= '1' then
-            UStr.Replace_Element (I, '0');
+      IntIO.Put (Out_Str, Int, 2);
+      Byte := To_UString (Out_Str (3 .. 10));  --  Skip "2#" and last "#"
+      for I in 1 .. Byte.Length loop
+         if Byte.Element (I) /= '0' and then Byte.Element (I) /= '1' then
+            Byte.Replace_Element (I, '0');
          end if;
       end loop;
-      return UStr;
+      return Byte;
    end Integer_To_Byte;
 
    -----------------------
@@ -90,17 +90,17 @@ package body Hilbert.Convert is
    -----------------------
 
    function Integer_To_Nibble (Int : Integer) return UString is
-      Str  : BString (1 .. 7);
-      UStr : UString;
+      Nibble  : UString;
+      Out_Str : BString (1 .. 7);
    begin
-      IntIO.Put (Str, Int, 2);
-      UStr := To_UString (Str (3 .. 6));  --  Skip "2#" and last "#"
-      for I in 1 .. UStr.Length loop
-         if UStr.Element (I) /= '0' and then UStr.Element (I) /= '1' then
-            UStr.Replace_Element (I, '0');
+      IntIO.Put (Out_Str, Int, 2);
+      Nibble := To_UString (Out_Str (3 .. 6));  --  Skip "2#" and last "#"
+      for I in 1 .. Nibble.Length loop
+         if Nibble.Element (I) /= '0' and then Nibble.Element (I) /= '1' then
+            Nibble.Replace_Element (I, '0');
          end if;
       end loop;
-      return UStr;
+      return Nibble;
    end Integer_To_Nibble;
 
    -----------------------
@@ -124,7 +124,7 @@ package body Hilbert.Convert is
      (Int : Integer; Width : Positive; Padding : Wide_Character := ' ')
       return BString
    is
-      Str    : BString (1 .. Width);
+      Str : BString (1 .. Width);
    begin
       IntIO.Put (Str, Int);
 

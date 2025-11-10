@@ -15,10 +15,10 @@ package body Hilbert.Signature is
       Signature : UString := Null_UString;
       Binary    : UString := Signature_Sentinel;
    begin
-      Binary.Append (Integer_To_Byte (Integer (Exam.Pool.Length)));
-      for I in 1 .. Integer (Exam.Pool.Length) loop
+      Binary.Append (Integer_To_Byte (Integer (Exam.Pool.Items.Length)));
+      for I in 1 .. Integer (Exam.Pool.Items.Length) loop
          declare
-            Item : constant Hilbert.Item.Object := Exam.Pool.Element (I);
+            Item : constant Hilbert.Item.Object := Exam.Pool.Items.Element (I);
          begin
             Binary.Append (Integer_To_Nibble (Item.Num_Options));
             for J in 1 .. Item.Num_Options loop

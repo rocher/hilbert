@@ -4,6 +4,10 @@ package Hilbert.Constants is
 
    use all type UString;
 
+   Pool_Suffix        : constant String := "_Pool.txt";
+   Exams_Suffix       : constant String := "_Exams.txt";
+   Batch_Suffix       : constant String := "_Batch.txt";
+
    Max_Options_Per_Item : constant Positive := 16;
    Max_Items_Per_Exam   : constant Positive := 256;
 

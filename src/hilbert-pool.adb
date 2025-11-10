@@ -1,29 +1,32 @@
-with Hilbert.Convert; use Hilbert.Convert;
-with Hilbert.Exam;    use Hilbert.Exam;
-with Hilbert.Strings; use Hilbert.Strings;
+with Hilbert.Constants; use Hilbert.Constants;
+with Hilbert.Convert;   use Hilbert.Convert;
+with Hilbert.Exam;      use Hilbert.Exam;
+with Hilbert.Strings;   use Hilbert.Strings;
 
 package body Hilbert.Pool is
 
    use all type UString;
 
-   --------------------
-   -- Read_From_File --
-   --------------------
+   ---------------
+   -- Read_From --
+   ---------------
 
-   procedure Read_From_File (Self : out Object; Filename : String) is
+   procedure Read (Self : out Object; Pool_Name : String) is
       In_File  : WIO.File_Type;
       New_Item : Item.Object;
+      Filename : constant String := Pool_Name & Pool_Suffix;
    begin
-      Self.Clear;
+      Self.Items.Clear;
+      Self.Name := To_Unbounded_String (Pool_Name);
 
       In_File.Open (Name => Filename, Mode => WIO.In_File);
       loop
          exit when In_File.End_Of_File;
          New_Item.Read_From (In_File);
-         Self.Append (New_Item);
+         Self.Items.Append (New_Item);
       end loop;
       In_File.Close;
-   end Read_From_File;
+   end Read;
 
    ----------------
    -- Make_Exams --
@@ -38,12 +41,16 @@ package body Hilbert.Pool is
       Exams_File : WIO.File_Type;
       Batch_File : WIO.File_Type;
    begin
-      if Num_Items > Positive (Self.Length) then
+      if Num_Items > Positive (Self.Items.Length) then
          raise Constraint_Error with "Not enough items in pool";
       end if;
 
-      Exams_File.Create (Name => Name & "_Exams.txt", Mode => WIO.Out_File);
-      Batch_File.Create (Name => Name & "_Batch.txt", Mode => WIO.Out_File);
+      Exams_File.Create
+        (Name => To_String (Self.Name) & "_" & Name & "_Exams.txt",
+         Mode => WIO.Out_File);
+      Batch_File.Create
+        (Name => To_String (Self.Name) & "_" & Name & "_Batch.txt",
+         Mode => WIO.Out_File);
 
       for I in 1 .. Num_Exams loop
          declare
@@ -68,9 +75,9 @@ package body Hilbert.Pool is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       Self   : Object) is
    begin
-      for Item of Self loop
+      for Item of Self.Items loop
          Output.Put (Item'Image);
-         if Item /= Self.Last_Element then
+         if Item /= Self.Items.Last_Element then
             Output.New_Line;
             Output.New_Line;
          end if;

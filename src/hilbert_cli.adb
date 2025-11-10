@@ -9,8 +9,8 @@ begin
 
    Hilbert.Random.Initialize (3221);
 
-   Pool.Read_From_File ("pool.txt");
+   Pool.Read ("SMX1_MUN_RA8");
    Pool.Make_Exams
-     (Name => "DIG_RA2_202511", Num_Exams => 52, Num_Items => 32);
+     (Name => "202511", Num_Exams => 70, Num_Items => 40);
 
 end Hilbert_CLI;

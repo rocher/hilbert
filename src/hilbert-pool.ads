@@ -2,6 +2,7 @@ with Hilbert.Item;
 
 with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Hilbert.Pool is
 
@@ -14,10 +15,13 @@ package Hilbert.Pool is
         Element_Type => Hilbert.Item.Object,
         "="          => Hilbert.Item."=");
 
-   type Object is new Item_Vector_Type.Vector with null record
+   type Object is record
+      Items : Item_Vector_Type.Vector;
+      Name  : Unbounded_String := Null_Unbounded_String;
+   end record
    with Put_Image => Put_Image_Pool;
 
-   procedure Read_From_File (Self : out Object; Filename : String);
+   procedure Read (Self : out Object; Pool_Name : String);
 
    procedure Make_Exams
      (Self      : Object;

@@ -36,7 +36,7 @@ package body Hilbert.Item is
 
       --  Read Number of Options
       declare
-         Line : constant BString := WIO.Get_Line (In_File);
+         Line : constant BString := In_File.Get_Line;
 
          Num_Options_Int : constant Integer :=
            Integer'Value (Line'Image (2 .. 2));
@@ -51,7 +51,7 @@ package body Hilbert.Item is
       for I in 1 .. Self.Num_Options loop
          --  Read Option Text prefixed by 0 or 1 (indicating correctness)
          declare
-            Line : constant BString := WIO.Get_Line (In_File);
+            Line : constant BString := In_File.Get_Line;
          begin
             Self.Options (I).Text := To_UString (Line (3 .. Line'Length));
 
@@ -66,7 +66,7 @@ package body Hilbert.Item is
       end loop;
 
       --  Skip blank line between items
-      if not WIO.End_Of_File (In_File) then
+      if not In_File.End_Of_File then
          In_File.Skip_Line;
       end if;
    end Read_From;

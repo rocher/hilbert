@@ -21,15 +21,15 @@ package body Hilbert.Exam is
       Item_Number  : Natural := 1;
       Σ_Difficulty : Float := 0.0;
    begin
-      if Num_Items > Positive (Pool.Length) then
+      if Num_Items > Positive (Pool.Items.Length) then
          raise Constraint_Error with "Not enough items in pool";
       end if;
 
       for I in 1 .. Num_Items loop
          declare
             Index    : constant Positive :=
-              Random_Index (Positive (Origin.Length));
-            New_Item : Hilbert.Item.Object := Origin.Element (Index);
+              Random_Index (Positive (Origin.Items.Length));
+            New_Item : Hilbert.Item.Object := Origin.Items.Element (Index);
          begin
             New_Item.Shuffle_Options;
             New_Item.Number := Item_Number;
@@ -50,8 +50,8 @@ package body Hilbert.Exam is
                  then 2.0
                  else 3.0);
 
-            New_Exam.Pool.Append (New_Item, 1);
-            Origin.Delete (Index);
+            New_Exam.Pool.Items.Append (New_Item, 1);
+            Origin.Items.Delete (Index);
          end;
       end loop;
 
@@ -79,7 +79,7 @@ package body Hilbert.Exam is
       return
         "EXAM "
         & To_BString (Self.Id)
-        & Integer'Wide_Image (Integer (Self.Pool.Length))
+        & Integer'Wide_Image (Integer (Self.Pool.Items.Length))
         & " "
         & Trim (Self.Num_Options)
         & "/"
@@ -98,9 +98,9 @@ package body Hilbert.Exam is
    begin
       Out_File.Put_Line (Self.Title_Line);
       Out_File.Put_Line (To_BString (Get_Options_Stream (Self.Signature)));
-      for I in 1 .. Positive (Self.Pool.Length) loop
+      for I in 1 .. Positive (Self.Pool.Items.Length) loop
          declare
-            Item : constant Hilbert.Item.Object := Self.Pool.Element (I);
+            Item : constant Hilbert.Item.Object := Self.Pool.Items.Element (I);
          begin
             Item.Write_To (Out_File);
          end;

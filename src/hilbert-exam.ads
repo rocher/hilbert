@@ -19,7 +19,9 @@ package Hilbert.Exam is
    function Create_Exam
      (Pool : Hilbert.Pool.Object; Num_Items : Positive) return Object
    with
-     Pre => Num_Items <= Positive (Pool.Length) and then Num_Items in 1 .. 255;
+     Pre =>
+       Num_Items <= Positive (Pool.Items.Length)
+       and then Num_Items in 1 .. 255;
 
    procedure Set_Id (Self : in out Object; Id : UString);
 
