@@ -22,7 +22,7 @@ package body Hilbert.Pool is
 
       --  Read Title Line
       declare
-         Line  : constant BString := In_File.Get_Line;
+         Line : constant BString := In_File.Get_Line;
       begin
          Self.Title := To_UString (Line);
          In_File.Skip_Line; -- Skip blank line after title
@@ -56,9 +56,13 @@ package body Hilbert.Pool is
       Exams_File.Create
         (Name => To_String (Self.Name) & "_" & Name & "_Exams.txt",
          Mode => WIO.Out_File);
+
       Batch_File.Create
         (Name => To_String (Self.Name) & "_" & Name & "_Batch.txt",
          Mode => WIO.Out_File);
+
+      Exams_File.Put_Line (To_BString (Self.Title));
+      Batch_File.Put_Line (To_BString (Self.Title));
 
       for I in 1 .. Num_Exams loop
          declare
