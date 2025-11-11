@@ -1,25 +1,33 @@
 with Hilbert.Constants; use Hilbert.Constants;
 with Hilbert.Convert;   use Hilbert.Convert;
 with Hilbert.Exam;      use Hilbert.Exam;
-with Hilbert.Strings;   use Hilbert.Strings;
 
 package body Hilbert.Pool is
 
    use all type UString;
 
-   ---------------
-   -- Read_From --
-   ---------------
+   ----------
+   -- Read --
+   ----------
 
    procedure Read (Self : out Object; Pool_Name : String) is
       In_File  : WIO.File_Type;
       New_Item : Item.Object;
       Filename : constant String := Pool_Name & Pool_Suffix;
    begin
-      Self.Items.Clear;
       Self.Name := To_Unbounded_String (Pool_Name);
+      Self.Items.Clear;
 
       In_File.Open (Name => Filename, Mode => WIO.In_File);
+
+      --  Read Title Line
+      declare
+         Line  : constant BString := In_File.Get_Line;
+      begin
+         Self.Title := To_UString (Line);
+         In_File.Skip_Line; -- Skip blank line after title
+      end;
+
       loop
          exit when In_File.End_Of_File;
          New_Item.Read_From (In_File);
@@ -57,7 +65,12 @@ package body Hilbert.Pool is
             New_Exam : Hilbert.Exam.Object :=
               Create_Exam (Pool => Self, Num_Items => Num_Items);
          begin
-            New_Exam.Set_Id (To_UString (Name) & "/" & Format (I, 3, '0'));
+            New_Exam.Set_Id
+              (To_UString (To_String (Self.Name))
+               & "_"
+               & To_UString (Name)
+               & "/"
+               & Format (I, 3, '0'));
             New_Exam.Write_To (Exams_File);
             Batch_File.Put_Line (New_Exam'Wide_Image);
          end;
@@ -75,6 +88,9 @@ package body Hilbert.Pool is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       Self   : Object) is
    begin
+      Output.Wide_Put (To_BString (Self.Title));
+      Output.New_Line;
+      Output.New_Line;
       for Item of Self.Items loop
          Output.Put (Item'Image);
          if Item /= Self.Items.Last_Element then

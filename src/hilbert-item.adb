@@ -1,11 +1,11 @@
 with Hilbert.Convert; use Hilbert.Convert;
-with Hilbert.Random; use Hilbert.Random;
+with Hilbert.Random;  use Hilbert.Random;
 
 package body Hilbert.Item is
 
-   ----------
-   -- Read --
-   ----------
+   ---------------
+   -- Read_From --
+   ---------------
 
    procedure Read_From (Self : out Object; In_File : in out WIO.File_Type) is
    begin
@@ -71,16 +71,17 @@ package body Hilbert.Item is
       end if;
    end Read_From;
 
-   -----------
-   -- Write --
-   -----------
+   --------------
+   -- Write_To --
+   --------------
 
    procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put (Trim (Self.Number) & " ");
       Out_File.Put_Line (To_BString (Self.Question));
+      Out_File.Put_Line (Trim (Self.Num_Options));
       for I in 1 .. Self.Num_Options loop
-         Out_File.Put ("    " & To_BString (Self.Options (I).Text));
+         Out_File.Put (To_BString (Self.Options (I).Text));
          Out_File.New_Line;
       end loop;
    end Write_To;

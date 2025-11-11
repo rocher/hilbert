@@ -1,4 +1,5 @@
 with Hilbert.Item;
+with Hilbert.Strings; use Hilbert.Strings;
 
 with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
@@ -16,8 +17,9 @@ package Hilbert.Pool is
         "="          => Hilbert.Item."=");
 
    type Object is record
-      Items : Item_Vector_Type.Vector;
       Name  : Unbounded_String := Null_Unbounded_String;
+      Title : UString := Null_UString;
+      Items : Item_Vector_Type.Vector;
    end record
    with Put_Image => Put_Image_Pool;
 
