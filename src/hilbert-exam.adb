@@ -81,23 +81,22 @@ package body Hilbert.Exam is
         & To_BString (Self.Id)
         & Integer'Wide_Image (Integer (Self.Pool.Items.Length))
         & " "
-        & Trim (Self.Num_Options)
+        & Format (Self.Num_Options, 3, '0')
         & "/"
-        & Trim (Self.Num_Trues)
+        & Format (Self.Num_Trues, 3, '0')
         & "/"
         & Trim (Integer (Self.Difficulty * 100.0))
         & " "
-        & To_BString (Self.Signature);
+        & To_BString (Get_Options_Stream (Self.Signature));
    end Title_Line;
 
-   -----------
-   -- Write --
-   -----------
+   --------------
+   -- Write_To --
+   --------------
 
    procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put_Line (Self.Title_Line);
-      Out_File.Put_Line (To_BString (Get_Options_Stream (Self.Signature)));
       for I in 1 .. Positive (Self.Pool.Items.Length) loop
          declare
             Item : constant Hilbert.Item.Object := Self.Pool.Items.Element (I);
