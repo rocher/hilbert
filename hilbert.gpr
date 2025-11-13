@@ -5,7 +5,7 @@ project Hilbert is
    for Object_Dir use "obj/" & Hilbert_Config.Build_Profile;
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "bin";
-   for Main use ("hilbert_cli.adb");
+   for Main use ("hilbert_cmd.adb");
 
    package Compiler is
       for Default_Switches ("Ada") use Hilbert_Config.Ada_Compiler_Switches;
@@ -16,7 +16,7 @@ project Hilbert is
    end Binder;
 
    package Builder is
-      for Executable ("hilbert_cli") use "hilbert";
+      for Executable ("hilbert_cmd") use "hilbert";
    end Builder;
 
    package Install is

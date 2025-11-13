@@ -1,7 +1,11 @@
 with Hilbert.Pool;
 with Hilbert.Random;
 
-procedure Hilbert_CLI is
+-----------------
+-- Hilbert_CMD --
+-----------------
+
+procedure Hilbert_CMD is
 
    Pool : Hilbert.Pool.Object;
 
@@ -12,4 +16,4 @@ begin
    Pool.Read ("SMX1_MUN_RA8");
    Pool.Make_Exams (Name => "202511", Num_Exams => 67, Num_Items => 34);
 
-end Hilbert_CLI;
+end Hilbert_CMD;

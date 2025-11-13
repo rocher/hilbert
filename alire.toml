@@ -16,3 +16,7 @@ executables = ["hilbert"]
 "*".Contracts = "Yes"
 "*".Source_Encoding = "utf_8"
 "*".Style_Checks = "Yes"
+
+[[depends-on]]
+clic = "~0.3.0"
+simple_logging = "^1.2.0"
