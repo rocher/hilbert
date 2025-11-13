@@ -7,6 +7,7 @@ with CLIC.TTY;
 with Simple_Logging;
 
 with Hilbert_Config;
+with Hilbert.CLI.Generate; use Hilbert.CLI.Generate;
 
 package body Hilbert.CLI is
 
@@ -59,49 +60,55 @@ package body Hilbert.CLI is
    -------------------------
 
    procedure Set_Global_Switches
-     (Config : in out CLIC.Subcommand.Switches_Configuration) is
+     (Config : in out CLIC.Subcommand.Switches_Configuration)
+   is
+      use CLIC.Subcommand;
    begin
       --!pp off
-      CLIC.Subcommand.Define_Switch (
+      Define_Switch (
          Config,
          Global_Switch.Help'Access,
          "-h", "--help",
          "Display command help");
 
-      CLIC.Subcommand.Define_Switch (
+      Define_Switch (
          Config,
          Global_Switch.No_Color'Access,
          Long_Switch => "--no-color",
-         Help        => "Disable color");
+         Help        => "Disable color",
+         Value       => False);
 
-      CLIC.Subcommand.Define_Switch (
+      Define_Switch (
          Config,
          Global_Switch.No_TTY'Access,
          Long_Switch => "--no-tty",
-         Help        => "Disable control characters");
+         Help        => "Disable control characters",
+         Value       => False);
 
-      CLIC.Subcommand.Define_Switch (
+      Define_Switch (
          Config,
          Global_Switch.Verbose'Access,
          Switch      => "-v",
          Long_Switch => "--verbose",
-         Help        => "Show command activity");
+         Help        => "Show command activity",
+         Value       => True);
 
-      CLIC.Subcommand.Define_Switch (
+      Define_Switch (
          Config,
          Global_Switch.Version'Access,
-         Switch      => "-V",
          Long_Switch => "--version",
-         Help        => "Display version information");
+         Help        => "Display version information",
+         Value       => True);
 
       pragma Warnings (Off);
       if Conf.Build_Profile = Conf.development then
-         CLIC.Subcommand.Define_Switch (
+         Define_Switch (
             Config,
             Global_Switch.Debug'Access,
-            Switch      => "-D",
+            Switch      => "-d",
             Long_Switch => "--debug",
-            Help        => "Show debug information");
+            Help        => "Show debug information",
+            Value       => True);
       end if;
       pragma Warnings (On);
       --!pp on
@@ -113,7 +120,7 @@ package body Hilbert.CLI is
 
    procedure Initialize is
    begin
-      null;
+      CLI_Command.Register ("Generation", new Hilbert.CLI.Generate.Cmd_Type);
    end Initialize;
 
    -------------
@@ -124,13 +131,16 @@ package body Hilbert.CLI is
    begin
       CLI_Command.Parse_Global_Switches;
 
-      Log.Level := Log.Info;
+      Log.Level := Log.Warning;
+
       if Global_Switch.Verbose then
-         Log.Level := Log.Detail;
+         Log.Level := Log.Info;
       end if;
+
       if Global_Switch.Debug then
          Log.Level := Log.Debug;
       end if;
+
       Log.Debug ("Global_Switch" & Global_Switch'Image);
 
       if not Global_Switch.No_TTY then
@@ -139,7 +149,7 @@ package body Hilbert.CLI is
       end if;
 
       if Global_Switch.No_Color and then Global_Switch.No_TTY then
-         CLIC.TTY.Enable_Color (Force => True);
+         CLIC.TTY.Enable_Color (Force => False);
          Log.Debug ("disable Color");
       end if;
 
