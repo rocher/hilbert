@@ -27,7 +27,7 @@ package Hilbert.Pool is
 
    procedure Make_Exams
      (Self      : Object;
-      Name      : String;
+      Date      : String;
       Num_Exams : Positive;
       Num_Items : Positive);
 

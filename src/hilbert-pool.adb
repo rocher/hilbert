@@ -42,7 +42,7 @@ package body Hilbert.Pool is
 
    procedure Make_Exams
      (Self      : Pool.Object;
-      Name      : String;
+      Date      : String;
       Num_Exams : Positive;
       Num_Items : Positive)
    is
@@ -54,11 +54,11 @@ package body Hilbert.Pool is
       end if;
 
       Exams_File.Create
-        (Name => To_String (Self.Name) & "_" & Name & "_Exams.txt",
+        (Name => To_String (Self.Name) & "_" & Date & "_Exams.txt",
          Mode => WIO.Out_File);
 
       Batch_File.Create
-        (Name => To_String (Self.Name) & "_" & Name & "_Batch.txt",
+        (Name => To_String (Self.Name) & "_" & Date & "_Batch.txt",
          Mode => WIO.Out_File);
 
       Exams_File.Put_Line (To_BWString (Self.Title));
@@ -72,7 +72,7 @@ package body Hilbert.Pool is
             New_Exam.Set_Id
               (To_UWString (To_String (Self.Name))
                & "_"
-               & To_UWString (Name)
+               & To_UWString (Date)
                & "/"
                & Format (I, 3, '0'));
             New_Exam.Write_To (Exams_File);
