@@ -19,6 +19,9 @@ package Hilbert.Strings is
    Null_WUString : constant UWString :=
      Ada.Strings.Wide_Unbounded.Null_Unbounded_Wide_String;
 
+   function To_UString (Item : String) return UString
+   renames Ada.Strings.Unbounded.To_Unbounded_String;
+
    function To_BWString (Item : String) return BWString
    renames Ada.Characters.Conversions.To_Wide_String;
 
