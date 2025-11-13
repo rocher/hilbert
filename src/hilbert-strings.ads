@@ -1,4 +1,5 @@
 with Ada.Characters.Conversions;
+with Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
@@ -6,23 +7,28 @@ package Hilbert.Strings is
 
    package WIO renames Ada.Wide_Text_IO;
 
-   subtype BString is Wide_String;
-   subtype UString is Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+   subtype UString is Ada.Strings.Unbounded.Unbounded_String;
 
-   Null_BString : constant BString := "";
    Null_UString : constant UString :=
+     Ada.Strings.Unbounded.Null_Unbounded_String;
+
+   subtype BWString is Wide_String;
+   subtype UWString is Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+
+   Null_WBString : constant BWString := "";
+   Null_WUString : constant UWString :=
      Ada.Strings.Wide_Unbounded.Null_Unbounded_Wide_String;
 
-   function To_BString (Item : String) return BString
+   function To_BWString (Item : String) return BWString
    renames Ada.Characters.Conversions.To_Wide_String;
 
-   function To_BString (Source : UString) return BString
+   function To_BWString (Source : UWString) return BWString
    renames Ada.Strings.Wide_Unbounded.To_Wide_String;
 
-   function To_UString (Source : BString) return UString
+   function To_UWString (Source : BWString) return UWString
    renames Ada.Strings.Wide_Unbounded.To_Unbounded_Wide_String;
 
-   function To_UString (Source : String) return UString
-   is (To_UString (To_BString (Source)));
+   function To_UWString (Source : String) return UWString
+   is (To_UWString (To_BWString (Source)));
 
 end Hilbert.Strings;

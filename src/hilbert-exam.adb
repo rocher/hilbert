@@ -65,7 +65,7 @@ package body Hilbert.Exam is
    -- Set_Number --
    ----------------
 
-   procedure Set_Id (Self : in out Object; Id : UString) is
+   procedure Set_Id (Self : in out Object; Id : UWString) is
    begin
       Self.Id := Id;
    end Set_Id;
@@ -74,11 +74,11 @@ package body Hilbert.Exam is
    -- Title_Line --
    ----------------
 
-   function Title_Line (Self : Object) return BString is
+   function Title_Line (Self : Object) return BWString is
    begin
       return
         "EXAM "
-        & To_BString (Self.Id)
+        & To_BWString (Self.Id)
         & Integer'Wide_Image (Integer (Self.Pool.Items.Length))
         & " "
         & Format (Self.Num_Options, 3, '0')
@@ -87,7 +87,7 @@ package body Hilbert.Exam is
         & "/"
         & Trim (Integer (Self.Difficulty * 100.0))
         & " "
-        & To_BString (Get_Options_Stream (Self.Signature));
+        & To_BWString (Get_Options_Stream (Self.Signature));
    end Title_Line;
 
    --------------

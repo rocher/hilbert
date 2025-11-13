@@ -5,15 +5,15 @@ with Hilbert.Convert;   use Hilbert.Convert;
 
 package body Hilbert.Signature is
 
-   use all type UString;
+   use all type UWString;
 
    -----------------------
    -- Compute_Signature --
    -----------------------
 
-   function Compute_Signature (Exam : Hilbert.Exam.Object) return UString is
-      Signature : UString := Null_UString;
-      Binary    : UString := Signature_Sentinel;
+   function Compute_Signature (Exam : Hilbert.Exam.Object) return UWString is
+      Signature : UWString := Null_WUString;
+      Binary    : UWString := Signature_Sentinel;
    begin
       Binary.Append (Integer_To_Byte (Integer (Exam.Pool.Items.Length)));
       for I in 1 .. Integer (Exam.Pool.Items.Length) loop
@@ -54,17 +54,17 @@ package body Hilbert.Signature is
    -- Get_Option_Stream --
    -----------------------
 
-   function Get_Options_Stream (Signature : UString) return UString is
+   function Get_Options_Stream (Signature : UWString) return UWString is
       --  10000111100001111...
       --       |      |
       --    Low'6 High'13
       Low  : Positive := 6;  --  skip sentinel + version
       High : Positive := Low + 7;  --  next byte for number of items
 
-      Bit_Stream : UString := Null_UString;
+      Bit_Stream : UWString := Null_WUString;
       Num_Bytes  : constant Positive := Signature.Length / 2;
 
-      Option_Stream : UString := Null_UString;
+      Option_Stream : UWString := Null_WUString;
       Num_Items     : Positive;
    begin
       for I in 1 .. Num_Bytes loop

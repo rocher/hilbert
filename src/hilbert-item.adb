@@ -12,13 +12,13 @@ package body Hilbert.Item is
       Self :=
         (Number      => 0,
          Difficulty  => Easy,
-         Question    => Null_UString,
+         Question    => Null_WUString,
          Num_Options => 1,
          Options     =>
-           [others => (Text => Null_UString, Is_Correct => False)]);
+           [others => (Text => Null_WUString, Is_Correct => False)]);
 
       declare
-         Line : constant BString := In_File.Get_Line;
+         Line : constant BWString := In_File.Get_Line;
       begin
          if Line (1) = '1' then
             Self.Difficulty := Easy;
@@ -31,12 +31,12 @@ package body Hilbert.Item is
          end if;
 
          --  Discard difficulty prefix
-         Self.Question := To_UString (Line (3 .. Line'Length));
+         Self.Question := To_UWString (Line (3 .. Line'Length));
       end;
 
       --  Read Number of Options
       declare
-         Line : constant BString := In_File.Get_Line;
+         Line : constant BWString := In_File.Get_Line;
 
          Num_Options_Int : constant Integer :=
            Integer'Value (Line'Image (2 .. 2));
@@ -51,9 +51,9 @@ package body Hilbert.Item is
       for I in 1 .. Self.Num_Options loop
          --  Read Option Text prefixed by 0 or 1 (indicating correctness)
          declare
-            Line : constant BString := In_File.Get_Line;
+            Line : constant BWString := In_File.Get_Line;
          begin
-            Self.Options (I).Text := To_UString (Line (3 .. Line'Length));
+            Self.Options (I).Text := To_UWString (Line (3 .. Line'Length));
 
             if Line (1) = '0' then
                Self.Options (I).Is_Correct := False;
@@ -78,10 +78,10 @@ package body Hilbert.Item is
    procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put (Trim (Self.Number) & " ");
-      Out_File.Put_Line (To_BString (Self.Question));
+      Out_File.Put_Line (To_BWString (Self.Question));
       Out_File.Put_Line (Trim (Self.Num_Options));
       for I in 1 .. Self.Num_Options loop
-         Out_File.Put (To_BString (Self.Options (I).Text));
+         Out_File.Put (To_BWString (Self.Options (I).Text));
          Out_File.New_Line;
       end loop;
    end Write_To;
@@ -128,14 +128,14 @@ package body Hilbert.Item is
          else '3');
    begin
       Output.Put (Difficulty_Char & " ");
-      Output.Wide_Put (To_BString (Self.Question));
+      Output.Wide_Put (To_BWString (Self.Question));
       Output.New_Line;
       Output.Put (Self.Num_Options'Image (2 .. Self.Num_Options'Image'Length));
       Output.New_Line;
 
       for I in 1 .. Self.Num_Options loop
          Output.Put ((if Self.Options (I).Is_Correct then '1' else '0') & " ");
-         Output.Wide_Put (To_BString (Self.Options (I).Text));
+         Output.Wide_Put (To_BWString (Self.Options (I).Text));
          if I < Self.Num_Options then
             Output.New_Line;
          end if;

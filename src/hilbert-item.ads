@@ -4,7 +4,7 @@ with Ada.Strings.Text_Buffers;
 
 package Hilbert.Item is
 
-   use all type UString;
+   use all type UWString;
 
    Max_Options : constant Positive := 16;
 
@@ -14,7 +14,7 @@ package Hilbert.Item is
 
    type Option_Type is record
       Is_Correct : Boolean;
-      Text       : UString;
+      Text       : UWString;
    end record;
 
    type Options_Type is array (Num_Options_Type) of Option_Type;
@@ -22,7 +22,7 @@ package Hilbert.Item is
    type Object is record
       Number      : Natural := 0;
       Difficulty  : Difficulty_Type;
-      Question    : UString;
+      Question    : UWString;
       Num_Options : Num_Options_Type;
       Options     : Options_Type;
    end record

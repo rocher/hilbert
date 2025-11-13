@@ -18,7 +18,7 @@ package Hilbert.Pool is
 
    type Object is record
       Name  : Unbounded_String := Null_Unbounded_String;
-      Title : UString := Null_UString;
+      Title : UWString := Null_WUString;
       Items : Item_Vector_Type.Vector;
    end record
    with Put_Image => Put_Image_Pool;

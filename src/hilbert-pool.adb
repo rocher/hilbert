@@ -4,7 +4,7 @@ with Hilbert.Exam;      use Hilbert.Exam;
 
 package body Hilbert.Pool is
 
-   use all type UString;
+   use all type UWString;
 
    ----------
    -- Read --
@@ -22,9 +22,9 @@ package body Hilbert.Pool is
 
       --  Read Title Line
       declare
-         Line : constant BString := In_File.Get_Line;
+         Line : constant BWString := In_File.Get_Line;
       begin
-         Self.Title := To_UString (Line);
+         Self.Title := To_UWString (Line);
          In_File.Skip_Line; -- Skip blank line after title
       end;
 
@@ -61,8 +61,8 @@ package body Hilbert.Pool is
         (Name => To_String (Self.Name) & "_" & Name & "_Batch.txt",
          Mode => WIO.Out_File);
 
-      Exams_File.Put_Line (To_BString (Self.Title));
-      Batch_File.Put_Line (To_BString (Self.Title));
+      Exams_File.Put_Line (To_BWString (Self.Title));
+      Batch_File.Put_Line (To_BWString (Self.Title));
 
       for I in 1 .. Num_Exams loop
          declare
@@ -70,9 +70,9 @@ package body Hilbert.Pool is
               Create_Exam (Pool => Self, Num_Items => Num_Items);
          begin
             New_Exam.Set_Id
-              (To_UString (To_String (Self.Name))
+              (To_UWString (To_String (Self.Name))
                & "_"
-               & To_UString (Name)
+               & To_UWString (Name)
                & "/"
                & Format (I, 3, '0'));
             New_Exam.Write_To (Exams_File);
@@ -92,7 +92,7 @@ package body Hilbert.Pool is
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       Self   : Object) is
    begin
-      Output.Wide_Put (To_BString (Self.Title));
+      Output.Wide_Put (To_BWString (Self.Title));
       Output.New_Line;
       Output.New_Line;
       for Item of Self.Items loop

@@ -8,8 +8,8 @@ package Hilbert.Exam is
 
    type Object is record
       Pool        : Hilbert.Pool.Object;
-      Id          : UString := Null_UString;
-      Signature   : UString := Null_UString;
+      Id          : UWString := Null_WUString;
+      Signature   : UWString := Null_WUString;
       Num_Options : Natural := 0;
       Num_Trues   : Natural := 0;
       Difficulty  : Float := 0.0;
@@ -23,7 +23,7 @@ package Hilbert.Exam is
        Num_Items <= Positive (Pool.Items.Length)
        and then Num_Items in 1 .. 255;
 
-   procedure Set_Id (Self : in out Object; Id : UString);
+   procedure Set_Id (Self : in out Object; Id : UWString);
 
    procedure Write_To (Self : Object; Out_File : in out WIO.File_Type);
 

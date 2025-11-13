@@ -15,10 +15,10 @@ package body Hilbert.Convert is
    -- Byte_To_Integer --
    ---------------------
 
-   function Byte_To_Integer (Byte : UString) return Integer is
+   function Byte_To_Integer (Byte : UWString) return Integer is
       Int    : Integer;
       Pos    : Positive;
-      In_Str : constant BString (1 .. 11) := "2#" & To_BString (Byte) & "#";
+      In_Str : constant BWString (1 .. 11) := "2#" & To_BWString (Byte) & "#";
    begin
       IntIO.Get (In_Str, Int, Pos);
       return Int;
@@ -28,19 +28,19 @@ package body Hilbert.Convert is
    -- Byte_To_Hexadecimal --
    -------------------------
 
-   function Byte_To_Hexadecimal (Byte : UString) return UString is
+   function Byte_To_Hexadecimal (Byte : UWString) return UWString is
       Int     : Integer;
       Pos     : Positive;
-      In_Str  : constant BString (1 .. 11) := "2#" & To_BString (Byte) & "#";
-      Out_Str : BString (1 .. 6);
-      Hex     : UString;
+      In_Str  : constant BWString (1 .. 11) := "2#" & To_BWString (Byte) & "#";
+      Out_Str : BWString (1 .. 6);
+      Hex     : UWString;
    begin
       IntIO.Get (In_Str, Int, Pos);
       IntIO.Put (Out_Str, Int, 16);
       if Out_Str (1) = ' ' then
-         Hex := To_UString ("0" & Out_Str (5));
+         Hex := To_UWString ("0" & Out_Str (5));
       else
-         Hex := To_UString (Out_Str (4 .. 5));
+         Hex := To_UWString (Out_Str (4 .. 5));
       end if;
       return Hex;
    end Byte_To_Hexadecimal;
@@ -49,16 +49,16 @@ package body Hilbert.Convert is
    -- Hexadecimal_To_Byte --
    -------------------------
 
-   function Hexadecimal_To_Byte (Hex : UString) return UString is
+   function Hexadecimal_To_Byte (Hex : UWString) return UWString is
       Int     : Integer;
       Pos     : Positive;
-      In_Str  : constant BString (1 .. 6) := "16#" & To_BString (Hex) & "#";
-      Out_Str : BString (1 .. 11);
-      Byte    : UString;
+      In_Str  : constant BWString (1 .. 6) := "16#" & To_BWString (Hex) & "#";
+      Out_Str : BWString (1 .. 11);
+      Byte    : UWString;
    begin
       IntIO.Get (In_Str, Int, Pos);
       IntIO.Put (Out_Str, Int, 2);
-      Byte := To_UString (Out_Str (3 .. 10));  --  Skip "2#" and last "#"
+      Byte := To_UWString (Out_Str (3 .. 10));  --  Skip "2#" and last "#"
       for I in 1 .. Byte.Length loop
          if Byte.Element (I) /= '0' and then Byte.Element (I) /= '1' then
             Byte.Replace_Element (I, '0');
@@ -71,12 +71,12 @@ package body Hilbert.Convert is
    -- Integer_To_Byte --
    ---------------------
 
-   function Integer_To_Byte (Int : Integer) return UString is
-      Byte    : UString;
-      Out_Str : BString (1 .. 11);
+   function Integer_To_Byte (Int : Integer) return UWString is
+      Byte    : UWString;
+      Out_Str : BWString (1 .. 11);
    begin
       IntIO.Put (Out_Str, Int, 2);
-      Byte := To_UString (Out_Str (3 .. 10));  --  Skip "2#" and last "#"
+      Byte := To_UWString (Out_Str (3 .. 10));  --  Skip "2#" and last "#"
       for I in 1 .. Byte.Length loop
          if Byte.Element (I) /= '0' and then Byte.Element (I) /= '1' then
             Byte.Replace_Element (I, '0');
@@ -89,12 +89,12 @@ package body Hilbert.Convert is
    -- Integer_To_Nibble --
    -----------------------
 
-   function Integer_To_Nibble (Int : Integer) return UString is
-      Nibble  : UString;
-      Out_Str : BString (1 .. 7);
+   function Integer_To_Nibble (Int : Integer) return UWString is
+      Nibble  : UWString;
+      Out_Str : BWString (1 .. 7);
    begin
       IntIO.Put (Out_Str, Int, 2);
-      Nibble := To_UString (Out_Str (3 .. 6));  --  Skip "2#" and last "#"
+      Nibble := To_UWString (Out_Str (3 .. 6));  --  Skip "2#" and last "#"
       for I in 1 .. Nibble.Length loop
          if Nibble.Element (I) /= '0' and then Nibble.Element (I) /= '1' then
             Nibble.Replace_Element (I, '0');
@@ -107,10 +107,10 @@ package body Hilbert.Convert is
    -- Nibble_To_Integer --
    -----------------------
 
-   function Nibble_To_Integer (Nibble : UString) return Integer is
+   function Nibble_To_Integer (Nibble : UWString) return Integer is
       Int    : Integer;
       Pos    : Positive;
-      In_Str : constant BString (1 .. 7) := "2#" & To_BString (Nibble) & "#";
+      In_Str : constant BWString (1 .. 7) := "2#" & To_BWString (Nibble) & "#";
    begin
       IntIO.Get (In_Str, Int, Pos);
       return Int;
@@ -122,9 +122,9 @@ package body Hilbert.Convert is
 
    function Format
      (Int : Integer; Width : Positive; Padding : Wide_Character := ' ')
-      return BString
+      return BWString
    is
-      Str : BString (1 .. Width);
+      Str : BWString (1 .. Width);
    begin
       IntIO.Put (Str, Int);
 
@@ -142,14 +142,14 @@ package body Hilbert.Convert is
    -- Trim --
    ----------
 
-   function Trim (Int : Integer) return BString is
-      Str  : BString (1 .. 20);
-      UStr : UString;
+   function Trim (Int : Integer) return BWString is
+      Str  : BWString (1 .. 20);
+      UStr : UWString;
    begin
       IntIO.Put (Str, Int);
       UStr :=
-        Ada.Strings.Wide_Unbounded.Trim (To_UString (Str), Ada.Strings.Left);
-      return To_BString (UStr);
+        Ada.Strings.Wide_Unbounded.Trim (To_UWString (Str), Ada.Strings.Left);
+      return To_BWString (UStr);
    end Trim;
 
 end Hilbert.Convert;
