@@ -3,7 +3,6 @@ with Ada.Strings.Text_Buffers;
 with Hilbert.Pool;
 with Hilbert.Strings; use Hilbert.Strings;
 
-
 package Hilbert.Exam is
 
    type Object is record
