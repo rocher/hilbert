@@ -1,9 +1,9 @@
-with Hilbert.Item;
-with Hilbert.Strings; use Hilbert.Strings;
-
 with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
+with Hilbert.Item;
+with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Pool is
 

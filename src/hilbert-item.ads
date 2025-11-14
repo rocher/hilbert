@@ -1,6 +1,6 @@
-with Hilbert.Strings; use Hilbert.Strings;
-
 with Ada.Strings.Text_Buffers;
+
+with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Item is
 

@@ -1,8 +1,8 @@
-with Hilbert.Pool;
+with Ada.Strings.Text_Buffers;
 
+with Hilbert.Pool;
 with Hilbert.Strings; use Hilbert.Strings;
 
-with Ada.Strings.Text_Buffers;
 
 package Hilbert.Exam is
 
