@@ -11,6 +11,8 @@ package Hilbert.Constants is
    Max_Options_Per_Item : constant Positive := 16;
    Max_Items_Per_Exam   : constant Positive := 256;
 
+   Random_Seed : constant Integer := 3221;
+
    Signature_Version_Str : constant String := "0000";
 
    Signature_Version     : constant UWString :=

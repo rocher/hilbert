@@ -1,9 +1,10 @@
-with Ada.Characters.Handling;
 with GNAT.OS_Lib;
 
 with CLIC.Subcommand; use CLIC.Subcommand;
 with Simple_Logging;
 
+with Hilbert.CLI.Internal; use Hilbert.CLI.Internal;
+with Hilbert.Constants; use Hilbert.Constants;
 with Hilbert.Pool;
 with Hilbert.Random;
 
@@ -52,9 +53,6 @@ package body Hilbert.CLI.Generate is
    overriding
    procedure Execute (Cmd : in out Cmd_Type; Args : AAA.Strings.Vector) is
       Arg_Num : constant Natural := Natural (Args.Length);
-
-      function Is_All_Digits (S : String) return Boolean
-      is (for all C of S => Ada.Characters.Handling.Is_Digit (C));
    begin
       Log.Debug ("Cmd.Settings = " & Cmd'Image);
       Log.Debug ("Args = " & Args'Image);
@@ -87,29 +85,7 @@ package body Hilbert.CLI.Generate is
       end if;
 
       Date_Str : constant String := Cmd.Date.all;
-      if Date_Str'Length /= 6 then
-         Log.Error
-           ("Date must be in format YYYYMM; '"
-            & Date_Str
-            & "', length"
-            & Integer'Image (Date_Str'Length)
-            & ".");
-         GNAT.OS_Lib.OS_Exit (1);
-      end if;
-      if not Is_All_Digits (Date_Str) then
-         Log.Error ("Date must be in format YYYYMM.");
-         GNAT.OS_Lib.OS_Exit (1);
-      end if;
-      if Integer'Value (Date_Str (1 .. 4)) < 2000 then
-         Log.Error ("Year in date must be 2000 or later.");
-         GNAT.OS_Lib.OS_Exit (1);
-      end if;
-      if Integer'Value (Date_Str (5 .. 6)) < 1
-        or else Integer'Value (Date_Str (5 .. 6)) > 12
-      then
-         Log.Error ("Month in date must be between 01 and 12.");
-         GNAT.OS_Lib.OS_Exit (1);
-      end if;
+      Check_Date (Date_Str);
 
       if Arg_Num /= 1 then
          Log.Error ("Pool name is missing.");
@@ -117,8 +93,6 @@ package body Hilbert.CLI.Generate is
       end if;
 
       Pool_Name : constant String := Args.Element (Args.First_Index);
-      --  Here would be the code to generate exams from the given pool.
-      --  For now, we just print the pool name.
 
       Log.Info
         ("Generating"
@@ -128,7 +102,7 @@ package body Hilbert.CLI.Generate is
          & " items from pool "
          & Pool_Name);
 
-      Hilbert.Random.Initialize (3221);
+      Hilbert.Random.Initialize (Random_Seed);
 
       Pool : Hilbert.Pool.Object;
       Pool.Read (Pool_Name);

@@ -26,7 +26,7 @@ package Hilbert.CLI.Generate is
    is (AAA.Strings.Empty_Vector.Append
          ("Generate a collection of exams from the given pool of items. ")
          .New_Line
-         .Append ("POOL_NAME is a Hilbert pool of items.")
+         .Append ("POOL_NAME is the name of a Hilbert pool of items. EXAMS_NAME is <POOL_NAME>_<DATE>. Generated exams are written to <EXAM_NAME>_Exams.txt, and the corresponding answer batches are written to <EXAM_NAME>_Batch.txt.")
          .New_Line
          .Append
             ("Please visit https://rocher.github.io/hilbert for a complete reference.")
