@@ -1,6 +1,5 @@
 with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Hilbert.Item;
 with Hilbert.Strings; use Hilbert.Strings;
@@ -17,7 +16,7 @@ package Hilbert.Pool is
         "="          => Hilbert.Item."=");
 
    type Object is record
-      Name  : Unbounded_String := Null_Unbounded_String;
+      Name  : UString := Null_UString;
       Title : UWString := Null_WUString;
       Items : Item_Vector_Type.Vector;
    end record

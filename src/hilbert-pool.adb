@@ -27,7 +27,7 @@ package body Hilbert.Pool is
          GNAT.OS_Lib.OS_Exit (Status => 1);
       end if;
 
-      Self.Name := To_Unbounded_String (Pool_Name);
+      Self.Name := To_UString (Pool_Name);
       Self.Items.Clear;
 
       In_File.Open (Name => Filename, Mode => WIO.In_File);
