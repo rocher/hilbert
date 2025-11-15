@@ -8,6 +8,7 @@ with Simple_Logging;
 
 with Hilbert_Config;
 with Hilbert.CLI.Generate; use Hilbert.CLI.Generate;
+with Hilbert.CLI.Grade;    use Hilbert.CLI.Grade;
 
 package body Hilbert.CLI is
 
@@ -120,7 +121,8 @@ package body Hilbert.CLI is
 
    procedure Initialize is
    begin
-      CLI_Command.Register ("Generation", new Hilbert.CLI.Generate.Cmd_Type);
+      CLI_Command.Register ("Generation", new Generate.Cmd_Type);
+      CLI_Command.Register ("Generation", new Grade.Cmd_Type);
    end Initialize;
 
    -------------
