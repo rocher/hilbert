@@ -49,6 +49,36 @@ package Hilbert.Types is
    function Is_Exam_ID (I : UString) return Boolean;
    function Is_Answers_Name (A : UString) return Boolean;
 
+   function Is_Cycle (C : Cycle_Type) return Boolean
+   is (Is_Cycle (To_UString (C)));
+
+   function Is_Group (G : Group_Type) return Boolean
+   is (Is_Group (To_UString (String'("" & G))));
+
+   function Is_Class (C : Class_Type) return Boolean
+   is (Is_Class (To_UString (C)));
+
+   function Is_Course (C : Course_Type) return Boolean
+   is (Is_Course (To_UString (C)));
+
+   function Is_RA (R : RA_Type) return Boolean
+   is (Is_RA (To_UString (R)));
+
+   function Is_Date (D : Date_Type) return Boolean
+   is (Is_Date (To_UString (D)));
+
+   function Is_Pool_Name (P : Pool_Name_Type) return Boolean
+   is (Is_Pool_Name (To_UString (P)));
+
+   function Is_Exams_Name (E : Exams_Name_Type) return Boolean
+   is (Is_Exams_Name (To_UString (E)));
+
+   function Is_Exam_ID (I : Exam_ID_Type) return Boolean
+   is (Is_Exam_ID (To_UString (I)));
+
+   function Is_Answers_Name (A : Answers_Name_Type) return Boolean
+   is (Is_Answers_Name (To_UString (A)));
+
    function Cycle (C : UString) return Cycle_Type
    is (Cycle_Type'(To_String (C)))
    with Pre => Is_Cycle (C);
@@ -61,7 +91,7 @@ package Hilbert.Types is
    is (Character'Val (Character'Pos ('0') + L));
 
    function Group (S : UString) return Group_Type
-   is (Group_Type'(To_String (S)(1)))
+   is (Group_Type'(To_String (S) (1)))
    with Pre => Is_Group (S);
 
    function Class (S : UString) return Class_Type
