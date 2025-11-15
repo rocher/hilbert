@@ -3,7 +3,7 @@ with GNAT.OS_Lib;
 with CLIC.Subcommand; use CLIC.Subcommand;
 with Simple_Logging;
 
-with Hilbert.CLI.Internal; use Hilbert.CLI.Internal;
+with Hilbert.Types; use Hilbert.Types;
 
 package body Hilbert.CLI.Grade is
 
@@ -50,7 +50,10 @@ package body Hilbert.CLI.Grade is
       end if;
 
       Date_Str : constant String := Cmd.Date.all;
-      Check_Date (Date_Str);
+      if not Is_Date (To_UString (Date_Str)) then
+         Log.Error ("Date must be in format YYYYMM, YYYY > 2000.");
+         GNAT.OS_Lib.OS_Exit (1);
+      end if;
 
       if Arg_Num /= 1 then
          Log.Error ("Pool name is missing.");
