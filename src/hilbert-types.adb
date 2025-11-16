@@ -190,32 +190,4 @@ package body Hilbert.Types is
                        + 3));
    end Is_Answers_Name;
 
-   -------------------
-   -- Is_Bit_Stream --
-   -------------------
-
-   function Is_Bit_Stream (B : UString) return Boolean
-   is (for all C of To_String (B) => C = '0' or else C = '1' or else C = ' ');
-
-   ----------------
-   -- Get_Answer --
-   ----------------
-
-   function Get_Next_Answer
-     (B : Bit_Stream_Type; Cursor : in out Natural) return Bit_Stream_Type
-   is
-      Low  : constant Natural := B.Index_Non_Blank (From => Cursor);
-      High : constant Natural := B.Index (" ", From => Low);
-   begin
-      if Low < High then
-         Cursor := High;
-         return B.Unbounded_Slice (Low, High - 1);
-      elsif Low < B.Length and then High = 0 then
-         Cursor := B.Length;
-         return B.Unbounded_Slice (Low, B.Length - 1);
-      else
-         return Null_UString;
-      end if;
-   end Get_Next_Answer;
-
 end Hilbert.Types;

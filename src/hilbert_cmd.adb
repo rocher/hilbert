@@ -19,7 +19,6 @@ procedure Hilbert_CMD is
    Answer : Hilbert.Answer.Object;
    EOF    : Boolean := False;
    Cursor : Natural := 1;
-   BS     : Bit_Stream_Type;
    Num    : Natural;
 
 begin
@@ -32,19 +31,19 @@ begin
 
       Put_Line
         (To_String (Answer.Name_Surname) & " - " & Answer.Exam_Id);
-
-      Num := 1;
-      Cursor := 1;
-      loop
-         BS := Get_Next_Answer (Answer.Bit_Stream, Cursor);
-         exit when BS = Null_UString;
-         Put (Num, Width => 3);
-         Put (if Is_Bit_Stream (BS) then "    " else " ERR");
-         Put (BS.Length, Width => 2);
-         Put (" |" & HStr.To_String (UString'(BS)) & "|");
-         New_Line;
-         Num := Num + 1;
-      end loop;
+      Put_Line ("   " & Answer'Image);
+      --  Num := 1;
+      --  Cursor := 1;
+      --  loop
+      --     --  BS := Get_Next_Answer (Answer.Bit_Stream, Cursor);
+      --     --  exit when BS = Null_UString;
+      --     Put (Num, Width => 3);
+      --     Put (if Is_Bit_String (BS) then "    " else " ERR");
+      --     Put (BS.Length, Width => 2);
+      --     Put (" |" & HStr.To_String (UString'(BS)) & "|");
+      --     New_Line;
+      --     Num := Num + 1;
+      --  end loop;
    end loop;
 
    Hilbert.Answer.Close;

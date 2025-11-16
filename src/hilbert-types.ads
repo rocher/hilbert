@@ -36,7 +36,6 @@ package Hilbert.Types is
    subtype Sequence_Type is Positive range 1 .. Sequence_Last;
    subtype Exam_ID_Type is String (1 .. Exam_ID_Length);
    subtype Answers_Name_Type is String (1 .. Answers_Name_Length);
-   subtype Bit_Stream_Type is UString;
 
    function Is_Cycle (C : UString) return Boolean;
    function Is_Level (L : UString) return Boolean;
@@ -49,7 +48,6 @@ package Hilbert.Types is
    function Is_Exams_Name (E : UString) return Boolean;
    function Is_Exam_ID (I : UString) return Boolean;
    function Is_Answers_Name (A : UString) return Boolean;
-   function Is_Bit_Stream (B : UString) return Boolean;
 
    function Is_Cycle (C : Cycle_Type) return Boolean
    is (Is_Cycle (To_UString (C)));
@@ -131,9 +129,5 @@ package Hilbert.Types is
    function Answers_Name (S : UString) return Answers_Name_Type
    is (Answers_Name_Type'(To_String (S)))
    with Pre => Is_Answers_Name (S);
-
-   function Get_Next_Answer
-     (B : Bit_Stream_Type; Cursor : in out Natural)
-      return Bit_Stream_Type;
 
 end Hilbert.Types;

@@ -2,6 +2,7 @@ with Ada.Containers.Hashed_Maps;
 with Ada.Strings.Hash;
 with Ada.Strings.Text_Buffers;
 
+with Hilbert.Bit_Stream;
 with Hilbert.Strings; use Hilbert.Strings;
 with Hilbert.Types;   use Hilbert.Types;
 
@@ -12,7 +13,7 @@ package Hilbert.Batch is
 
    type Batch_Item_Type is record
       Num_Items  : Positive;
-      Bit_Stream : UString := Null_UString;
+      Bit_Stream : Hilbert.Bit_Stream.Object;
    end record;
 
    package Batch_Map is new

@@ -31,6 +31,7 @@ package body Hilbert.Answer is
 
    procedure Read (Self : out Object; End_Of_File : out Boolean) is
    begin
+      Self.Bit_Stream.Bit_Stream.Clear;
       End_Of_File := In_File.End_Of_File;
 
       if not End_Of_File then
@@ -68,8 +69,9 @@ package body Hilbert.Answer is
          end if;
 
          --  Bit_Stream
-         Self.Bit_Stream :=
-           To_UString (Line.Unbounded_Slice (From, Line.Length));
+         Self.Bit_Stream.Load_From_UString
+           (To_UString (Line.Unbounded_Slice (From, Line.Length)));
+         Self.Bit_Stream.Count_Valid_Items;
       end if;
    end Read;
 

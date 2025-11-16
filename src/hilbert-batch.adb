@@ -36,8 +36,8 @@ package body Hilbert.Batch is
                GNAT.OS_Lib.OS_Exit (Status => 1);
             end if;
             Exam_Id : constant Exam_ID_Type := Exam_ID_Type'(Exam_Id_Str);
-            Bit_Stream : constant UString :=
-              To_UString (Line (45 .. Line'Last));
+            Bit_Stream : Hilbert.Bit_Stream.Object;
+            Bit_Stream.Load_From_UString (To_UString (Line (45 .. Line'Last)));
             Self.Batch.Insert
               (Key      => Exam_Id,
                New_Item =>
@@ -63,7 +63,7 @@ package body Hilbert.Batch is
            (Cursor.Key
             & Cursor.Element.Num_Items'Image
             & " "
-            & To_String (Cursor.Element.Bit_Stream));
+            & Cursor.Element.Bit_Stream'Image);
          Output.New_Line;
       end loop;
    end Put_Image_Batch;
