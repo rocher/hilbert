@@ -19,11 +19,7 @@ package Hilbert.Strings is
    Null_WUString : constant UWString :=
      Ada.Strings.Wide_Unbounded.Null_Unbounded_Wide_String;
 
-   function To_String (Item : UString) return String
-   renames Ada.Strings.Unbounded.To_String;
-
-   function To_UString (Item : String) return UString
-   renames Ada.Strings.Unbounded.To_Unbounded_String;
+   --  Conversions to BWString
 
    function To_BWString (Item : String) return BWString
    renames Ada.Characters.Conversions.To_Wide_String;
@@ -31,10 +27,34 @@ package Hilbert.Strings is
    function To_BWString (Source : UWString) return BWString
    renames Ada.Strings.Wide_Unbounded.To_Wide_String;
 
+   --  Conversions to UWString
+
    function To_UWString (Source : BWString) return UWString
    renames Ada.Strings.Wide_Unbounded.To_Unbounded_Wide_String;
 
    function To_UWString (Source : String) return UWString
    is (To_UWString (To_BWString (Source)));
+
+   --  Conversions to String
+
+   function To_String (Item : UString) return String
+   renames Ada.Strings.Unbounded.To_String;
+
+   function To_String (Source : BWString) return String
+   is (Ada.Characters.Conversions.To_String (Source));
+
+   function To_String (Source : UWString) return String
+   is (Ada.Characters.Conversions.To_String (To_BWString (Source)));
+
+   --  Conversions to UString
+
+   function To_UString (Item : String) return UString
+   renames Ada.Strings.Unbounded.To_Unbounded_String;
+
+   function To_UString (Source : BWString) return UString
+   is (To_UString (To_String (Source)));
+
+   function To_UString (Source : UWString) return UString
+   is (To_UString (To_String (Source)));
 
 end Hilbert.Strings;
