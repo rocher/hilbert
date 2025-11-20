@@ -5,8 +5,8 @@ with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Exam is
 
-   type Object is record
-      Pool : Hilbert.Pool.Object;
+   type Exam_Type is record
+      Pool : Hilbert.Pool.Pool_Type;
       --  The pool of items contained in this exam.
 
       Id : UWString := Null_WUString;
@@ -28,7 +28,7 @@ package Hilbert.Exam is
    --  Represents an exam created from a pool of items.
 
    function Create_Exam
-     (Pool : Hilbert.Pool.Object; Num_Items : Positive) return Object
+     (Pool : Hilbert.Pool.Pool_Type; Num_Items : Positive) return Exam_Type
    with
      Pre =>
        Num_Items <= Positive (Pool.Items.Length)
@@ -36,15 +36,15 @@ package Hilbert.Exam is
    --  Creates an exam with the specified number of items from the given pool
    --  of items.
 
-   procedure Set_Id (Self : in out Object; Id : UWString);
+   procedure Set_Id (Self : in out Exam_Type; Id : UWString);
    --  Sets the identifier of the exam to the specified Id.
 
-   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type);
+   procedure Write_To (Self : Exam_Type; Out_File : in out WIO.File_Type);
    --  Writes the exam Self to the specified output file.
 
    procedure Put_Image_Exam
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object);
+      Self   : Exam_Type);
    --  Outputs a textual representation of the exam to the specified output
    --  buffer.
 

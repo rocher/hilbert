@@ -7,7 +7,8 @@ package body Hilbert.Item is
    -- Read_From --
    ---------------
 
-   procedure Read_From (Self : out Object; In_File : in out WIO.File_Type) is
+   procedure Read_From (Self : out Item_Type; In_File : in out WIO.File_Type)
+   is
    begin
       Self :=
         (Number      => 0,
@@ -75,7 +76,7 @@ package body Hilbert.Item is
    -- Write_To --
    --------------
 
-   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
+   procedure Write_To (Self : Item_Type; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put (Trim (Self.Number) & " ");
       Out_File.Put_Line (To_BWString (Self.Question));
@@ -90,7 +91,7 @@ package body Hilbert.Item is
    -- Shuffle_Options --
    ---------------------
 
-   procedure Shuffle_Options (Self : in out Object) is
+   procedure Shuffle_Options (Self : in out Item_Type) is
 
       procedure Swap (A, B : in out Option_Type) is
          Temp : Option_Type := A;
@@ -118,7 +119,7 @@ package body Hilbert.Item is
 
    procedure Put_Image_Item
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object)
+      Self   : Item_Type)
    is
       Difficulty_Char : constant Character :=
         (if Self.Difficulty = Easy

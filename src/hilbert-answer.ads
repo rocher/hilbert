@@ -5,7 +5,7 @@ with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Answer is
 
-   type Object is record
+   type Answer_Type is record
       Date_Time : UWString := Null_WUString;
       --  The date and time when the answer was submitted.
 
@@ -18,10 +18,9 @@ package Hilbert.Answer is
       Exam_Id : Exam_ID_Type;
       --  The ID of the exam for which this answer was submitted.
 
-      Bit_Stream : Hilbert.Bit_Stream.Object;
+      Bit_Stream : Hilbert.Bit_Stream.Bit_Stream_Type;
       --  The bit stream representing the answers.
    end record;
-   --  with Put_Image => Put_Image_Answer;
    --  Represents an answer submitted for an exam.
 
    procedure Open (Answer_Name : Answers_Name_Type);
@@ -30,15 +29,12 @@ package Hilbert.Answer is
    procedure Close;
    --  Closes the answers file.
 
-   procedure Read (Self : out Object; End_Of_File : out Boolean);
+   procedure Read (Self : out Answer_Type; End_Of_File : out Boolean);
    --  Reads the next answer from the answers file.
 
    function Get_Score
-     (Self : Object; Batch : Hilbert.Batch.Object) return Float;
+     (Self : Answer_Type; Batch : Hilbert.Batch.Batch_Type) return Float;
    --  Computes and returns the score for the given answer based on the
    --  provided batch information.
 
-   --  procedure Put_Image_Answer
-   --    (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-   --     Self   : Object);
 end Hilbert.Answer;

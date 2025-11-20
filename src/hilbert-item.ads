@@ -22,7 +22,7 @@ package Hilbert.Item is
 
    type Options_Type is array (Num_Options_Type) of Option_Type;
 
-   type Object is record
+   type Item_Type is record
       Number : Natural := 0;
       --  The number of the item in the exam.
 
@@ -42,25 +42,25 @@ package Hilbert.Item is
    --  Represents an item (question) in a pool or exam.
 
    overriding
-   function "=" (Left, Right : Object) return Boolean
+   function "=" (Left, Right : Item_Type) return Boolean
    is (Left.Difficulty = Right.Difficulty
        and then Left.Question = Right.Question
        and then Left.Num_Options = Right.Num_Options
        and then Left.Options = Right.Options);
    --  Compares two Items for equality based on their fields.
 
-   procedure Read_From (Self : out Object; In_File : in out WIO.File_Type);
+   procedure Read_From (Self : out Item_Type; In_File : in out WIO.File_Type);
    --  Reads an item from the specified input file into Self.
 
-   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type);
+   procedure Write_To (Self : Item_Type; Out_File : in out WIO.File_Type);
    --  Writes the item Self to the specified output file.
 
-   procedure Shuffle_Options (Self : in out Object);
-   -- Shuffles the options of the item Self randomly.
+   procedure Shuffle_Options (Self : in out Item_Type);
+   --  Shuffles the options of the item Self randomly.
 
    procedure Put_Image_Item
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object);
+      Self   : Item_Type);
    --  Outputs a textual representation of the item to the specified output
    --  buffer.
 

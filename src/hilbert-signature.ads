@@ -12,7 +12,7 @@ package Hilbert.Signature is
    --    - Padding bits (0) to align to byte boundary
    --    - Hexadecimal representation of the binary string
 
-   function Compute_Signature (Exam : Hilbert.Exam.Object) return UWString;
+   function Compute_Signature (Exam : Hilbert.Exam.Exam_Type) return UWString;
 
    function Get_Options_Stream (Signature : UWString) return UWString;
 

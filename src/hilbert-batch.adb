@@ -17,7 +17,7 @@ package body Hilbert.Batch is
    --  123456789012345678901234567890123456789012345678
    --  EXAM SMX1_DIG_RA2_202511/011 38 166/085/189 0001
 
-   procedure Read (Self : out Object; Exams_Name : Exams_Name_Type) is
+   procedure Read (Self : out Batch_Type; Exams_Name : Exams_Name_Type) is
       Filename : constant String := Exams_Name & Batch_Suffix;
       In_File  : Ada.Text_IO.File_Type;
    begin
@@ -36,7 +36,7 @@ package body Hilbert.Batch is
                GNAT.OS_Lib.OS_Exit (Status => 1);
             end if;
             Exam_Id : constant Exam_ID_Type := Exam_ID_Type'(Exam_Id_Str);
-            Bit_Stream : Hilbert.Bit_Stream.Object;
+            Bit_Stream : Hilbert.Bit_Stream.Bit_Stream_Type;
             Bit_Stream.Load_From_UString (To_UString (Line (45 .. Line'Last)));
             Self.Map.Insert
               (Key      => Exam_Id,
@@ -54,7 +54,7 @@ package body Hilbert.Batch is
 
    procedure Put_Image_Batch
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object) is
+      Self   : Batch_Type) is
    begin
       Output.Put (Self.Exams_Name);
       Output.New_Line;

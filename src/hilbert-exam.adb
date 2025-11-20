@@ -10,12 +10,12 @@ package body Hilbert.Exam is
    -----------------
 
    function Create_Exam
-     (Pool : Hilbert.Pool.Object; Num_Items : Positive) return Object
+     (Pool : Hilbert.Pool.Pool_Type; Num_Items : Positive) return Exam_Type
    is
       use all type Hilbert.Item.Difficulty_Type;
 
-      Origin   : Hilbert.Pool.Object := Pool;
-      New_Exam : Object;
+      Origin   : Hilbert.Pool.Pool_Type := Pool;
+      New_Exam : Exam_Type;
 
       Item_Number  : Natural := 1;
       Σ_Difficulty : Float := 0.0;
@@ -28,7 +28,7 @@ package body Hilbert.Exam is
          declare
             Index    : constant Positive :=
               Random_Index (Positive (Origin.Items.Length));
-            New_Item : Hilbert.Item.Object := Origin.Items.Element (Index);
+            New_Item : Hilbert.Item.Item_Type := Origin.Items.Element (Index);
          begin
             New_Item.Shuffle_Options;
             New_Item.Number := Item_Number;
@@ -64,7 +64,7 @@ package body Hilbert.Exam is
    -- Set_Number --
    ----------------
 
-   procedure Set_Id (Self : in out Object; Id : UWString) is
+   procedure Set_Id (Self : in out Exam_Type; Id : UWString) is
    begin
       Self.Id := Id;
    end Set_Id;
@@ -73,7 +73,7 @@ package body Hilbert.Exam is
    -- Title_Line --
    ----------------
 
-   function Title_Line (Self : Object) return BWString is
+   function Title_Line (Self : Exam_Type) return BWString is
    begin
       return
         "EXAM "
@@ -93,12 +93,13 @@ package body Hilbert.Exam is
    -- Write_To --
    --------------
 
-   procedure Write_To (Self : Object; Out_File : in out WIO.File_Type) is
+   procedure Write_To (Self : Exam_Type; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put_Line (Self.Title_Line);
       for I in 1 .. Positive (Self.Pool.Items.Length) loop
          declare
-            Item : constant Hilbert.Item.Object := Self.Pool.Items.Element (I);
+            Item : constant Hilbert.Item.Item_Type :=
+              Self.Pool.Items.Element (I);
          begin
             Item.Write_To (Out_File);
          end;
@@ -111,7 +112,7 @@ package body Hilbert.Exam is
 
    procedure Put_Image_Exam
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object) is
+      Self   : Exam_Type) is
    begin
       Output.Wide_Put (Self.Title_Line);
    end Put_Image_Exam;

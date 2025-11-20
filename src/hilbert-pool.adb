@@ -17,9 +17,9 @@ package body Hilbert.Pool is
    -- Read --
    ----------
 
-   procedure Read (Self : out Object; Pool_Name : String) is
+   procedure Read (Self : out Pool_Type; Pool_Name : String) is
       In_File  : WIO.File_Type;
-      New_Item : Item.Object;
+      New_Item : Item.Item_Type;
       Filename : constant String := Pool_Name & Pool_Suffix;
    begin
       if Ada.Directories.Exists (Filename) = False then
@@ -53,7 +53,7 @@ package body Hilbert.Pool is
    ----------------
 
    procedure Make_Exams
-     (Self      : Pool.Object;
+     (Self      : Pool.Pool_Type;
       Date      : String;
       Num_Exams : Positive;
       Num_Items : Positive)
@@ -78,7 +78,7 @@ package body Hilbert.Pool is
 
       for I in 1 .. Num_Exams loop
          declare
-            New_Exam : Hilbert.Exam.Object :=
+            New_Exam : Hilbert.Exam.Exam_Type :=
               Create_Exam (Pool => Self, Num_Items => Num_Items);
          begin
             New_Exam.Set_Id
@@ -102,7 +102,7 @@ package body Hilbert.Pool is
 
    procedure Put_Image_Pool
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object) is
+      Self   : Pool_Type) is
    begin
       Output.Wide_Put (To_BWString (Self.Title));
       Output.New_Line;

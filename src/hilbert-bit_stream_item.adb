@@ -4,7 +4,7 @@ package body Hilbert.Bit_Stream_Item is
    -- Check_Validity --
    --------------------
 
-   procedure Check_Validity (Self : in out Object) is
+   procedure Check_Validity (Self : in out Bit_Stream_Type) is
    begin
       Self.Is_Valid :=
         Self.Bits.Length > 0
@@ -16,7 +16,8 @@ package body Hilbert.Bit_Stream_Item is
    -- Check_Length --
    ------------------
 
-   procedure Check_Length (Self : in out Object; Origin : Object) is
+   procedure Check_Length
+     (Self : in out Bit_Stream_Type; Origin : Bit_Stream_Type) is
    begin
       Self.Extra_Bits := Self.Bits.Length - Origin.Bits.Length;
    end Check_Length;
@@ -25,7 +26,8 @@ package body Hilbert.Bit_Stream_Item is
    -- Set_Score --
    ---------------
 
-   procedure Set_Score (Self : in out Object; Origin : Object) is
+   procedure Set_Score
+     (Self : in out Bit_Stream_Type; Origin : Bit_Stream_Type) is
    begin
       Self.Score := (if Self.Bits = Origin.Bits then Origin.Score else 0);
    end Set_Score;
@@ -34,7 +36,7 @@ package body Hilbert.Bit_Stream_Item is
    -- Is_Valid --
    --------------
 
-   function Is_Valid (Self : in out Object) return Boolean is
-   (Self.Is_Valid);
+   function Is_Valid (Self : in out Bit_Stream_Type) return Boolean
+   is (Self.Is_Valid);
 
 end Hilbert.Bit_Stream_Item;

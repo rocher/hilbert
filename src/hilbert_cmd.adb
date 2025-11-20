@@ -16,7 +16,7 @@ procedure Hilbert_CMD is
 
    use all type Hilbert.Strings.UString;
 
-   Answer : Hilbert.Answer.Object;
+   Answer : Hilbert.Answer.Answer_Type;
    EOF    : Boolean := False;
    Cursor : Natural := 1;
    Num    : Natural;

@@ -4,7 +4,7 @@ package Hilbert.Bit_Stream_Item is
 
    use all type UString;
 
-   type Object is record
+   type Bit_Stream_Type is record
       Bits : UString := Null_UString;
       --  The bit string representing the item, consisting of '0' and '1'
       --  characters.
@@ -21,29 +21,31 @@ package Hilbert.Bit_Stream_Item is
    end record;
    --  Represents a single item in a bit stream.
 
-   procedure Check_Validity (Self : in out Object);
+   procedure Check_Validity (Self : in out Bit_Stream_Type);
    --  Validates the Bit_Stream_Item by checking if the Bits field contains
    --  only '0' and '1' characters and is non-empty. Sets the Is_Valid field
    --  accordingly.
 
-   procedure Check_Length (Self : in out Object; Origin : Object);
+   procedure Check_Length
+     (Self : in out Bit_Stream_Type; Origin : Bit_Stream_Type);
    --  Compares the length of Self.Bits with Origin.Bits. If they differ,
    --  sets Self.Extra_Bits to the difference.
 
-   procedure Set_Score (Self : in out Object; Origin : Object);
+   procedure Set_Score
+     (Self : in out Bit_Stream_Type; Origin : Bit_Stream_Type);
    --  Sets the Score of Self based on comparison with Origin. If the Bits
    --  match, assigns Origin.Score to Self.Score; otherwise, sets it to 0.
 
-   function Is_Valid (Self : in out Object) return Boolean;
+   function Is_Valid (Self : in out Bit_Stream_Type) return Boolean;
    --  Returns the validity of the Bit_Stream_Item based on its Bits field.
 
-   function To_String (Self : Object) return String
+   function To_String (Self : Bit_Stream_Type) return String
    is (Hilbert.Strings.To_String (Self.Bits))
    with Pre => Self.Is_Valid;
    --  Converts the Bits field of the Bit_Stream_Item to a standard String.
 
    overriding
-   function "=" (Left, Right : Object) return Boolean
+   function "=" (Left, Right : Bit_Stream_Type) return Boolean
    is (Left.Bits = Right.Bits);
    --  Compares two Bit_Stream_Items for equality based on their Bits fields.
 

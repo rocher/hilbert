@@ -6,7 +6,7 @@ package body Hilbert.Bit_Stream is
    -- Count_Valid_Items --
    -----------------------
 
-   procedure Count_Valid_Items (Self : in out Object) is
+   procedure Count_Valid_Items (Self : in out Bit_Stream_Type) is
    begin
       Self.Valid_Items := 0;
       for Item of Self.Bit_Stream loop
@@ -21,7 +21,8 @@ package body Hilbert.Bit_Stream is
    -- Check_Extra_Items --
    -----------------------
 
-   procedure Check_Extra_Items (Self : in out Object; Origin : Object) is
+   procedure Check_Extra_Items
+     (Self : in out Bit_Stream_Type; Origin : Bit_Stream_Type) is
    begin
       Self.Extra_Items :=
         Integer (Self.Bit_Stream.Length) - Integer (Origin.Bit_Stream.Length);
@@ -52,10 +53,11 @@ package body Hilbert.Bit_Stream is
    -- Load_From_UString --
    -----------------------
 
-   procedure Load_From_UString (Self : in out Object; Bits : UString) is
+   procedure Load_From_UString (Self : in out Bit_Stream_Type; Bits : UString)
+   is
       Cursor : Natural := 1;
       Chunk  : UString;
-      Item   : Hilbert.Bit_Stream_Item.Object;
+      Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Type;
    begin
       loop
          Chunk := Get_Next_Chunk (Bits, Cursor);

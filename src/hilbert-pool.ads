@@ -6,17 +6,17 @@ with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Pool is
 
-   use all type Hilbert.Item.Object;
+   use all type Hilbert.Item.Item_Type;
    use all type Ada.Containers.Count_Type;
 
    package Item_Vector_Type is new
      Ada.Containers.Vectors
        (Index_Type   => Positive,
-        Element_Type => Hilbert.Item.Object,
+        Element_Type => Hilbert.Item.Item_Type,
         "="          => Hilbert.Item."=");
    --  A vector of Items.
 
-   type Object is record
+   type Pool_Type is record
       Name : UString := Null_UString;
       --  The name of the pool.
 
@@ -58,10 +58,10 @@ package Hilbert.Pool is
 
    --  <Bit> is '1' for correct options and '0' for incorrect options.
 
-   procedure Read (Self : out Object; Pool_Name : String);
+   procedure Read (Self : out Pool_Type; Pool_Name : String);
 
    procedure Make_Exams
-     (Self      : Object;
+     (Self      : Pool_Type;
       Date      : String;
       Num_Exams : Positive;
       Num_Items : Positive);
@@ -70,7 +70,7 @@ package Hilbert.Pool is
 
    procedure Put_Image_Pool
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Object);
+      Self   : Pool_Type);
    --  Outputs a textual representation of the pool to the specified output
    --  buffer.
 

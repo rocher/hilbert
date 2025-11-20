@@ -107,7 +107,7 @@ package body Hilbert.CLI.Generate is
 
       Hilbert.Random.Initialize (Random_Seed);
 
-      Pool : Hilbert.Pool.Object;
+      Pool : Hilbert.Pool.Pool_Type;
       Pool.Read (Pool_Name);
       Pool.Make_Exams
         (Date      => Date_Str,

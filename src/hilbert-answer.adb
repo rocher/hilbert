@@ -33,7 +33,7 @@ package body Hilbert.Answer is
    -- Read --
    ----------
 
-   procedure Read (Self : out Object; End_Of_File : out Boolean) is
+   procedure Read (Self : out Answer_Type; End_Of_File : out Boolean) is
    begin
       Self.Bit_Stream.Bit_Stream.Clear;
       End_Of_File := In_File.End_Of_File;
@@ -84,7 +84,7 @@ package body Hilbert.Answer is
    ---------------
 
    function Get_Score
-     (Self : Object; Batch : Hilbert.Batch.Object) return Float is
+     (Self : Answer_Type; Batch : Hilbert.Batch.Batch_Type) return Float is
    begin
       if Batch.Map.Contains (Self.Exam_Id) then
          null;
