@@ -25,7 +25,7 @@ package Hilbert.Batch is
 
    type Object is record
       Exams_Name : Exams_Name_Type := Exams_Name_Type'(others => ' ');
-      Batch      : Batch_Map.Map;
+      Map        : Batch_Map.Map;
    end record
    with Put_Image => Put_Image_Batch;
 

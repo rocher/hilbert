@@ -22,7 +22,7 @@ package body Hilbert.Batch is
       In_File  : Ada.Text_IO.File_Type;
    begin
       Self.Exams_Name := Exams_Name;
-      Self.Batch.Clear;
+      Self.Map.Clear;
 
       Ada.Text_IO.Open (In_File, Ada.Text_IO.In_File, Filename);
       while not In_File.End_Of_File loop
@@ -38,7 +38,7 @@ package body Hilbert.Batch is
             Exam_Id : constant Exam_ID_Type := Exam_ID_Type'(Exam_Id_Str);
             Bit_Stream : Hilbert.Bit_Stream.Object;
             Bit_Stream.Load_From_UString (To_UString (Line (45 .. Line'Last)));
-            Self.Batch.Insert
+            Self.Map.Insert
               (Key      => Exam_Id,
                New_Item =>
                  (Num_Items  => Positive'Value (Line (30 .. 31)),
@@ -58,7 +58,7 @@ package body Hilbert.Batch is
    begin
       Output.Put (Self.Exams_Name);
       Output.New_Line;
-      for Cursor in Self.Batch.Iterate loop
+      for Cursor in Self.Map.Iterate loop
          Output.Put
            (Cursor.Key
             & Cursor.Element.Num_Items'Image
