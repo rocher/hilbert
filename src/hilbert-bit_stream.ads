@@ -12,10 +12,16 @@ package Hilbert.Bit_Stream is
         "="          => Hilbert.Bit_Stream_Item."=");
 
    type Object is record
-      Bit_Stream  : Bit_Stream_Vector_Type.Vector;
+      Bit_Stream : Bit_Stream_Vector_Type.Vector;
+      --  The sequence of Bit_Stream_Items in this Bit_Stream.
+
       Valid_Items : Natural := 0;
+      --  The number of valid Bit_Stream_Items in this Bit_Stream.
+
       Extra_Items : Integer := 0;
+      --  The difference in number of items compared to an origin Bit_Stream.
    end record;
+   --  Represents a stream of bits divided into items.
 
    function Length (Self : Object) return Natural
    is (Natural (Self.Bit_Stream.Length));

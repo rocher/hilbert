@@ -5,11 +5,21 @@ package Hilbert.Bit_Stream_Item is
    use all type UString;
 
    type Object is record
-      Bits       : UString := Null_UString;
-      Is_Valid   : Boolean := False;
+      Bits : UString := Null_UString;
+      --  The bit string representing the item, consisting of '0' and '1'
+      --  characters.
+
+      Is_Valid : Boolean := False;
+      --  Indicates whether the Bits field is valid. Basically, it should only
+      --  contain '0' and '1' characters and be non-empty.
+
       Extra_Bits : Integer := 0;
-      Score      : Natural := 0;
+      --  Difference in length compared to an origin Bit_Stream_Item.
+
+      Score : Natural := 0;
+      --  Score assigned based on comparison with an origin Bit_Stream_Item.
    end record;
+   --  Represents a single item in a bit stream.
 
    procedure Check_Validity (Self : in out Object);
    --  Validates the Bit_Stream_Item by checking if the Bits field contains
