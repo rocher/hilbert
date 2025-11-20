@@ -20,7 +20,7 @@ package Hilbert.Batch is
    end record;
    --  Represents a single exam in a batch.
 
-   package Batch_Map is new
+   package Batch_Map_Package is new
      Ada.Containers.Hashed_Maps
        (Key_Type        => Exam_ID_Type,
         Element_Type    => Batch_Item_Type,
@@ -28,11 +28,13 @@ package Hilbert.Batch is
         Equivalent_Keys => "=");
    --  A map from Exam_IDs to their corresponding Batch_Items.
 
+   subtype Batch_Map_Type is Batch_Map_Package.Map;
+
    type Batch_Type is record
       Exams_Name : Exams_Name_Type := Exams_Name_Type'(others => ' ');
       --  The name of the exams file associated with this batch.
 
-      Map : Batch_Map.Map;
+      Map : Batch_Map_Type;
       --  The map of Exam_IDs to their corresponding Batch_Items.
    end record
    with Put_Image => Put_Image_Batch;
