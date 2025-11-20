@@ -8,7 +8,7 @@ package Hilbert.Bit_Stream is
    package Bit_Stream_Vector_Type is new
      Ada.Containers.Vectors
        (Index_Type   => Positive,
-        Element_Type => Hilbert.Bit_Stream_Item.Bit_Stream_Type,
+        Element_Type => Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type,
         "="          => Hilbert.Bit_Stream_Item."=");
 
    type Bit_Stream_Type is record

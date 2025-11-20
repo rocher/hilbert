@@ -57,7 +57,7 @@ package body Hilbert.Bit_Stream is
    is
       Cursor : Natural := 1;
       Chunk  : UString;
-      Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Type;
+      Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
    begin
       loop
          Chunk := Get_Next_Chunk (Bits, Cursor);
