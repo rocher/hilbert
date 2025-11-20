@@ -6,8 +6,8 @@ with Hilbert.Strings; use Hilbert.Strings;
 package Hilbert.Exam is
 
    type Exam_Type is record
-      Pool : Hilbert.Pool.Pool_Type;
-      --  The pool of items contained in this exam.
+      Items : Hilbert.Pool.Item_Vector_Type;
+      --  The items included in this exam.
 
       Id : UWString := Null_WUString;
       --  The identifier of the exam.

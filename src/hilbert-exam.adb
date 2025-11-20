@@ -49,7 +49,7 @@ package body Hilbert.Exam is
                  then 2.0
                  else 3.0);
 
-            New_Exam.Pool.Items.Append (New_Item, 1);
+            New_Exam.Items.Append (New_Item, 1);
             Origin.Items.Delete (Index);
          end;
       end loop;
@@ -78,7 +78,7 @@ package body Hilbert.Exam is
       return
         "EXAM "
         & To_BWString (Self.Id)
-        & Integer'Wide_Image (Integer (Self.Pool.Items.Length))
+        & Integer'Wide_Image (Integer (Self.Items.Length))
         & " "
         & Format (Self.Num_Options, 3, '0')
         & "/"
@@ -96,10 +96,10 @@ package body Hilbert.Exam is
    procedure Write_To (Self : Exam_Type; Out_File : in out WIO.File_Type) is
    begin
       Out_File.Put_Line (Self.Title_Line);
-      for I in 1 .. Positive (Self.Pool.Items.Length) loop
+      for I in 1 .. Positive (Self.Items.Length) loop
          declare
             Item : constant Hilbert.Item.Item_Type :=
-              Self.Pool.Items.Element (I);
+              Self.Items.Element (I);
          begin
             Item.Write_To (Out_File);
          end;
