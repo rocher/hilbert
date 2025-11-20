@@ -10,7 +10,7 @@ package Hilbert.Exam is
       Items : Hilbert.Item.Item_Vector_Type;
       --  The items included in this exam.
 
-      Id : UWString := Null_WUString;
+      Id : UWString := Null_WUString;  --  #FIXME - Use type Exam_ID_Type
       --  The identifier of the exam.
 
       Signature : UWString := Null_WUString;
