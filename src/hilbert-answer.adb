@@ -90,8 +90,12 @@ package body Hilbert.Answer is
          null;
       else
          Log.Error
-           ("Exam ID '" & Self.Exam_Id & "' not found in batch for scoring "
-            & "the answers of '" & To_String (Self.Name_Surname) & "'.");
+           ("Exam ID '"
+            & Self.Exam_Id
+            & "' not found in batch for scoring "
+            & "the answers of '"
+            & To_String (Self.Name_Surname)
+            & "'.");
          return 0.0;
       end if;
 
@@ -99,11 +103,11 @@ package body Hilbert.Answer is
       Batch_Item : constant Hilbert.Batch.Batch_Item_Type :=
         Batch.Map.Element (Self.Exam_Id);
 
-      for I in 1 .. Batch_Item.Num_Items loop
-         if Self.Bit_Stream.Is_Bit_Set (I) then
-            Score := Score + 1.0;
-         end if;
-      end loop;
+   --  for I in 1 .. Batch_Item.Num_Items loop
+   --     if Self.Bit_Stream.Is_Bit_Set (I) then
+   --        Score := Score + 1.0;
+   --     end if;
+   --  end loop;
 
    end Get_Score;
 
