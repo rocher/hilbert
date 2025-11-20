@@ -1,12 +1,13 @@
 with Ada.Strings.Text_Buffers;
 
+with Hilbert.Item;
 with Hilbert.Pool;
 with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Exam is
 
    type Exam_Type is record
-      Items : Hilbert.Pool.Item_Vector_Type;
+      Items : Hilbert.Item.Item_Vector_Type;
       --  The items included in this exam.
 
       Id : UWString := Null_WUString;

@@ -1,4 +1,3 @@
-with Hilbert.Item;
 with Hilbert.Convert;   use Hilbert.Convert;
 with Hilbert.Random;    use Hilbert.Random;
 with Hilbert.Signature; use Hilbert.Signature;

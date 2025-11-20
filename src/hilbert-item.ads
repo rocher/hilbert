@@ -1,3 +1,4 @@
+with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
 
 with Hilbert.Strings; use Hilbert.Strings;
@@ -63,5 +64,14 @@ package Hilbert.Item is
       Self   : Item_Type);
    --  Outputs a textual representation of the item to the specified output
    --  buffer.
+
+   package Item_Vector_Package is new
+     Ada.Containers.Vectors
+       (Index_Type   => Positive,
+        Element_Type => Hilbert.Item.Item_Type,
+        "="          => Hilbert.Item."=");
+   --  A vector of Items.
+
+   subtype Item_Vector_Type is Item_Vector_Package.Vector;
 
 end Hilbert.Item;

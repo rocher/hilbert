@@ -1,4 +1,3 @@
-with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
 
 with Hilbert.Item;
@@ -7,16 +6,6 @@ with Hilbert.Strings; use Hilbert.Strings;
 package Hilbert.Pool is
 
    use all type Hilbert.Item.Item_Type;
-   use all type Ada.Containers.Count_Type;
-
-   package Item_Vector_Package is new
-     Ada.Containers.Vectors
-       (Index_Type   => Positive,
-        Element_Type => Hilbert.Item.Item_Type,
-        "="          => Hilbert.Item."=");
-   --  A vector of Items.
-
-   subtype Item_Vector_Type is Item_Vector_Package.Vector;
 
    type Pool_Type is record
       Name : UString := Null_UString;
@@ -25,7 +14,7 @@ package Hilbert.Pool is
       Title : UWString := Null_WUString;
       --  The title of the pool.
 
-      Items : Item_Vector_Package.Vector;
+      Items : Hilbert.Item.Item_Vector_Type;
       --  The collection of items in the pool.
    end record
    with Put_Image => Put_Image_Pool;
