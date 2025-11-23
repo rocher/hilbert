@@ -12,31 +12,42 @@ package body Hilbert.Bit_Stream_Item is
                     C = '0' or else C = '1');
    end Check_Validity;
 
-   ------------------
-   -- Check_Length --
-   ------------------
-
-   procedure Check_Length
-     (Self : in out Bit_Stream_Item_Type; Origin : Bit_Stream_Item_Type) is
-   begin
-      Self.Extra_Bits := Self.Bits.Length - Origin.Bits.Length;
-   end Check_Length;
-
-   ---------------
-   -- Set_Score --
-   ---------------
-
-   procedure Set_Score
-     (Self : in out Bit_Stream_Item_Type; Origin : Bit_Stream_Item_Type) is
-   begin
-      Self.Score := (if Self.Bits = Origin.Bits then Origin.Score else 0);
-   end Set_Score;
-
    --------------
    -- Is_Valid --
    --------------
 
    function Is_Valid (Self : in out Bit_Stream_Item_Type) return Boolean
    is (Self.Is_Valid);
+
+   -----------
+   -- Match --
+   -----------
+
+   function Match
+     (Answer, Correct : Bit_Stream_Item_Type) return Bit_Stream_Item_Type
+   is
+      Result  : Bit_Stream_Item_Type;
+      Min_Len : constant Natural :=
+        Natural'Min (Answer.Bits.Length, Correct.Bits.Length);
+   begin
+      Result.Bits := Hilbert.Strings.Null_UString;
+      Result.Is_Valid := True;
+
+      for I in 1 .. Min_Len loop
+         if Answer.Bits.Element (I) = Correct.Bits.Element (I) then
+            Result.Bits.Append ('1');
+         else
+            Result.Bits.Append ('0');
+         end if;
+      end loop;
+
+      if Answer.Bits.Length < Correct.Bits.Length then
+         for I in Min_Len + 1 .. Correct.Bits.Length loop
+            Result.Bits.Append ('0');
+         end loop;
+      end if;
+
+      return Result;
+   end Match;
 
 end Hilbert.Bit_Stream_Item;

@@ -24,6 +24,9 @@ package Hilbert.Types is
    Answers_Name_Length : constant Integer :=
      Class_Length + 1 + Course_Length + 1 + RA_Length + 1 + Date_Length;
 
+   Grades_Name_Length : constant Integer :=
+     Class_Length + 1 + Course_Length + 1 + RA_Length + 1 + Date_Length;
+
    subtype Cycle_Type is String (1 .. Cycle_Length);
    subtype Level_Type is Positive range 1 .. 9;
    subtype Group_Type is Character range 'A' .. 'Z';
@@ -36,6 +39,7 @@ package Hilbert.Types is
    subtype Sequence_Type is Positive range 1 .. Sequence_Last;
    subtype Exam_ID_Type is String (1 .. Exam_ID_Length);
    subtype Answers_Name_Type is String (1 .. Answers_Name_Length);
+   subtype Grades_Name_Type is String (1 .. Grades_Name_Length);
 
    function Is_Cycle (C : UString) return Boolean;
    function Is_Level (L : UString) return Boolean;

@@ -3,6 +3,8 @@ with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 --  with Hilbert.CLI;
 with Hilbert.Answer;
+with Hilbert.Batch;
+with Hilbert.Grade;
 with Hilbert.Types;   use Hilbert.Types;
 with Hilbert.Strings; use Hilbert.Strings;
 
@@ -17,21 +19,29 @@ procedure Hilbert_CMD is
    use all type Hilbert.Strings.UString;
 
    Answer : Hilbert.Answer.Answer_Type;
+   Batch  : Hilbert.Batch.Batch_Type;
+   Grade  : Hilbert.Grade.Grade_Type;
    EOF    : Boolean := False;
    Cursor : Natural := 1;
    Num    : Natural;
 
 begin
 
-   Hilbert.Answer.Open (Answers_Name_Type'("SMX1B_DIG_RA2_202511"));
+   Batch.Read (Exams_Name_Type'("SMX1_MUN_RA8_202511"));
+   Hilbert.Answer.Open (Answers_Name_Type'("SMX1C_MUN_RA8_202511"));
+   Hilbert.Grade.Open (Grades_Name_Type'("SMX1C_MUN_RA8_202511"));
 
    loop
       Answer.Read (EOF);
       exit when EOF;
 
-      Put_Line
-        (To_String (Answer.Name_Surname) & " - " & Answer.Exam_Id);
-      Put_Line ("   " & Answer'Image);
+      if Batch.Map.Contains (Exam_ID_Type'(Answer.Exam_Id)) = False then
+         Put_Line ("No exam found for Answer Exam ID: " & Answer.Exam_Id);
+      else
+         Grade.Evaluate (Answer, Batch.Map (Exam_ID_Type'(Answer.Exam_Id)));
+         Grade.Write;
+      end if;
+
       --  Num := 1;
       --  Cursor := 1;
       --  loop
@@ -46,6 +56,7 @@ begin
       --  end loop;
    end loop;
 
+   Hilbert.Grade.Close;
    Hilbert.Answer.Close;
 
 --  Hilbert.CLI.Initialize;

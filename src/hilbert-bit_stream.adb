@@ -2,32 +2,6 @@ package body Hilbert.Bit_Stream is
 
    use all type Hilbert.Strings.UString;
 
-   -----------------------
-   -- Count_Valid_Items --
-   -----------------------
-
-   procedure Count_Valid_Items (Self : in out Bit_Stream_Type) is
-   begin
-      Self.Valid_Items := 0;
-      for Item of Self.Bit_Stream loop
-         Item.Check_Validity;
-         if Item.Is_Valid then
-            Self.Valid_Items := @ + 1;
-         end if;
-      end loop;
-   end Count_Valid_Items;
-
-   -----------------------
-   -- Check_Extra_Items --
-   -----------------------
-
-   procedure Check_Extra_Items
-     (Self : in out Bit_Stream_Type; Origin : Bit_Stream_Type) is
-   begin
-      Self.Extra_Items :=
-        Integer (Self.Bit_Stream.Length) - Integer (Origin.Bit_Stream.Length);
-   end Check_Extra_Items;
-
    --------------------
    -- Get_Next_Chunk --
    --------------------
@@ -64,7 +38,7 @@ package body Hilbert.Bit_Stream is
          exit when Chunk = Null_UString;
          Item.Bits := Chunk;
          Item.Check_Validity;
-         Self.Bit_Stream.Append (Item);
+         Self.Append (Item);
       end loop;
    end Load_From_UString;
 
