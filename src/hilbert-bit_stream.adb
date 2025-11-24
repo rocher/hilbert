@@ -17,7 +17,7 @@ package body Hilbert.Bit_Stream is
          return Bit_String.Unbounded_Slice (Low, High - 1);
       elsif Low < Bit_String.Length and then High = 0 then
          Cursor := Bit_String.Length;
-         return Bit_String.Unbounded_Slice (Low, Bit_String.Length - 1);
+         return Bit_String.Unbounded_Slice (Low, Bit_String.Length);
       else
          return Null_UString;
       end if;
