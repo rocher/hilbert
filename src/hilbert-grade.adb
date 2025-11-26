@@ -35,10 +35,21 @@ package body Hilbert.Grade is
            Exam.Bit_Stream.Element (I);
          Self.Match.Append
            (Hilbert.Bit_Stream_Item.Match (Answer_Item, Exam_Item));
-         if Answer_Item.Bits.Length = Exam_Item.Bits.Length
-           and then Answer_Item.Bits = Exam_Item.Bits
-         then
-            Self.Score := Self.Score + 1;
+
+         if Answer_Item.Bits.Length = Exam_Item.Bits.Length then
+            if Answer_Item.Bits = Exam_Item.Bits then
+               Self.Score := Self.Score + 1;
+            end if;
+         elsif Answer_Item.Bits.Length > Exam_Item.Bits.Length then
+            --  Lengths differ, score depends on matching bits only
+            Correct : Boolean := True;
+            for J in 1 .. Exam_Item.Bits.Length loop
+               if Answer_Item.Bits.Element (J) /= Exam_Item.Bits.Element (J)
+               then
+                  Correct := False;
+               end if;
+            end loop;
+            Self.Score := Self.Score + (if Correct then 1 else 0);
          end if;
       end loop;
 
