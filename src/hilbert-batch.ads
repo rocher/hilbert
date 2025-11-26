@@ -60,8 +60,7 @@ package Hilbert.Batch is
    -- average of the difficulties of the items in the exam multiplied by 100.
    pragma Style_Checks (On);
 
-   procedure Read (Self : out Batch_Type; Exams_Name : Exams_Name_Type)
-   with Pre => Is_Exams_Name (Exams_Name);
+   procedure Read (Self : out Batch_Type; Exams_Name : Exams_Name_Type);
    --  Reads the batch of exams with the specified name. The filename is
    --  constructed by appending the batch suffix to the exams name.
 

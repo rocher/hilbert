@@ -122,7 +122,7 @@ package body Hilbert.CLI is
    procedure Initialize is
    begin
       CLI_Command.Register ("Generation", new Generate.Cmd_Type);
-      CLI_Command.Register ("Generation", new Grade.Cmd_Type);
+      CLI_Command.Register ("Grading", new Grade.Cmd_Type);
    end Initialize;
 
    -------------

@@ -3,13 +3,12 @@ with GNAT.OS_Lib;
 with CLIC.Subcommand; use CLIC.Subcommand;
 with Simple_Logging;
 
-with Hilbert.Types; use Hilbert.Types;
+with Hilbert.Grade;
+with Hilbert.Types;
 
 package body Hilbert.CLI.Grade is
 
    package Log renames Simple_Logging;
-
-   use all type GNAT.Strings.String_Access;
 
    --------------------
    -- Setup_Switches --
@@ -20,13 +19,7 @@ package body Hilbert.CLI.Grade is
      (Cmd    : in out Cmd_Type;
       Config : in out CLIC.Subcommand.Switches_Configuration) is
    begin
-      Define_Switch
-        (Config,
-         Cmd.Date'Access,
-         Switch      => "-d:",
-         Long_Switch => "--date=",
-         Help        => "Date, in YYYYMM format",
-         Argument    => "DATE");
+      null;
    end Setup_Switches;
 
    -------------
@@ -42,28 +35,24 @@ package body Hilbert.CLI.Grade is
       for I in Args.First_Index .. Args.Last_Index loop
          Log.Debug ("Args(" & I'Image & ") = " & Args.Element (I));
       end loop;
+      Log.Debug ("Arg_Num =" & Arg_Num'Image);
 
-      Log.Debug ("Date: " & Cmd.Date.all'Image);
-      if Cmd.Date = null then
-         Log.Error ("Specify date, in format YYYYMM.");
+      if Arg_Num < 1 then
+         Log.Error ("Class exam name is missing.");
+         GNAT.OS_Lib.OS_Exit (1);
+      elsif Arg_Num > 1 then
+         Log.Error ("Too many arguments.");
          GNAT.OS_Lib.OS_Exit (1);
       end if;
 
-      Date_Str : constant String := Cmd.Date.all;
-      if not Is_Date (To_UString (Date_Str)) then
-         Log.Error ("Date must be in format YYYYMM, YYYY > 2000.");
+      Class_Exam_Name : constant String := Args.Element (Args.First_Index);
+      if Hilbert.Types.Is_Class_Exam_Name (Class_Exam_Name) = False then
+         Log.Error ("Invalid class exam name: " & Class_Exam_Name);
          GNAT.OS_Lib.OS_Exit (1);
       end if;
 
-      if Arg_Num /= 1 then
-         Log.Error ("Pool name is missing.");
-         GNAT.OS_Lib.OS_Exit (1);
-      end if;
-
-      Pool_Name : constant String := Args.Element (Args.First_Index);
-      Exams_Name : constant String := Pool_Name & "_" & Date_Str;
-
-      Log.Info ("Grading exams " & Date_Str);
+      Log.Info ("Grading exams " & Class_Exam_Name & "...");
+      Hilbert.Grade.Grade_Class_Exam (Class_Exam_Name);
    end Execute;
 
 end Hilbert.CLI.Grade;

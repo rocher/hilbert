@@ -90,8 +90,11 @@ package body Hilbert.CLI.Generate is
          GNAT.OS_Lib.OS_Exit (1);
       end if;
 
-      if Arg_Num /= 1 then
+      if Arg_Num < 1 then
          Log.Error ("Pool name is missing.");
+         GNAT.OS_Lib.OS_Exit (1);
+      elsif Arg_Num > 1 then
+         Log.Error ("Too many arguments.");
          GNAT.OS_Lib.OS_Exit (1);
       end if;
 

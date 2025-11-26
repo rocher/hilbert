@@ -1,7 +1,8 @@
 with Hilbert.Answer;
 with Hilbert.Batch;
 with Hilbert.Bit_Stream;
-with Hilbert.Types;   use Hilbert.Types;
+with Hilbert.Strings; use Hilbert.Strings;
+with Hilbert.Types; use Hilbert.Types;
 
 package Hilbert.Grade is
 
@@ -54,22 +55,11 @@ package Hilbert.Grade is
    --     SCORES,<Email>,<Name_Surname>,<Exam_ID>,<Total_Score>/<Max_Possible>,<Final_Score_Over_10>,<Rounded_Final_Score_Over_10>
    pragma Style_Checks (On);
 
-   procedure Evaluate
-     (Self   : in out Grade_Type;
-      Answer : Hilbert.Answer.Answer_Type;
-      Exam   : Hilbert.Batch.Batch_Item_Type);
-   --  Determines the Match and Score fields of the Grade based on the
-   --  provided Answer and Exam. The Match field is computed by comparing the
-   --  bits of the Answer's Bit_Stream with the Exam's Bit_Stream. The Score
-   --  is the count of fully correct Bit_Stream_Items (where all bits match).
-
-   procedure Open (Grade_Name : Grades_Name_Type);
-   --  Opens the grades file for writing.
-
-   procedure Close;
-   --  Closes the grades file.
-
-   procedure Write (Self : Grade_Type);
-   --  Writes the grading information of the Grade to the opened grades file.
+   procedure Grade_Class_Exam (Class_Exam : String)
+   with Pre => Is_Class_Exam_Name (To_UString (Class_Exam));
+   --  Grades all exams for the specified CLASS_EXAM. The answers are read
+   --  from the file named <CLASS_EXAM>_Answers.csv, the correct answers are
+   --  read from <CLASS_EXAM>_Batch.txt, and the results are written to
+   --  <CLASS_EXAM>_Grades.csv.
 
 end Hilbert.Grade;

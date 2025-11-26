@@ -14,7 +14,7 @@ package Hilbert.CLI.Generate is
 
    overriding
    function Usage_Custom_Parameters (Self : Cmd_Type) return String
-   is ("POOL_NAME");
+   is ("--exams=NUM_EXAMS --items=NUM_ITEMS --date=YYYYMM POOL_NAME");
 
    overriding
    function Short_Description (Self : Cmd_Type) return String
@@ -26,7 +26,7 @@ package Hilbert.CLI.Generate is
    is (AAA.Strings.Empty_Vector.Append
          ("Generate a collection of exams from the given pool of items. ")
          .New_Line
-         .Append ("POOL_NAME is the name of a Hilbert pool of items. EXAMS_NAME is <POOL_NAME>_<DATE>. Generated exams are written to <EXAM_NAME>_Exams.txt, and the corresponding answer batches are written to <EXAM_NAME>_Batch.txt.")
+         .Append ("POOL_NAME is the name of a Hilbert pool of items. EXAM_NAME is <POOL_NAME>_<DATE>. Generated exams are written to <EXAM_NAME>_Exams.txt, and the corresponding answer batches are written to <EXAM_NAME>_Batch.txt.")
          .New_Line
          .Append
             ("Please visit https://rocher.github.io/hilbert for a complete reference.")

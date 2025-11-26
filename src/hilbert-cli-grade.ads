@@ -14,7 +14,7 @@ package Hilbert.CLI.Grade is
 
    overriding
    function Usage_Custom_Parameters (Self : Cmd_Type) return String
-   is ("POOL_NAME");
+   is ("CLASS_EXAM");
 
    overriding
    function Short_Description (Self : Cmd_Type) return String
@@ -26,7 +26,7 @@ package Hilbert.CLI.Grade is
    is (AAA.Strings.Empty_Vector.Append
          ("Grade a collection of exams from a set of answers. ")
          .New_Line
-         .Append ("POOL_NAME is a Hilbert pool name. EXAM_NAME is <POOL_NAME>_<DATE>. Answers are expected to be in a file named <EXAM_NAME>_Answers.txt. Grades are produced using the correct answers in <EXAM_NAME>_Batch.txt, and the results will be written to <EXAM_NAME>_Grades.txt.")
+         .Append ("CLASS_EXAM is <CLASS>_<MODULE>_<RA>_<DATE>. For example, 'SMX1B_MUN_RA8_202511'. Answers are expected to be in a file named <CLASS_EXAM>_Answers.txt. Grades are produced using the correct answers in <EXAM>_Batch.txt and the results will be written to <GROUP_EXAMS>_Grades.txt, being <EXAM> SMX1_MUN_RA8_202511 for this example.")
          .New_Line
          .Append
             ("Please visit https://rocher.github.io/hilbert for a complete reference.")

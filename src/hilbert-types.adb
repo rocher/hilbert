@@ -66,13 +66,22 @@ package body Hilbert.Types is
    end Is_Class;
 
    ---------------
+   -- Is_Module --
+   ---------------
+
+   function Is_Module (M : UString) return Boolean is
+   begin
+      return M.Length = Module_Length;
+   end Is_Module;
+
+   ---------------
    -- Is_Course --
    ---------------
 
    function Is_Course (C : UString) return Boolean is
       S : constant String := To_String (C);
    begin
-      return S'Length = Course_Length and then Is_All_Upper (S);
+      return S'Length = Module_Length and then Is_All_Upper (S);
    end Is_Course;
 
    -----------
@@ -120,23 +129,23 @@ package body Hilbert.Types is
         and then Is_Course
                    (P.Unbounded_Slice
                       (Cycle_Length + Level_Length + 2,
-                       Cycle_Length + Level_Length + Course_Length + 1))
-        and then S (Cycle_Length + Level_Length + Course_Length + 2) = '_'
+                       Cycle_Length + Level_Length + Module_Length + 1))
+        and then S (Cycle_Length + Level_Length + Module_Length + 2) = '_'
         and then Is_RA
                    (P.Unbounded_Slice
-                      (Cycle_Length + Level_Length + Course_Length + 3,
+                      (Cycle_Length + Level_Length + Module_Length + 3,
                        Cycle_Length
                        + Level_Length
-                       + Course_Length
+                       + Module_Length
                        + RA_Length
                        + 2));
    end Is_Pool_Name;
 
-   -------------------
-   -- Is_Exams_Name --
-   -------------------
+   ------------------
+   -- Is_Exam_Name --
+   ------------------
 
-   function Is_Exams_Name (E : UString) return Boolean is
+   function Is_Exam_Name (E : UString) return Boolean is
       S : constant String := To_String (E);
    begin
       return
@@ -144,7 +153,34 @@ package body Hilbert.Types is
         and then Is_Pool_Name (E.Unbounded_Slice (1, Pool_Name_Length))
         and then S (Pool_Name_Length + 1) = '_'
         and then Is_Date (E.Unbounded_Slice (Pool_Name_Length + 2, S'Last));
-   end Is_Exams_Name;
+   end Is_Exam_Name;
+
+   ------------------------
+   -- Is_Class_Exam_Name --
+   ------------------------
+
+   function Is_Class_Exam_Name (C : UString) return Boolean is
+      S : constant String := To_String (C);
+   begin
+      --  ccccc mmm rrr dddddd
+      --  SMX1C_DIG_RA2_202511
+      return
+        S'Length = Class_Exam_Name_Length
+        and then Is_Class (C.Unbounded_Slice (1, Class_Length))
+        and then S (Class_Length + 1) = '_'
+        and then Is_Module
+                   (C.Unbounded_Slice
+                      (Class_Length + 2, Class_Length + Module_Length + 1))
+        and then S (Class_Length + Module_Length + 2) = '_'
+        and then Is_RA
+                   (C.Unbounded_Slice
+                      (Class_Length + Module_Length + 3,
+                       Class_Length + Module_Length + RA_Length + 2))
+        and then S (Class_Length + Module_Length + RA_Length + 3) = '_'
+        and then Is_Date
+                   (C.Unbounded_Slice
+                      (Class_Length + Module_Length + RA_Length + 4, S'Last));
+   end Is_Class_Exam_Name;
 
    ----------------
    -- Is_Exam_ID --
@@ -153,41 +189,25 @@ package body Hilbert.Types is
    function Is_Exam_ID (I : UString) return Boolean is
       S : constant String := To_String (I);
    begin
+      --  cccl mmm rrr dddddd/nnn
+      --  SMX1_DIG_RA2_202511/011
       return
         S'Length = Exam_ID_Length
-        and then Is_Exams_Name (I.Unbounded_Slice (1, Exams_Name_Length))
+        and then Is_Exam_Name (I.Unbounded_Slice (1, Exams_Name_Length))
         and then S (Exams_Name_Length + 1) = '/'
         and then Is_All_Digits (S (Exams_Name_Length + 2 .. S'Last));
    end Is_Exam_ID;
 
-   ---------------------
-   -- Is_Answers_Name --
-   ---------------------
+   --------------------
+   -- Get_Exams_Name --
+   --------------------
 
-   function Is_Answers_Name (A : UString) return Boolean is
-      S : constant String := To_String (A);
+   function Get_Exams_Name (C : Class_Exam_Name_Type) return Exams_Name_Type is
+      Pool : constant String :=
+        C (1 .. Cycle_Length + Level_Length)
+        & C (Cycle_Length + Level_Length + 2 .. C'Length);
    begin
-      return
-        S'Length = Answers_Name_Length
-        and then Is_Class (A.Unbounded_Slice (1, Class_Length))
-        and then S (Class_Length + 1) = '_'
-        and then Is_Course
-                   (A.Unbounded_Slice
-                      (Class_Length + 2, Class_Length + Course_Length + 1))
-        and then S (Class_Length + Course_Length + 2) = '_'
-        and then Is_RA
-                   (A.Unbounded_Slice
-                      (Class_Length + Course_Length + 3,
-                       Class_Length + Course_Length + RA_Length + 2))
-        and then S (Class_Length + Course_Length + RA_Length + 3) = '_'
-        and then Is_Date
-                   (A.Unbounded_Slice
-                      (Class_Length + Course_Length + RA_Length + 4,
-                       Class_Length
-                       + Course_Length
-                       + RA_Length
-                       + Date_Length
-                       + 3));
-   end Is_Answers_Name;
+      return Exams_Name_Type'(Pool);
+   end Get_Exams_Name;
 
 end Hilbert.Types;
