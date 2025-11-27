@@ -53,7 +53,7 @@ package body Hilbert.Grade is
          for I in 1 .. Bit_Stream.Num_Items loop
             Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
               Bit_Stream.Element (I);
-            Out_File.Put (To_BWString (Hilbert.Strings.To_String (Item.Bits)));
+            Out_File.Put (To_BWString (Item.Bits));
             if I < Bit_Stream.Num_Items then
                Out_File.Put (",");
             end if;

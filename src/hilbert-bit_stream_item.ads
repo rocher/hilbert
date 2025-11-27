@@ -24,7 +24,7 @@ package Hilbert.Bit_Stream_Item is
    --  Returns the validity of the Bit_Stream_Item based on its Bits field.
 
    function To_String (Self : Bit_Stream_Item_Type) return String
-   is (Hilbert.Strings.To_String (Self.Bits))
+   is (Self.Bits.To_String)
    with Pre => Self.Is_Valid;
    --  Converts the Bits field of the Bit_Stream_Item to a standard String.
 

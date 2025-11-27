@@ -8,7 +8,7 @@ package body Hilbert.Bit_Stream_Item is
    begin
       Self.Is_Valid :=
         Self.Bits.Length > 0
-        and then (for all C of Hilbert.Strings.To_String (Self.Bits) =>
+        and then (for all C of Self.Bits.To_String =>
                     C = '0' or else C = '1');
    end Check_Validity;
 

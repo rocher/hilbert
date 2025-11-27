@@ -24,6 +24,9 @@ package Hilbert.Strings is
    function To_BWString (Item : String) return BWString
    renames Ada.Characters.Conversions.To_Wide_String;
 
+   function To_BWString (Source : UString) return BWString
+   is (To_BWString (Source.To_String));
+
    function To_BWString (Source : UWString) return BWString
    renames Ada.Strings.Wide_Unbounded.To_Wide_String;
 
