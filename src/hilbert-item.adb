@@ -28,7 +28,9 @@ package body Hilbert.Item is
          elsif Line (1) = '3' then
             Self.Difficulty := Hard;
          else
-            raise Constraint_Error with "Invalid difficulty level";
+            raise Constraint_Error
+              with
+                "Invalid difficulty level ad line '" & To_String (Line) & "'";
          end if;
 
          --  Discard difficulty prefix
@@ -37,13 +39,16 @@ package body Hilbert.Item is
 
       --  Read Number of Options
       declare
-         Line : constant BWString := In_File.Get_Line;
-
+         Line            : constant BWString := In_File.Get_Line;
          Num_Options_Int : constant Integer :=
-           Integer'Value (Line'Image (2 .. 2));
+           Integer'Value (To_String (Line));
       begin
          if Num_Options_Int < 1 or else Num_Options_Int > Max_Options then
-            raise Constraint_Error with "Number of options out of range";
+            raise Constraint_Error
+              with
+                "Number of options out of range at line '"
+                & To_String (Line)
+                & "'";
          end if;
          Self.Num_Options := Num_Options_Type (Num_Options_Int);
       end;
@@ -61,7 +66,11 @@ package body Hilbert.Item is
             elsif Line (1) = '1' then
                Self.Options (I).Is_Correct := True;
             else
-               raise Constraint_Error with "Invalid correctness flag";
+               raise Constraint_Error
+                 with
+                   "Invalid correctness flag at line '"
+                   & To_String (Line)
+                   & "'";
             end if;
          end;
       end loop;
