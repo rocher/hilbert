@@ -8,7 +8,7 @@ package Hilbert.Random is
    procedure Initialize (Initiator : Integer := 123_456_789);
 
    function Random_Index (High : Positive) return Positive
-   with Pre => High > 1, Post => Random_Index'Result in 1 .. High;
+   with Pre => High >= 1, Post => Random_Index'Result in 1 .. High;
 
 private
 
