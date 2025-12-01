@@ -10,8 +10,8 @@ package body Hilbert.Answer is
    -- Open --
    ----------
 
-   procedure Open (Answer_Name : Answers_Name_Type) is
-      Filename : constant String := Answer_Name & Answers_Suffix;
+   procedure Open (Name : Class_Exam_Name_Type) is
+      Filename : constant String := Name & Answers_Suffix;
    begin
       In_File.Open (WIO.In_File, Filename);
    end Open;

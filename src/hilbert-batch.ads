@@ -31,7 +31,7 @@ package Hilbert.Batch is
    subtype Batch_Map_Type is Batch_Map_Package.Map;
 
    type Batch_Type is record
-      Exams_Name : Exams_Name_Type := Exams_Name_Type'(others => ' ');
+      Exams_Name : Exam_Name_Type := Exam_Name_Type'(others => ' ');
       --  The name of the exams file associated with this batch.
 
       Map : Batch_Map_Type;
@@ -60,7 +60,7 @@ package Hilbert.Batch is
    -- average of the difficulties of the items in the exam multiplied by 100.
    pragma Style_Checks (On);
 
-   procedure Read (Self : out Batch_Type; Exams_Name : Exams_Name_Type);
+   procedure Read (Self : out Batch_Type; Exams_Name : Exam_Name_Type);
    --  Reads the batch of exams with the specified name. The filename is
    --  constructed by appending the batch suffix to the exams name.
 

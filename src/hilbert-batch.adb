@@ -17,7 +17,7 @@ package body Hilbert.Batch is
    --  123456789012345678901234567890123456789012345678
    --  EXAM SMX1_DIG_RA2_202511/011 38 166/085/189 0001
 
-   procedure Read (Self : out Batch_Type; Exams_Name : Exams_Name_Type) is
+   procedure Read (Self : out Batch_Type; Exams_Name : Exam_Name_Type) is
       Filename : constant String := Exams_Name & Batch_Suffix;
       In_File  : Ada.Text_IO.File_Type;
    begin

@@ -26,7 +26,7 @@ package body Hilbert.Grade is
    -- Open --
    ----------
 
-   procedure Open (Grade_Name : Grades_Name_Type) is
+   procedure Open (Grade_Name : Class_Exam_Name_Type) is
       Filename : constant String := Grade_Name & Grades_Suffix;
    begin
       Out_File.Create (WIO.Out_File, Filename);
@@ -175,13 +175,13 @@ package body Hilbert.Grade is
       end if;
 
       Batch_Filename : constant String :=
-        String'(Get_Exams_Name (Class_Exam_Name)) & Batch_Suffix;
+        String'(Get_Exam_Name (Class_Exam_Name)) & Batch_Suffix;
       if Ada.Directories.Exists (Batch_Filename) = False then
          Log.Error ("Batch file '" & Batch_Filename & "' does not exist.");
          GNAT.OS_Lib.OS_Exit (Status => 1);
       end if;
 
-      Batch.Read (Get_Exams_Name (Class_Exam_Name));
+      Batch.Read (Get_Exam_Name (Class_Exam_Name));
       Hilbert.Answer.Open (Class_Exam_Name);
       Hilbert.Grade.Open (Class_Exam_Name);
 
