@@ -5,13 +5,13 @@ with Hilbert.Strings; use Hilbert.Strings;
 package Hilbert.Answer is
 
    type Answer_Type is record
-      Date_Time : UWString := Null_WUString;
+      Date_Time : UWString := Null_UWString;
       --  The date and time when the answer was submitted.
 
-      Email : UWString := Null_WUString;
+      Email : UWString := Null_UWString;
       --  The email of the person who submitted the answer.
 
-      Name_Surname : UWString := Null_WUString;
+      Name_Surname : UWString := Null_UWString;
       --  The name and surname of the person who submitted the answer.
 
       Exam_Id : Exam_ID_Type;

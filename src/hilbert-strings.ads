@@ -15,8 +15,8 @@ package Hilbert.Strings is
    subtype BWString is Wide_String;
    subtype UWString is Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
 
-   Null_WBString : constant BWString := "";
-   Null_WUString : constant UWString :=
+   Null_BWString : constant BWString := "";
+   Null_UWString : constant UWString :=
      Ada.Strings.Wide_Unbounded.Null_Unbounded_Wide_String;
 
    --  Conversions to BWString

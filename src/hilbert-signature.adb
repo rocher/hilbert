@@ -12,7 +12,7 @@ package body Hilbert.Signature is
 
    function Compute_Signature (Exam : Hilbert.Exam.Exam_Type) return UWString
    is
-      Signature : UWString := Null_WUString;
+      Signature : UWString := Null_UWString;
       Binary    : UWString := Signature_Sentinel;
    begin
       Binary.Append (Integer_To_Byte (Integer (Exam.Items.Length)));
@@ -62,10 +62,10 @@ package body Hilbert.Signature is
       Low  : Positive := 6;  --  skip sentinel + version
       High : Positive := Low + 7;  --  next byte for number of items
 
-      Bit_Stream : UWString := Null_WUString;
+      Bit_Stream : UWString := Null_UWString;
       Num_Bytes  : constant Positive := Signature.Length / 2;
 
-      Option_Stream : UWString := Null_WUString;
+      Option_Stream : UWString := Null_UWString;
       Num_Items     : Positive;
    begin
       for I in 1 .. Num_Bytes loop

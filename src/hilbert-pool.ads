@@ -11,7 +11,7 @@ package Hilbert.Pool is
       Name : UString := Null_UString;
       --  The name of the pool.
 
-      Title : UWString := Null_WUString;
+      Title : UWString := Null_UWString;
       --  The title of the pool.
 
       Items : Hilbert.Item.Item_Vector_Type;

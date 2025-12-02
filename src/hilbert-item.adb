@@ -13,10 +13,10 @@ package body Hilbert.Item is
       Self :=
         (Number      => 0,
          Difficulty  => Easy,
-         Question    => Null_WUString,
+         Question    => Null_UWString,
          Num_Options => 1,
          Options     =>
-           [others => (Text => Null_WUString, Is_Correct => False)]);
+           [others => (Text => Null_UWString, Is_Correct => False)]);
 
       declare
          Line : constant BWString := In_File.Get_Line;
