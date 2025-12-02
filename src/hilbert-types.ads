@@ -128,6 +128,9 @@ package Hilbert.Types is
    --  Checking functions  --
    --------------------------
 
+   function Is_All_Digits (S : String) return Boolean;
+   function Is_All_Upper (S : String) return Boolean;
+
    function Is_Cycle (S : String) return Boolean;
    function Is_Cycle (U : UString) return Boolean
    is (Is_Cycle (To_String (U)));

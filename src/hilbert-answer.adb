@@ -1,10 +1,12 @@
 with Hilbert.Constants; use Hilbert.Constants;
+with Hilbert.Version;   use Hilbert.Version;
 
 package body Hilbert.Answer is
 
    package WIO renames Hilbert.Strings.WIO;
 
    In_File : WIO.File_Type;
+   Version : Version_Type := Null_Version;
 
    ----------
    -- Open --
@@ -14,6 +16,12 @@ package body Hilbert.Answer is
       Filename : constant String := Name & Answers_Suffix;
    begin
       In_File.Open (WIO.In_File, Filename);
+      Line : constant String := To_String (In_File.Get_Line);
+      if Has_Version (Line) then
+         Version := Get_Version (Line);
+      else
+         In_File.Reset;
+      end if;
    end Open;
 
    -----------
@@ -25,11 +33,11 @@ package body Hilbert.Answer is
       In_File.Close;
    end Close;
 
-   ----------
-   -- Read --
-   ----------
+   ------------
+   -- Read_0 --
+   ------------
 
-   procedure Read (Self : out Answer_Type; End_Of_File : out Boolean) is
+   procedure Read_0 (Self : out Answer_Type; End_Of_File : out Boolean) is
    begin
       Self.Bit_Stream.Clear;
       End_Of_File := In_File.End_Of_File;
@@ -71,6 +79,17 @@ package body Hilbert.Answer is
          --  Bit_Stream
          Self.Bit_Stream.Load_From_UString
            (To_UString (Line.Unbounded_Slice (From, Line.Length)));
+      end if;
+   end Read_0;
+
+   ----------
+   -- Read --
+   ----------
+
+   procedure Read (Self : out Answer_Type; End_Of_File : out Boolean) is
+   begin
+      if Version = Null_Version then
+         Read_0 (Self, End_Of_File);
       end if;
    end Read;
 
