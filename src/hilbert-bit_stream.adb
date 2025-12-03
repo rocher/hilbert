@@ -1,3 +1,5 @@
+with Hilbert.Version; use Hilbert.Version;
+
 package body Hilbert.Bit_Stream is
 
    use all type Hilbert.Strings.UString;
@@ -63,15 +65,14 @@ package body Hilbert.Bit_Stream is
    -- Load_From_UString --
    -----------------------
 
-   procedure Load_From_UString (Self : in out Bit_Stream_Type; Bits : UString;
-   Version : Version_Type := Null_Version)
+   procedure Load_From_UString (Self : in out Bit_Stream_Type; Bits : UString)
    is
       Cursor : Natural := 1;
       Chunk  : UString;
       Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
    begin
       loop
-         if Version = "25.12" then
+         if Get_Version = "25.12" then
             Chunk := Get_Next_Chunk_25_12 (Bits, Cursor);
          else
             Chunk := Get_Next_Chunk_0 (Bits, Cursor);

@@ -9,6 +9,7 @@ with Simple_Logging;
 with Hilbert.Bit_Stream_Item;
 with Hilbert.Constants; use Hilbert.Constants;
 with Hilbert.Convert;   use Hilbert.Convert;
+with Hilbert.Version;   use Hilbert.Version;
 
 package body Hilbert.Grade is
 
@@ -30,6 +31,9 @@ package body Hilbert.Grade is
       Filename : constant String := Grade_Name & Grades_Suffix;
    begin
       Out_File.Create (WIO.Out_File, Filename);
+      if Get_Version /= Null_Version then
+         Out_File.Put_Line (To_BWString (Version_Prefix & Get_Version));
+      end if;
    end Open;
 
    -----------
@@ -189,20 +193,34 @@ package body Hilbert.Grade is
          Answer.Read (EOF);
          exit when EOF;
 
-         WIO.Put
-           (To_BWString (Answer.Name_Surname)
-            & "  ("
-            & To_BWString (Answer.Email)
-            & ")");
-         TIO.Put
-           (ASCII.CR
-            & ASCII.HT
-            & ASCII.HT
-            & ASCII.HT
-            & ASCII.HT
-            & ASCII.HT
-            & ASCII.HT
-            & ASCII.HT);
+         if Get_Version = Null_Version then
+            WIO.Put
+              (To_BWString (Answer.Name_Surname)
+               & "  ("
+               & To_BWString (Answer.Email)
+               & ")");
+            TIO.Put
+              (ASCII.CR
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT);
+         else
+            WIO.Put
+              (To_BWString (Answer.Name_Surname)
+               & ", "
+               & To_BWString (Answer.Name));
+            TIO.Put
+              (ASCII.CR
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT
+               & ASCII.HT);
+         end if;
 
          if Batch.Map.Contains (Exam_ID_Type'(Answer.Exam_Id)) = False then
             Log.Error ("No exam found for Answer Exam ID: " & Answer.Exam_Id);

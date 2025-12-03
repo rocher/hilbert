@@ -2,7 +2,6 @@ with Ada.Containers.Vectors;
 
 with Hilbert.Bit_Stream_Item;
 with Hilbert.Strings; use Hilbert.Strings;
-with Hilbert.Version; use Hilbert.Version;
 
 package Hilbert.Bit_Stream is
 
@@ -17,8 +16,7 @@ package Hilbert.Bit_Stream is
 
    procedure Load_From_UString
      (Self    : in out Bit_Stream_Type;
-      Bits    : UString;
-      Version : Version_Type := Null_Version);
+      Bits    : UString);
    --  Loads the Bit_Stream from a UString by dividing it into chunks of
    --  and creating a Bit_Stream_Item for each chunk.
 
