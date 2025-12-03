@@ -11,8 +11,16 @@ package Hilbert.Answer is
       Email : UWString := Null_UWString;
       --  The email of the person who submitted the answer.
 
+      Name : UWString := Null_UWString;
+      --  The name of the person who submitted the answer.
+      --
+      --  Only available in versions 25.12 and later.
+
       Name_Surname : UWString := Null_UWString;
       --  The name and surname of the person who submitted the answer.
+      --
+      --  Only available in versions prior to 25.12. In versions 25.12 and
+      --  later, it contains only the surname.
 
       Exam_Id : Exam_ID_Type;
       --  The ID of the exam for which this answer was submitted.
