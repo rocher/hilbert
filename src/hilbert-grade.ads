@@ -13,17 +13,40 @@ package Hilbert.Grade is
       Exam : Hilbert.Batch.Batch_Item_Type;
       --  The Bit_Stream_Item of the correct answers.
 
-      Match : Hilbert.Bit_Stream.Bit_Stream_Type;
-      --  The bitwise comparison between the Batch.Bit_Stream and
-      --  Answer.Bit_Stream. '1's indicate bits that match, '0' indicates bits
-      --  that differ. If the Answer has fewer bits, the missing bits are zero
-      --  in Match. If the Answer has extra bits, those bits are ignored in
-      --  Match.
-
-      --  For example:
-      --  ANSWERS: 1101 0001 1010 100  10010
-      --  CORRECT: 1101 0100 1010 1001 1111
-      --  MATCHES: 1111 1010 1111 1110 1111
+      Match : Hilbert.Bit_Stream.Bit_Stream_Type;  -- UString;
+      --  #TODO - Make Match more efficient
+      --  Matches is a series of symbols that can help GUIs when displaying
+      --  results:
+      --
+      --    Per each item, first character indicates overall match:
+      --      'C' indicates a correct answer (typically in green)
+      --      'W' indicates a wrong answer (typically in red)
+      --
+      --    Subsequent characters, if any, indicate the status of each
+      --    additional or missing option of the item:
+      --
+      --     * '?' indicates that the answer included less options than the
+      --       correct one
+      --
+      --     * '0' or '1' indicates that the answer included extra options
+      --       that was not in the correct answer
+      --
+      --  Example:
+      --  ANSWERS:  1101  0001  10    100110  1010  001   11010  1101
+      --  CORRECT:  1101  0100  1010  1001    1111  0010  110    101
+      --  MATCHES:  C     W     W??   C10     W     W?    C10   W1
+      --
+      --  The way GUIs interpret this information is up to them, but this
+      --  convention allows for a richer representation of the grading
+      --  results. The most common way would be to use colors: green for
+      --  correct answers, red for wrong answers, and perhaps gray for extra
+      --  or missing options.
+      --
+      --  For example, in a GUI, the first item could be displayed in green,
+      --  the second item could be displayed in red. The third item could be
+      --  displayed in red with two gray indicators for the missing options.
+      --  The fourth item could be displayed in green with a gray indicator
+      --  for the extra options '10', and so on.
 
       Score : Natural := 0;
       --  The score assigned to this exam based on the total number of

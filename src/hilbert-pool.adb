@@ -42,6 +42,16 @@ package body Hilbert.Pool is
 
       loop
          exit when In_File.End_Of_File;
+         --  #TODO - Add support for comments in pool files
+         --  #TODO - Add error handling for malformed items with line info
+         --  #TODO - Add support for flags in pool items (vspace, figures,
+         --  in-all-exams, etc)
+         --  #TODO - Add support to load only certain types of items,
+         --  depending on flags or its difficulty level
+         --  #TODO - Add support for bomb items (items with options that,
+         --  if selected, suspend the exam immediately)
+         --  #TODO - Add support for jackpot items (items with options that,
+         --  if selected, approve the exam regardless of other answers)
          New_Item.Read_From (In_File);
          Self.Items.Append (New_Item);
       end loop;
