@@ -1,6 +1,5 @@
 with Hilbert.Convert;   use Hilbert.Convert;
 with Hilbert.Random;    use Hilbert.Random;
-with Hilbert.Signature; use Hilbert.Signature;
 
 package body Hilbert.Exam is
 
@@ -54,7 +53,6 @@ package body Hilbert.Exam is
       end loop;
 
       New_Exam.Difficulty := Σ_Difficulty / Float (Num_Items);
-      New_Exam.Signature := Compute_Signature (New_Exam);
 
       return New_Exam;
    end Create_Exam;
@@ -67,6 +65,22 @@ package body Hilbert.Exam is
    begin
       Self.Id := Id;
    end Set_Id;
+
+   ----------------------
+   -- Get_Answers_Bits --
+   ----------------------
+
+   function Get_Answers_Bits (Self : Exam_Type) return UString is
+   begin
+      return Result : UString := Null_UString do
+         for I in 1 .. Positive (Self.Items.Length) loop
+            Result.Append (Self.Items.Element (I).Get_Answers_Bits);
+            if I < Positive (Self.Items.Length) then
+               Result.Append (' ');
+            end if;
+         end loop;
+      end return;
+   end Get_Answers_Bits;
 
    ----------------
    -- Title_Line --
@@ -85,7 +99,7 @@ package body Hilbert.Exam is
         & "/"
         & Trim (Integer (Self.Difficulty * 100.0))
         & " "
-        & To_BWString (Get_Options_Stream (Self.Signature));
+        & To_BWString (Self.Get_Answers_Bits);
    end Title_Line;
 
    --------------
@@ -97,8 +111,7 @@ package body Hilbert.Exam is
       Out_File.Put_Line (Self.Title_Line);
       for I in 1 .. Positive (Self.Items.Length) loop
          declare
-            Item : constant Hilbert.Item.Item_Type :=
-              Self.Items.Element (I);
+            Item : constant Hilbert.Item.Item_Type := Self.Items.Element (I);
          begin
             Item.Write_To (Out_File);
          end;

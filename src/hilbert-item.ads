@@ -59,6 +59,11 @@ package Hilbert.Item is
    procedure Shuffle_Options (Self : in out Item_Type);
    --  Shuffles the options of the item Self randomly.
 
+   function Get_Answers_Bits (Self : Item_Type) return UString;
+   --  Returns a UString representing the correct answers of the item. The
+   --  returned UString consists of '1' and '0' characters, where '1'
+   --  indicates a correct option and '0' indicates an incorrect option.
+
    procedure Put_Image_Item
      (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
       Self   : Item_Type);

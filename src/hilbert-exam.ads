@@ -13,9 +13,6 @@ package Hilbert.Exam is
       Id : UWString := Null_UWString;  --  #FIXME - Use type Exam_ID_Type
       --  The identifier of the exam.
 
-      Signature : UWString := Null_UWString;
-      --  The signature of the exam.
-
       Num_Options : Natural := 0;
       --  The total number of options of all items.
 
@@ -39,6 +36,9 @@ package Hilbert.Exam is
 
    procedure Set_Id (Self : in out Exam_Type; Id : UWString);
    --  Sets the identifier of the exam to the specified Id.
+
+   function Get_Answers_Bits (Self : Exam_Type) return UString;
+   --  Returns the bits representing the correct answers of the exam.
 
    procedure Write_To (Self : Exam_Type; Out_File : in out WIO.File_Type);
    --  Writes the exam Self to the specified output file.

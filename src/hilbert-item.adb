@@ -122,6 +122,24 @@ package body Hilbert.Item is
       end loop;
    end Shuffle_Options;
 
+   ----------------------
+   -- Get_Answers_Bits --
+   ----------------------
+
+   function Get_Answers_Bits (Self : Item_Type) return UString is
+   begin
+      return Result : UString := Null_UString do
+         for I in 1 .. Self.Num_Options loop
+            if Self.Options (I).Is_Correct then
+               Result.Append ('1');
+            else
+               Result.Append ('0');
+            end if;
+
+         end loop;
+      end return;
+   end Get_Answers_Bits;
+
    --------------------
    -- Put_Image_Item --
    --------------------
