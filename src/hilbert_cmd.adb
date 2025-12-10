@@ -1,5 +1,7 @@
 with Hilbert.CLI;
 
+--  with Hilbert.Unit_Test;
+
 -----------------
 -- Hilbert_CMD --
 -----------------
@@ -9,5 +11,7 @@ begin
 
    Hilbert.CLI.Initialize;
    Hilbert.CLI.Execute;
+
+   --  Hilbert.Unit_Test.All_Unit_Tests;
 
 end Hilbert_CMD;

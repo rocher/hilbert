@@ -544,6 +544,4 @@ package body Hilbert.Types is
       return Class_Exam_Name;
    end Get_Class_Exam_Name;
 
-   procedure Test_Hilbert_Types is separate;
-
 end Hilbert.Types;

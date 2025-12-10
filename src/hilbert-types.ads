@@ -294,6 +294,4 @@ package Hilbert.Types is
    function Get_Class_Exam_Name (U : UString) return Class_Exam_Name_Type
    is (Get_Class_Exam_Name (To_String (U)));
 
-   procedure Test_Hilbert_Types;
-
 end Hilbert.Types;
