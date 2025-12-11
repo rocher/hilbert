@@ -14,7 +14,6 @@ package Hilbert.Grade is
       --  The Bit_Stream_Item of the correct answers.
 
       Match : Hilbert.Bit_Stream.Bit_Stream_Type;  -- UString;
-      --  #TODO - Make Match more efficient
       --  Matches is a series of symbols that can help GUIs when displaying
       --  results:
       --
