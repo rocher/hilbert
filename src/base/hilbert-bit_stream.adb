@@ -84,4 +84,20 @@ package body Hilbert.Bit_Stream is
       end loop;
    end Load_From_UString;
 
+   --------------
+   -- Write_To --
+   --------------
+
+   procedure Write_To (Self : Bit_Stream_Type; Out_File : WIO.File_Type) is
+   begin
+      for I in 1 .. Self.Num_Items loop
+         Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
+           Self.Element (I);
+         Out_File.Put (To_BWString (Item.Bits));
+         if I < Self.Num_Items then
+            Out_File.Put (",");
+         end if;
+      end loop;
+   end Write_To;
+
 end Hilbert.Bit_Stream;

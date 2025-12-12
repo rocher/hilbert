@@ -51,19 +51,6 @@ package body Hilbert.Grade is
 
    procedure Write (Self : Grade_Type) is
 
-      procedure Write_Bit_Stream
-        (Bit_Stream : Hilbert.Bit_Stream.Bit_Stream_Type) is
-      begin
-         for I in 1 .. Bit_Stream.Num_Items loop
-            Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
-              Bit_Stream.Element (I);
-            Out_File.Put (To_BWString (Item.Bits));
-            if I < Bit_Stream.Num_Items then
-               Out_File.Put (",");
-            end if;
-         end loop;
-      end Write_Bit_Stream;
-
    begin
       Out_File.Put
         (To_BWString ("ANSWERS")
@@ -76,7 +63,7 @@ package body Hilbert.Grade is
          & ","
          & To_BWString (Self.Answer.Exam_Id)
          & ",");
-      Write_Bit_Stream (Self.Answer.Bit_Stream);
+      Self.Answer.Bit_Stream.Write_To (Out_File);
       Out_File.New_Line;
 
       Out_File.Put
@@ -84,7 +71,7 @@ package body Hilbert.Grade is
          & ","
          & Integer'Wide_Image (Integer (Self.Exam.Num_Items))
          & ",");
-      Write_Bit_Stream (Self.Exam.Bit_Stream);
+      Self.Exam.Bit_Stream.Write_To (Out_File);
       Out_File.New_Line;
 
       Out_File.Put (To_BWString ("MATCHES,"));

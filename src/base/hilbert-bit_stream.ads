@@ -24,4 +24,7 @@ package Hilbert.Bit_Stream is
    is (Natural (Bit_Stream_Vector_Package.Vector (Self).Length));
    --  Returns the number of items in the Bit_Stream.
 
+   procedure Write_To (Self : Bit_Stream_Type; Out_File : WIO.File_Type);
+   --  Outputs the values of the Bit_Stream to the given file.
+
 end Hilbert.Bit_Stream;
