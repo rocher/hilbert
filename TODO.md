@@ -1,11 +1,15 @@
 # List of Things TODO
 
-### In Type `Grade`
+### In Type `Grade` or Grade Files
 
-- [ ] Make `Match` field of `Grade`type more efficient: read description in
+- [X] Make `Match` field of `Grade`type more efficient: read description in
   [source code](src/hilbert-grade.ads#L17)
 
-- [ ] Sort output by "Surname, Name"
+- [X] Sort output by "Surname, Name" (HV=25.12)
+
+- [X] Include computed score
+
+- [X] Add support for version number
 
 ### In Pool files
 
@@ -34,6 +38,9 @@
 - [ ] Add support for grouping: one flag defines a group of items, then one
   item of the group appears in all exams
 
+- [X] Add support for $\LaTeX$ expressions (inline math) using `\(..\)`
+  instead of `$..$`
+
 ### Generation of Exams
 
 - [ ] Allow more than one pool to generate exams (useful for June 'repesca')
@@ -44,6 +51,6 @@
 
 ### Exam Visualizer
 
-- [ ] Use new match field of grade file: depends on Type Grade TODO.
+- [X] Use new match field of grade file: depends on Type Grade TODO.
 
 - [ ] Improve visual effects, possibly based on the Advent Of Code website.
