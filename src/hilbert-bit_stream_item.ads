@@ -28,17 +28,25 @@ package Hilbert.Bit_Stream_Item is
    with Pre => Self.Is_Valid;
    --  Converts the Bits field of the Bit_Stream_Item to a standard String.
 
-   function Match
-     (Answer, Correct : Bit_Stream_Item_Type) return Bit_Stream_Item_Type;
-   --  Compares the Answer Bit_Stream_Item with the Correct one and returns a
-   --  Bit_Stream_Item indicating which bits match (1) and which do not (0).
-   --  For each position in the Bits field, if the bits match, the resulting
-   --  Bit_Stream_Item will have '1' at that position; otherwise, it will have
-   --  '0'. If the Answer have fewer bits than Correct, the remaining bits
-   --  included in the result will be '0'. If Answer have more bits than
-   --  Correct, the extra bits will be ignored.
-   --
-   --  Precondition: Both Answer and Correct must be valid.
+   function Head (Left, Right : Bit_Stream_Item_Type) return UString
+   with Pre => Left.Bits.Length > Right.Bits.Length;
+   --  Returns a UString representing the leading bits of the Left
+   --  Bit_Stream_Item. The result contains bits from the start up to the
+   --  length of the Right Bit_Stream_Item. For example, if Left has bits
+   --  "11010" and Right has bits "101", the result will be "110".
+
+   function Tail (Left, Right : Bit_Stream_Item_Type) return UString;
+   --  If Left has more bits than Right, Tail returns the trailing bits of
+   --  Left. For example, if Left has bits "11010" and Right has bits "101",
+   --  the result will be "10". If Left has less bits than Right, this
+   --  function returns a series of '?' characters representing the missing
+   --  bits. For example, if Left has bits "101" and Right has bits "11010",
+   --  the result will be "??". If Left and Right have the same length, the
+   --  result is an empty UString.
+
+   function Mask (Self : Bit_Stream_Item_Type) return UString;
+   --  Returns a UString representing a mask for the Bit_Stream_Item. The
+   --  result contains as many '?' characters as the length of Self.Bits.
 
    overriding
    function "=" (Left, Right : Bit_Stream_Item_Type) return Boolean

@@ -8,8 +8,7 @@ package body Hilbert.Bit_Stream_Item is
    begin
       Self.Is_Valid :=
         Self.Bits.Length > 0
-        and then (for all C of Self.Bits.To_String =>
-                    C = '0' or else C = '1');
+        and then (for all C of Self.Bits.To_String => C = '0' or else C = '1');
    end Check_Validity;
 
    --------------
@@ -19,35 +18,50 @@ package body Hilbert.Bit_Stream_Item is
    function Is_Valid (Self : in out Bit_Stream_Item_Type) return Boolean
    is (Self.Is_Valid);
 
-   -----------
-   -- Match --
-   -----------
+   ----------
+   -- Head --
+   ----------
 
-   function Match
-     (Answer, Correct : Bit_Stream_Item_Type) return Bit_Stream_Item_Type
-   is
-      Result  : Bit_Stream_Item_Type;
-      Min_Len : constant Natural :=
-        Natural'Min (Answer.Bits.Length, Correct.Bits.Length);
+   function Head (Left, Right : Bit_Stream_Item_Type) return UString is
    begin
-      Result.Bits := Hilbert.Strings.Null_UString;
-      Result.Is_Valid := True;
-
-      for I in 1 .. Min_Len loop
-         if Answer.Bits.Element (I) = Correct.Bits.Element (I) then
-            Result.Bits.Append ('1');
-         else
-            Result.Bits.Append ('0');
-         end if;
-      end loop;
-
-      if Answer.Bits.Length < Correct.Bits.Length then
-         for I in Min_Len + 1 .. Correct.Bits.Length loop
-            Result.Bits.Append ('0');
+      return Result : UString := Null_UString do
+         for I in 1 .. Right.Bits.Length loop
+            Result.Append (Left.Bits.Element (I));
          end loop;
-      end if;
+      end return;
+   end Head;
 
-      return Result;
-   end Match;
+   ----------
+   -- Tail --
+   ----------
+
+   function Tail (Left, Right : Bit_Stream_Item_Type) return UString is
+   begin
+      return Result : UString := Null_UString do
+         if Left.Bits.Length < Right.Bits.Length then
+            for I in Left.Bits.Length + 1 .. Right.Bits.Length loop
+               Result.Append ('?');
+            end loop;
+            return;
+         elsif Right.Bits.Length < Left.Bits.Length then
+            for I in Right.Bits.Length + 1 .. Left.Bits.Length loop
+               Result.Append (Left.Bits.Element (I));
+            end loop;
+         end if;
+      end return;
+   end Tail;
+
+   ----------
+   -- Mask --
+   ----------
+
+   function Mask (Self : Bit_Stream_Item_Type) return UString is
+   begin
+      return Result : UString := Null_UString do
+         for I in 1 .. Self.Bits.Length loop
+            Result.Append ('?');
+         end loop;
+      end return;
+   end Mask;
 
 end Hilbert.Bit_Stream_Item;
