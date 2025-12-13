@@ -3,6 +3,8 @@ with Ada.Strings.Unbounded;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
+with Hilbert.CSV_Strings;
+
 package Hilbert.Strings is
 
    package WIO renames Ada.Wide_Text_IO;
@@ -59,5 +61,21 @@ package Hilbert.Strings is
 
    function To_UString (Source : UWString) return UString
    is (To_UString (To_String (Source)));
+
+   --  CSV Utilities
+
+   function Index_Of_Char
+     (Source : UString; Char : Character; From : Natural) return Natural
+   is (Ada.Strings.Unbounded.Index (Source, "" & Char, From));
+
+   package CSV_UStrings is new
+     Hilbert.CSV_Strings
+       (Base_String      => UString,
+        Null_Base_String => Null_UString,
+        Length           => Ada.Strings.Unbounded.Length,
+        Index_Of         => Index_Of_Char,
+        Substring        => Ada.Strings.Unbounded.Unbounded_Slice,
+        Append_Char      => Ada.Strings.Unbounded.Append,
+        Append_String    => Ada.Strings.Unbounded.Append);
 
 end Hilbert.Strings;

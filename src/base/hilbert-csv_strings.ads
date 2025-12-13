@@ -1,3 +1,12 @@
+--
+--  Generic package for CSV string handling.
+--  It is already instantiated for UString in Hilbert.Strings package.
+--
+--  This package defines a generic CSV string type that can work with any base
+--  string type, such as Unbounded_String. It provides functionality to parse,
+--  construct, and manipulate CSV strings according to standard CSV rules,
+--  including handling of separators, enclosures, and escaping.
+
 generic
 
    type Base_String is private;
