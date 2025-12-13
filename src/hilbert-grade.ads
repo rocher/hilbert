@@ -1,8 +1,11 @@
 with Hilbert.Answer;
 with Hilbert.Batch;
-with Hilbert.Bit_Stream;
-with Hilbert.Strings; use Hilbert.Strings;
-with Hilbert.Types; use Hilbert.Types;
+with Hilbert.Strings;
+with Hilbert.Types;
+
+use Hilbert.Strings;
+use Hilbert.Strings.CSV_UStrings;
+use Hilbert.Types;
 
 package Hilbert.Grade is
 
@@ -13,13 +16,15 @@ package Hilbert.Grade is
       Exam : Hilbert.Batch.Batch_Item_Type;
       --  The Bit_Stream_Item of the correct answers.
 
-      Match : Hilbert.Bit_Stream.Bit_Stream_Type;  -- UString;
+      Match : CSV_String;
       --  Matches is a series of symbols that can help GUIs when displaying
       --  results:
       --
       --    Per each item, first character indicates overall match:
-      --      'C' indicates a correct answer (typically in green)
-      --      'W' indicates a wrong answer (typically in red)
+      --      'G' indicates a correct answer, in Green
+      --      'R' indicates a wrong answer, in Red
+      --      'g' indicates an missing or additional options, as well as
+      --      unanswered or an additional item, in gray
       --
       --    Subsequent characters, if any, indicate the status of each
       --    additional or missing option of the item:
@@ -31,21 +36,19 @@ package Hilbert.Grade is
       --       that was not in the correct answer
       --
       --  Example:
-      --  ANSWERS:  1101  0001  10    100110  1010  001   11010  1101
-      --  CORRECT:  1101  0100  1010  1001    1111  0010  110    101
-      --  MATCHES:  C     W     W??   C10     W     W?    C10   W1
+      --  ANSWERS:  1101   100110    0001   10      1101          |  10101
+      --  CORRECT:  1101   1001      0100   1010    101     1101  |
+      --  MATCHES: G1101  G1001g10  R0001  R10g??  R110g1  g????  |  g10101
       --
-      --  The way GUIs interpret this information is up to them, but this
-      --  convention allows for a richer representation of the grading
-      --  results. The most common way would be to use colors: green for
-      --  correct answers, red for wrong answers, and perhaps gray for extra
-      --  or missing options.
+      --  The way GUIs interpret this information is clear:
       --
-      --  For example, in a GUI, the first item could be displayed in green,
-      --  the second item could be displayed in red. The third item could be
-      --  displayed in red with two gray indicators for the missing options.
-      --  The fourth item could be displayed in green with a gray indicator
-      --  for the extra options '10', and so on.
+      --     'G1101'      <green>1101</green>
+      --     'G1001g10'   <green>1001</green><gray>10</gray>
+      --     'R0001'      <red>0001</red>
+      --     'R10g??'     <red>10</red><gray>??</gray>
+      --     'R110g1'     <red>110</red><gray>1</gray>
+      --     'g????'      <gray>????</gray>
+      --     'g10101'     <gray>10101</gray>
 
       Score : Natural := 0;
       --  The score assigned to this exam based on the total number of

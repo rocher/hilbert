@@ -52,17 +52,33 @@ package body Hilbert.Grade is
    procedure Write (Self : Grade_Type) is
 
    begin
-      Out_File.Put
-        (To_BWString ("ANSWERS")
-         & ","
-         & To_BWString (Self.Answer.Date_Time)
-         & ","
-         & To_BWString (Self.Answer.Email)
-         & ","
-         & To_BWString (Self.Answer.Name_Surname)
-         & ","
-         & To_BWString (Self.Answer.Exam_Id)
-         & ",");
+      if Get_Version = Null_Version then
+         Out_File.Put
+           (To_BWString ("ANSWERS")
+            & ","
+            & To_BWString (Self.Answer.Date_Time)
+            & ","
+            & To_BWString (Self.Answer.Email)
+            & ","
+            & To_BWString (Self.Answer.Name_Surname)
+            & ","
+            & To_BWString (Self.Answer.Exam_Id)
+            & ",");
+      elsif Get_Version = "25.12" then
+         Out_File.Put
+           (To_BWString ("ANSWERS")
+            & ","
+            & To_BWString (Self.Answer.Date_Time)
+            & ","
+            & To_BWString (Self.Answer.Email)
+            & ","
+            & To_BWString (Self.Answer.Name_Surname)
+            & ","
+            & To_BWString (Self.Answer.Name)
+            & ","
+            & To_BWString (Self.Answer.Exam_Id)
+            & ",");
+      end if;
       Self.Answer.Bit_Stream.Write_To (Out_File);
       Out_File.New_Line;
 
@@ -74,14 +90,21 @@ package body Hilbert.Grade is
       Self.Exam.Bit_Stream.Write_To (Out_File);
       Out_File.New_Line;
 
-      Out_File.Put (To_BWString ("MATCHES,"));
-      Write_Bit_Stream (Self.Match);
+      Out_File.Put (To_BWString ("MATCHES," & Self.Match.Values));
       Out_File.New_Line;
 
       Out_File.Put
         (To_BWString ("SCORE")
          & ","
-         & Integer'Wide_Image (Integer (Self.Score)));
+         & Hilbert.Convert.Trim (Self.Score)
+         & "/"
+         & Hilbert.Convert.Trim (Self.Exam.Num_Items)
+         & ","
+         & Trim (Float (Self.Score) / Float (Self.Exam.Num_Items) * 10.0)
+         & ","
+         & Hilbert.Convert.Trim
+             (Integer
+                (Float (Self.Score) / Float (Self.Exam.Num_Items) * 10.0)));
       Out_File.New_Line;
 
    end Write;
@@ -100,7 +123,7 @@ package body Hilbert.Grade is
    begin
       Self.Answer := Answer;
       Self.Exam := Exam;
-      Self.Match.Clear;
+      Self.Match := Null_CSV_String;
       Self.Score := 0;
 
       for I in 1 .. Min_Items loop
@@ -108,12 +131,15 @@ package body Hilbert.Grade is
            Answer.Bit_Stream.Element (I);
          Exam_Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
            Exam.Bit_Stream.Element (I);
-         Self.Match.Append
-           (Hilbert.Bit_Stream_Item.Match (Answer_Item, Exam_Item));
 
          if Answer_Item.Bits.Length = Exam_Item.Bits.Length then
             if Answer_Item.Bits = Exam_Item.Bits then
                Self.Score := Self.Score + 1;
+               Self.Match.Append_Field
+                 (To_UString ("G" & Answer_Item.Bits.To_String));
+            else
+               Self.Match.Append_Field
+                 (To_UString ("R" & Answer_Item.Bits.To_String));
             end if;
          elsif Answer_Item.Bits.Length > Exam_Item.Bits.Length then
             --  Lengths differ, score depends on matching bits only
@@ -122,9 +148,23 @@ package body Hilbert.Grade is
                if Answer_Item.Bits.Element (J) /= Exam_Item.Bits.Element (J)
                then
                   Correct := False;
+                  exit;
                end if;
             end loop;
+            Self.Match.Append_Field
+              ((if Correct then "G" else "R")
+               & Head (Answer_Item, Exam_Item)
+               & "g"
+               & Tail (Answer_Item, Exam_Item));
             Self.Score := Self.Score + (if Correct then 1 else 0);
+         else
+            --  Answer_Item.Bits.Length < Exam_Item.Bits.Length
+            --  Less bits than correct answer, no score, wrong answer
+            Self.Match.Append_Field
+              ("R"
+               & To_UString (Answer_Item.Bits.To_String)
+               & "g"
+               & Tail (Answer_Item, Exam_Item));
          end if;
       end loop;
 
@@ -133,15 +173,17 @@ package body Hilbert.Grade is
             Exam_Item :
               constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
                 Exam.Bit_Stream.Element (I);
-
-            Match_Item : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
-            Match_Item.Bits := Exam_Item.Bits;
-            for J in 1 .. Exam_Item.Bits.Length loop
-               Match_Item.Bits.Replace_Element (J, '0');
-            end loop;
-            Match_Item.Is_Valid := True;
-            Self.Match.Append (Match_Item);
+            Self.Match.Append_Field ("g" & Exam_Item.Mask);
             --  No score for unanswered items
+         end loop;
+      elsif Answer.Bit_Stream.Num_Items > Exam.Bit_Stream.Num_Items then
+         for I in Min_Items + 1 .. Answer.Bit_Stream.Num_Items loop
+            Answer_Item :
+              constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
+                Answer.Bit_Stream.Element (I);
+            Self.Match.Append_Field
+              ("g" & To_UString (Answer_Item.Bits.To_String));
+            --  No score for additional items
          end loop;
       end if;
    end Grade_Answer;
