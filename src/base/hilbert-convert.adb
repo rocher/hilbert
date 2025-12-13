@@ -1,4 +1,5 @@
 with Ada.Integer_Wide_Text_IO;
+with Ada.Float_Wide_Text_IO;
 with Ada.Strings;
 with Ada.Strings.Wide_Unbounded;
 
@@ -8,8 +9,8 @@ with Ada.Strings.Wide_Unbounded;
 
 package body Hilbert.Convert is
 
-   --  package IntIO renames Ada.Integer_Text_IO;
    package IntIO renames Ada.Integer_Wide_Text_IO;
+   package FloatIO renames Ada.Float_Wide_Text_IO;
 
    ---------------------
    -- Byte_To_Integer --
@@ -142,11 +143,25 @@ package body Hilbert.Convert is
    -- Trim --
    ----------
 
-   function Trim (Int : Integer) return BWString is
+   function Trim (I : Integer) return BWString is
       Str  : BWString (1 .. 20);
       UStr : UWString;
    begin
-      IntIO.Put (Str, Int);
+      IntIO.Put (Str, I);
+      UStr :=
+        Ada.Strings.Wide_Unbounded.Trim (To_UWString (Str), Ada.Strings.Left);
+      return To_BWString (UStr);
+   end Trim;
+
+   ----------
+   -- Trim --
+   ----------
+
+   function Trim (F : Float) return BWString is
+      Str  : BWString (1 .. 40);
+      UStr : UWString;
+   begin
+      FloatIO.Put (Str, F);
       UStr :=
         Ada.Strings.Wide_Unbounded.Trim (To_UWString (Str), Ada.Strings.Left);
       return To_BWString (UStr);

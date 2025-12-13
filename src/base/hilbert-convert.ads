@@ -24,6 +24,8 @@ package Hilbert.Convert is
      (Int : Integer; Width : Positive; Padding : Wide_Character := ' ')
       return BWString;
 
-   function Trim (Int : Integer) return BWString;
+   function Trim (I : Integer) return BWString;
+
+   function Trim (F : Float) return BWString;
 
 end Hilbert.Convert;
