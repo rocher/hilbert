@@ -40,9 +40,10 @@ package body Hilbert.Pool is
          In_File.Skip_Line; -- Skip blank line after title
       end;
 
+      Line_Number : Natural := 2;
       loop
          exit when In_File.End_Of_File;
-         New_Item.Read_From (In_File);
+         New_Item.Read_From (In_File, Line_Number);
          Self.Items.Append (New_Item);
       end loop;
       In_File.Close;

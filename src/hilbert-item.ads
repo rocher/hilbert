@@ -50,7 +50,10 @@ package Hilbert.Item is
        and then Left.Options = Right.Options);
    --  Compares two Items for equality based on their fields.
 
-   procedure Read_From (Self : out Item_Type; In_File : in out WIO.File_Type);
+   procedure Read_From
+     (Self        : out Item_Type;
+      In_File     : in out WIO.File_Type;
+      Line_Number : in out Natural);
    --  Reads an item from the specified input file into Self.
 
    procedure Write_To (Self : Item_Type; Out_File : in out WIO.File_Type);

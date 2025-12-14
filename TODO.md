@@ -13,9 +13,9 @@
 
 ### In Pool files
 
-- [ ] Add support for comments
+- [X] Add support for comments
 
-- [ ] Add error handling for malformed items with line info
+- [X] Add error handling for malformed items with line info
 
 - [ ] Add support to load only certain types of items, depending on flags or
   its difficulty level

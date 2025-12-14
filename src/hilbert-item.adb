@@ -1,3 +1,5 @@
+with Ada.Wide_Characters.Handling;
+
 with Hilbert.Convert; use Hilbert.Convert;
 with Hilbert.Random;  use Hilbert.Random;
 
@@ -7,8 +9,23 @@ package body Hilbert.Item is
    -- Read_From --
    ---------------
 
-   procedure Read_From (Self : out Item_Type; In_File : in out WIO.File_Type)
+   procedure Read_From
+     (Self        : out Item_Type;
+      In_File     : in out WIO.File_Type;
+      Line_Number : in out Natural)
    is
+      procedure Skip_Line is
+      begin
+         Line_Number := Line_Number + 1;
+         In_File.Skip_Line;
+      end Skip_Line;
+
+      function Get_Line return BWString is
+      begin
+         Line_Number := Line_Number + 1;
+         return In_File.Get_Line;
+      end Get_Line;
+
    begin
       Self :=
         (Number      => 0,
@@ -19,8 +36,17 @@ package body Hilbert.Item is
            [others => (Text => Null_UWString, Is_Correct => False)]);
 
       declare
-         Line : constant BWString := In_File.Get_Line;
+         WChar : Wide_Character;
+         EOL   : Boolean;
       begin
+         --  Skip Comment Lines
+         loop
+            In_File.Look_Ahead (WChar, EOL);
+            exit when Ada.Wide_Characters.Handling.Is_Digit (WChar);
+            Skip_Line;
+         end loop;
+
+         Line : constant BWString := Get_Line;
          if Line (1) = '1' then
             Self.Difficulty := Easy;
          elsif Line (1) = '2' then
@@ -30,7 +56,10 @@ package body Hilbert.Item is
          else
             raise Constraint_Error
               with
-                "Invalid difficulty level ad line '" & To_String (Line) & "'";
+                "line"
+                & Line_Number'Image
+                & ": invalid difficulty level; "
+                & To_String (Line);
          end if;
 
          --  Discard difficulty prefix
@@ -39,16 +68,17 @@ package body Hilbert.Item is
 
       --  Read Number of Options
       declare
-         Line            : constant BWString := In_File.Get_Line;
+         Line            : constant BWString := Get_Line;
          Num_Options_Int : constant Integer :=
            Integer'Value (To_String (Line));
       begin
          if Num_Options_Int < 1 or else Num_Options_Int > Max_Options then
             raise Constraint_Error
               with
-                "Number of options out of range at line '"
-                & To_String (Line)
-                & "'";
+                "line"
+                & Line_Number'Image
+                & ": number of options out of range: "
+                & To_String (Line);
          end if;
          Self.Num_Options := Num_Options_Type (Num_Options_Int);
       end;
@@ -57,27 +87,36 @@ package body Hilbert.Item is
       for I in 1 .. Self.Num_Options loop
          --  Read Option Text prefixed by 0 or 1 (indicating correctness)
          declare
-            Line : constant BWString := In_File.Get_Line;
+            Line : constant BWString := Get_Line;
          begin
             Self.Options (I).Text := To_UWString (Line (3 .. Line'Length));
 
-            if Line (1) = '0' then
-               Self.Options (I).Is_Correct := False;
-            elsif Line (1) = '1' then
-               Self.Options (I).Is_Correct := True;
+            if Line'Length > 0 then
+               if Line (1) = '0' then
+                  Self.Options (I).Is_Correct := False;
+               elsif Line (1) = '1' then
+                  Self.Options (I).Is_Correct := True;
+               else
+                  raise Constraint_Error
+                    with
+                      "line"
+                      & Line_Number'Image
+                      &": invalid correctness flag; "
+                      & To_String (Line);
+               end if;
             else
                raise Constraint_Error
                  with
-                   "Invalid correctness flag at line '"
-                   & To_String (Line)
-                   & "'";
+                 "line"
+                 & Line_Number'Image
+                 & "empty line, option expected";
             end if;
          end;
       end loop;
 
       --  Skip blank line between items
       if not In_File.End_Of_File then
-         In_File.Skip_Line;
+         Skip_Line;
       end if;
    end Read_From;
 
