@@ -3,7 +3,6 @@ with Ada.Strings;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Text_IO;
 
-with GNAT.OS_Lib;
 with Simple_Logging;
 
 with Hilbert.Bit_Stream_Item;
@@ -203,15 +202,15 @@ package body Hilbert.Grade is
 
       Answers_Filename : constant String := Class_Exam & Answers_Suffix;
       if Ada.Directories.Exists (Answers_Filename) = False then
-         Log.Error ("Answers file '" & Answers_Filename & "' does not exist.");
-         GNAT.OS_Lib.OS_Exit (Status => 1);
+         raise Constraint_Error
+           with "Answers file '" & Answers_Filename & "' does not exist.";
       end if;
 
       Batch_Filename : constant String :=
         String'(Get_Exam_Name (Class_Exam_Name)) & Batch_Suffix;
       if Ada.Directories.Exists (Batch_Filename) = False then
-         Log.Error ("Batch file '" & Batch_Filename & "' does not exist.");
-         GNAT.OS_Lib.OS_Exit (Status => 1);
+         raise Constraint_Error
+           with "Batch file '" & Batch_Filename & "' does not exist.";
       end if;
 
       Batch.Read (Get_Exam_Name (Class_Exam_Name));

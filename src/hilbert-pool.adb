@@ -1,15 +1,10 @@
 with Ada.Directories;
 
-with GNAT.OS_Lib;
-with Simple_Logging;
-
 with Hilbert.Constants; use Hilbert.Constants;
 with Hilbert.Convert;   use Hilbert.Convert;
 with Hilbert.Exam;      use Hilbert.Exam;
 
 package body Hilbert.Pool is
-
-   package Log renames Simple_Logging;
 
    use all type UWString;
 
@@ -23,8 +18,8 @@ package body Hilbert.Pool is
       Filename : constant String := Pool_Name & Pool_Suffix;
    begin
       if Ada.Directories.Exists (Filename) = False then
-         Log.Error ("Pool file '" & Filename & "' does not exist.");
-         GNAT.OS_Lib.OS_Exit (Status => 1);
+         raise Constraint_Error
+           with "Pool file '" & Filename & "' does not exist.";
       end if;
 
       Self.Name := To_UString (Pool_Name);

@@ -1,13 +1,8 @@
 with Ada.Text_IO;
-with GNAT.OS_Lib;
-
-with Simple_Logging; use Simple_Logging;
 
 with Hilbert.Constants; use Hilbert.Constants;
 
 package body Hilbert.Batch is
-
-   package Log renames Simple_Logging;
 
    ----------
    -- Read --
@@ -25,15 +20,21 @@ package body Hilbert.Batch is
       Self.Map.Clear;
 
       Ada.Text_IO.Open (In_File, Ada.Text_IO.In_File, Filename);
+      Line_Number : Natural := 0;
       while not In_File.End_Of_File loop
          Line : constant String := In_File.Get_Line;
+         Line_Number := Line_Number + 1;
          if Line (1 .. 4) = "EXAM" then
             Exam_Id_Str : constant String (1 .. Exam_ID_Length) :=
               Line (6 .. 6 + Exam_ID_Length - 1);
             if not Is_Exam_ID (To_UString (Exam_Id_Str)) then
-               Log.Error
-                 ("Invalid Exam ID '" & Exam_Id_Str & "' in batch file.");
-               GNAT.OS_Lib.OS_Exit (Status => 1);
+               raise Constraint_Error
+                 with
+                   "Line "
+                   & Line_Number'Image
+                   & ": invalid Exam ID "
+                   & Exam_Id_Str
+                   & " in batch file";
             end if;
             Exam_Id : constant Exam_ID_Type := Exam_ID_Type'(Exam_Id_Str);
             Bit_Stream : Hilbert.Bit_Stream.Bit_Stream_Type;
