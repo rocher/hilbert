@@ -11,6 +11,12 @@
 
 - [X] Add support for version number
 
+### In Answers Files
+
+- [ ] Add support for multiple answers, usually sent when an error is detected
+  in previously sent answers. Solution: take always the latest answers sent by
+  an student.
+
 ### In Pool files
 
 - [X] Add support for comments
