@@ -6,6 +6,53 @@ with Hilbert.Random;  use Hilbert.Random;
 package body Hilbert.Item is
 
    ---------------
+   -- Get_Flags --
+   ---------------
+
+   procedure Get_Flags
+     (Self : in out Item_Type; Line : UWString; Line_Number : Natural)
+   is
+      Low  : Natural := Line.Index ("--");
+      High : Natural;
+   begin
+      while Low > 0 loop
+         High := Line.Index (" ", From => Low);
+         --  High := Line.Index_Non_Blank (High);
+         if High = 0 then
+            High := Line.Length + 1;
+         end if;
+
+         declare
+            Flag : constant Wide_String := Line.Slice (Low + 2, High - 1);
+         begin
+            if Flag = "figure" or else Flag = "vspace" then
+               Low := Line.Index_Non_Blank (From => High);
+               High := Line.Index (" ", From => Low);
+               if High = 0 then
+                  High := Line.Length + 1;
+               end if;
+               if Flag = "figure" then
+                  Self.Flags.Figure := Line.Unbounded_Slice (Low, High - 1);
+               else
+                  Self.Flags.VSpace := Line.Unbounded_Slice (Low, High - 1);
+               end if;
+            elsif Flag = "in-all-exams" then
+               Self.Flags.In_All_Exams := True;
+            else
+               raise Constraint_Error
+                 with
+                   "line"
+                   & Line_Number'Image
+                   & ": invalid item flag: "
+                   & To_String (Flag);
+            end if;
+         end;
+
+         Low := Line.Index ("--", High);
+      end loop;
+   end Get_Flags;
+
+   ---------------
    -- Read_From --
    ---------------
 
@@ -33,7 +80,11 @@ package body Hilbert.Item is
          Question    => Null_UWString,
          Num_Options => 1,
          Options     =>
-           [others => (Text => Null_UWString, Is_Correct => False)]);
+           [others => (Text => Null_UWString, Is_Correct => False)],
+         Flags       =>
+           (Figure       => Null_UWString,
+            VSpace       => Null_UWString,
+            In_All_Exams => False));
 
       declare
          WChar : Wide_Character;
@@ -101,22 +152,43 @@ package body Hilbert.Item is
                     with
                       "line"
                       & Line_Number'Image
-                      &": invalid correctness flag; "
+                      & ": invalid correctness flag; "
                       & To_String (Line);
                end if;
             else
                raise Constraint_Error
                  with
-                 "line"
-                 & Line_Number'Image
-                 & "empty line, option expected";
+                   "line" & Line_Number'Image & "empty line, option expected";
             end if;
          end;
       end loop;
 
-      --  Skip blank line between items
-      if not In_File.End_Of_File then
-         Skip_Line;
+      if not In_File.End_Of_Line then
+         declare
+            Line : constant BWString := Get_Line;
+         begin
+            if Line = "" then
+               --  Skip blank line between items
+               null;
+            else
+               if Line (1 .. 2) = "--" then
+                  --  Get item's flags
+                  Get_Flags (Self, To_UWString (Line), Line_Number);
+               else
+                  --  Invalid line between items
+                  raise Constraint_Error
+                    with
+                      "line"
+                      & Line_Number'Image
+                      & ": expected blank line between items; "
+                      & To_String (Line);
+               end if;
+               --  Skip blank line between items
+               if not In_File.End_Of_File then
+                  Skip_Line;
+               end if;
+            end if;
+         end;
       end if;
    end Read_From;
 
@@ -125,6 +197,7 @@ package body Hilbert.Item is
    --------------
 
    procedure Write_To (Self : Item_Type; Out_File : in out WIO.File_Type) is
+      Has_Flags : Boolean := False;
    begin
       Out_File.Put (Trim (Self.Number) & " ");
       Out_File.Put_Line (To_BWString (Self.Question));
@@ -133,6 +206,21 @@ package body Hilbert.Item is
          Out_File.Put (To_BWString (Self.Options (I).Text));
          Out_File.New_Line;
       end loop;
+
+      if Self.Flags.Figure /= Null_UWString then
+         Out_File.Put ("--figure " & To_BWString (Self.Flags.Figure));
+         Has_Flags := True;
+      end if;
+      if Self.Flags.VSpace /= Null_UWString then
+         Out_File.Put
+           ((if Has_Flags then " " else "")
+            & "--vspace "
+            & To_BWString (Self.Flags.VSpace));
+         Has_Flags := True;
+      end if;
+      if Has_Flags then
+         Out_File.New_Line;
+      end if;
    end Write_To;
 
    ---------------------

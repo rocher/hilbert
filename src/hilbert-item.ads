@@ -21,6 +21,17 @@ package Hilbert.Item is
       --  The text of the option.
    end record;
 
+   type Item_Flags_Type is record
+      Figure : UWString := Null_UWString;
+      --  The figure associated with the item, if any.
+
+      VSpace : UWString := Null_UWString;
+      --  The vertical space after the item, in LaTeX units.
+
+      In_All_Exams : Boolean := False;
+      --  Indicates whether the item should appear in all exams.
+   end record;
+
    type Options_Type is array (Num_Options_Type) of Option_Type;
 
    type Item_Type is record
@@ -38,6 +49,9 @@ package Hilbert.Item is
 
       Options : Options_Type;
       --  The options for this item.
+
+      Flags : Item_Flags_Type;
+      --  The flags associated with this item.
    end record
    with Put_Image => Put_Image_Item;
    --  Represents an item (question) in a pool or exam.
