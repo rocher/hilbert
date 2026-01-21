@@ -1,5 +1,13 @@
 # List of Things TODO
 
+### In all contexts
+
+- [ ] Add logging messages for different severity levels (info, warning, error,
+  debug)
+
+- [ ] Explore the possibility to use _recfiles_ as a database instead of text
+  or csv files
+
 ### In Type `Grade` or Grade Files
 
 - [X] Make `Match` field of `Grade`type more efficient: read description in
@@ -33,7 +41,12 @@
 
 ### For Items
 
-- [ ] Add support for flags (vspace, figures, in-all-exams, etc)
+- [ ] Add support for flags:
+  - [x] vspace
+  - [x] figures
+  - [ ] in-all-exams
+  - [ ] bomb-question
+  - [ ] jackpot-question
 
 - [ ] Add support for bomb items (items with options that, if selected,
   suspend the exam immediately)
@@ -48,6 +61,8 @@
   instead of `$..$`
 
 ### Generation of Exams
+
+- [ ] Add new CLI option for a random seed
 
 - [ ] Allow more than one pool to generate exams (useful for June 'repesca')
 
