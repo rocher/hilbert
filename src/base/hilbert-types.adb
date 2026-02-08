@@ -138,7 +138,7 @@ package body Hilbert.Types is
       return
         S'Length = RA_Length
         and then S (S'First .. S'Last - 1) = "RA"
-        and then Is_Digit (S (S'Last));
+        and then Is_Alphanumeric (S (S'Last));
    end Is_RA;
 
    -------------
