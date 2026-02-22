@@ -29,7 +29,7 @@ package Hilbert.Exam is
      (Pool : Hilbert.Pool.Pool_Type; Num_Items : Positive) return Exam_Type
    with
      Pre =>
-       Num_Items <= Positive (Pool.Items.Length)
+       Num_Items <= Pool.Num_Items
        and then Num_Items in 1 .. 255;
    --  Creates an exam with the specified number of items from the given pool
    --  of items.

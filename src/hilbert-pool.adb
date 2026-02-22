@@ -39,7 +39,21 @@ package body Hilbert.Pool is
       loop
          exit when In_File.End_Of_File;
          New_Item.Read_From (In_File, Line_Number);
-         Self.Items.Append (New_Item);
+
+         if New_Item.Flags.Group = Null_UWString then
+            --  Item is not part of any group, add it directly to the pool
+            Self.Items.Append (New_Item);
+         else
+            --  Item is part of a group, add it to the corresponding group in
+            --  the pool
+            if Self.Groups.Contains (New_Item.Flags.Group) then
+               Self.Groups.Reference (New_Item.Flags.Group).Append (New_Item);
+            else
+               Self.Groups.Insert
+                 (Key      => New_Item.Flags.Group,
+                  New_Item => Item.Item_Vector_Type'[1 .. 1 => New_Item]);
+            end if;
+         end if;
       end loop;
       In_File.Close;
    end Read;
@@ -57,7 +71,7 @@ package body Hilbert.Pool is
       Exams_File : WIO.File_Type;
       Batch_File : WIO.File_Type;
    begin
-      if Num_Items > Positive (Self.Items.Length) then
+      if Num_Items > Self.Num_Items then
          raise Constraint_Error with "Not enough items in pool";
       end if;
 

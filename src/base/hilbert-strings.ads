@@ -1,5 +1,7 @@
 with Ada.Characters.Conversions;
+with Ada.Containers;
 with Ada.Strings.Unbounded;
+with Ada.Strings.Wide_Hash;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
@@ -77,5 +79,14 @@ package Hilbert.Strings is
         Substring        => Ada.Strings.Unbounded.Unbounded_Slice,
         Append_Char      => Ada.Strings.Unbounded.Append,
         Append_String    => Ada.Strings.Unbounded.Append);
+
+   --  Hash function and other utilities for UWString, used in the
+   --  Item_Map_Type.
+
+   function Hash (Key : UWString) return Ada.Containers.Hash_Type
+   is (Ada.Strings.Wide_Hash (To_BWString (Key)));
+
+   function Equivalent (Left, Right : UWString) return Boolean
+   is (To_BWString (Left) = To_BWString (Right));
 
 end Hilbert.Strings;

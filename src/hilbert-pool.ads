@@ -16,6 +16,9 @@ package Hilbert.Pool is
 
       Items : Hilbert.Item.Item_Vector_Type;
       --  The collection of items in the pool.
+
+      Groups : Hilbert.Item.Item_Map_Type;
+      --  Groups of items defined in the pool.
    end record
    with Put_Image => Put_Image_Pool;
    --  Represents a pool of items. A pool contains multiple items that can be
@@ -48,6 +51,12 @@ package Hilbert.Pool is
    --  1 Quarta
 
    --  <Bit> is '1' for correct options and '0' for incorrect options.
+
+   function Num_Items (Self : Pool_Type) return Positive
+   is (Natural (Self.Items.Length) + Natural (Self.Groups.Length));
+   --  Returns the number of items in the pool. This is the number of items in
+   --  the Items vector plus the number of groups (only one item will be
+   --  selected from each group).
 
    procedure Read (Self : out Pool_Type; Pool_Name : String);
 

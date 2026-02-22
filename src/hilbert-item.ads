@@ -1,3 +1,4 @@
+with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Vectors;
 with Ada.Strings.Text_Buffers;
 
@@ -5,6 +6,7 @@ with Hilbert.Strings; use Hilbert.Strings;
 
 package Hilbert.Item is
 
+   use all type Ada.Containers.Count_Type;
    use all type UWString;
 
    Max_Options : constant Positive := 16;
@@ -28,8 +30,10 @@ package Hilbert.Item is
       VSpace : UWString := Null_UWString;
       --  The vertical space after the item, in LaTeX units.
 
-      In_All_Exams : Boolean := False;
-      --  Indicates whether the item should appear in all exams.
+      Group : UWString := Null_UWString;
+      --  The group of the item, if any. Group Null_UWString means the item is
+      --  not part of any group. Items in the same non-zero group are related,
+      --  and at least one item from each group must be included in all exams.
    end record;
 
    type Options_Type is array (Num_Options_Type) of Option_Type;
@@ -55,6 +59,8 @@ package Hilbert.Item is
    end record
    with Put_Image => Put_Image_Item;
    --  Represents an item (question) in a pool or exam.
+
+   type Item_Access_Type is access all Item_Type;
 
    overriding
    function "=" (Left, Right : Item_Type) return Boolean
@@ -95,5 +101,25 @@ package Hilbert.Item is
    --  A vector of Items.
 
    subtype Item_Vector_Type is Item_Vector_Package.Vector;
+
+   function "=" (Left, Right : Item_Vector_Type) return Boolean
+   is (Left.Length = Right.Length
+       and then
+         (for all I in
+            Item_Vector_Package.To_Index (Left.First)
+            .. Item_Vector_Package.To_Index (Right.Last) =>
+            Left.Element (I) = Right.Element (I)));
+   --  Compares two Item_Vectors for equality based on their elements.
+
+   package Item_Map_Package is new
+     Ada.Containers.Hashed_Maps
+       (Key_Type        => UWString,
+        Element_Type    => Item_Vector_Type,
+        Hash            => Hilbert.Strings.Hash,
+        Equivalent_Keys => Hilbert.Strings.Equivalent,
+        "="             => "=");
+   --  A hash map that maps groups to their items in the pool.
+
+   subtype Item_Map_Type is Item_Map_Package.Map;
 
 end Hilbert.Item;

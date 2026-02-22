@@ -25,7 +25,8 @@ package body Hilbert.Item is
          declare
             Flag : constant Wide_String := Line.Slice (Low + 2, High - 1);
          begin
-            if Flag = "figure" or else Flag = "vspace" then
+            if Flag = "figure" or else Flag = "vspace" or else Flag = "group"
+            then
                Low := Line.Index_Non_Blank (From => High);
                High := Line.Index (" ", From => Low);
                if High = 0 then
@@ -33,11 +34,11 @@ package body Hilbert.Item is
                end if;
                if Flag = "figure" then
                   Self.Flags.Figure := Line.Unbounded_Slice (Low, High - 1);
-               else
+               elsif Flag = "vspace" then
                   Self.Flags.VSpace := Line.Unbounded_Slice (Low, High - 1);
+               else
+                  Self.Flags.Group := Line.Unbounded_Slice (Low, High - 1);
                end if;
-            elsif Flag = "in-all-exams" then
-               Self.Flags.In_All_Exams := True;
             else
                raise Constraint_Error
                  with
@@ -82,9 +83,9 @@ package body Hilbert.Item is
          Options     =>
            [others => (Text => Null_UWString, Is_Correct => False)],
          Flags       =>
-           (Figure       => Null_UWString,
-            VSpace       => Null_UWString,
-            In_All_Exams => False));
+           (Figure => Null_UWString,
+            VSpace => Null_UWString,
+            Group  => Null_UWString));
 
       declare
          WChar : Wide_Character;

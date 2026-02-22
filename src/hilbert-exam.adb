@@ -1,7 +1,9 @@
-with Hilbert.Convert;   use Hilbert.Convert;
-with Hilbert.Random;    use Hilbert.Random;
+with Hilbert.Convert; use Hilbert.Convert;
+with Hilbert.Random;  use Hilbert.Random;
 
 package body Hilbert.Exam is
+
+   use Hilbert.Item.Item_Map_Package;
 
    -----------------
    -- Create_Exam --
@@ -15,41 +17,84 @@ package body Hilbert.Exam is
       Origin   : Hilbert.Pool.Pool_Type := Pool;
       New_Exam : Exam_Type;
 
-      Item_Number  : Natural := 1;
       Σ_Difficulty : Float := 0.0;
+
+      procedure Append_Item (Item : in out Hilbert.Item.Item_Type) is
+      begin
+         Item.Shuffle_Options;
+
+         New_Exam.Items.Append (Item);
+         New_Exam.Num_Options := @ + Item.Num_Options;
+         for I in 1 .. Item.Num_Options loop
+            if Item.Options (I).Is_Correct then
+               New_Exam.Num_Trues := @ + 1;
+            end if;
+         end loop;
+
+         Σ_Difficulty :=
+           @
+           + (if Item.Difficulty = Easy
+              then 1.0
+              elsif Item.Difficulty = Medium
+              then 2.0
+              else 3.0);
+      end Append_Item;
+
    begin
-      if Num_Items > Positive (Pool.Items.Length) then
+      if Num_Items > Pool.Num_Items then
          raise Constraint_Error with "Not enough items in pool";
       end if;
 
-      for I in 1 .. Num_Items loop
+      --  Move one item from each group of the Origin pool to New_Exam.
+      if Natural (Origin.Groups.Length) > 0 then
+         declare
+            Group : Hilbert.Item.Item_Map_Package.Cursor;
+         begin
+            Group := Origin.Groups.First;
+            loop
+               exit when Group = Hilbert.Item.Item_Map_Package.No_Element;
+               declare
+                  Index : constant Positive :=
+                    Random_Index
+                      (Positive (Origin.Groups.Reference (Group).Length));
+               begin
+                  Append_Item
+                    (Origin.Groups.Reference (Group).Element (Index));
+               end;
+               Group := Group.Next;
+            end loop;
+         end;
+      end if;
+
+      --  Select random items from the Origin pool until New_Exam has the
+      --  required number of items.
+      loop
+         exit when Natural (New_Exam.Items.Length) >= Num_Items;
          declare
             Index    : constant Positive :=
               Random_Index (Positive (Origin.Items.Length));
             New_Item : Hilbert.Item.Item_Type := Origin.Items.Element (Index);
          begin
-            New_Item.Shuffle_Options;
-            New_Item.Number := Item_Number;
-
-            New_Exam.Num_Options := @ + New_Item.Num_Options;
-            for I in 1 .. New_Item.Num_Options loop
-               if New_Item.Options (I).Is_Correct then
-                  New_Exam.Num_Trues := @ + 1;
-               end if;
-            end loop;
-
-            Item_Number := @ + 1;
-            Σ_Difficulty :=
-              @
-              + (if New_Item.Difficulty = Easy
-                 then 1.0
-                 elsif New_Item.Difficulty = Medium
-                 then 2.0
-                 else 3.0);
-
-            New_Exam.Items.Append (New_Item, 1);
+            Append_Item (New_Item);
             Origin.Items.Delete (Index);
          end;
+      end loop;
+
+      --  Shuffle the items in New_Exam to ensure a random order.
+      for I in 1 .. Num_Items loop
+         declare
+            Index1 : constant Positive := Random_Index (Num_Items);
+            Index2 : constant Positive := Random_Index (Num_Items);
+         begin
+            New_Exam.Items.Swap (Index1, Index2);
+            New_Exam.Items (Index1).Number := Index2;
+            New_Exam.Items (Index2).Number := Index1;
+         end;
+      end loop;
+
+      --  Renumber the items in New_Exam sequentially from 1 to Num_Items.
+      for I in 1 .. Num_Items loop
+         New_Exam.Items (I).Number := I;
       end loop;
 
       New_Exam.Difficulty := Σ_Difficulty / Float (Num_Items);

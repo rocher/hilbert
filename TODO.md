@@ -42,11 +42,11 @@
 ### For Items
 
 - [ ] Add support for flags:
-  - [x] vspace
-  - [x] figures
-  - [ ] in-all-exams
-  - [ ] bomb-question
-  - [ ] jackpot-question
+  - [x] `vspace {units}`
+  - [x] `figure {path}`
+  - [x] `group {gid}`
+  - [ ] `item-bomb`
+  - [ ] `item-approved`
 
 - [ ] Add support for bomb items (items with options that, if selected,
   suspend the exam immediately)
@@ -54,7 +54,7 @@
 - [ ] Add support for jackpot items (items with options that, if selected,
   approve the exam regardless of other answers)
 
-- [ ] Add support for grouping: one flag defines a group of items, then one
+- [x] Add support for grouping: one flag defines a group of items, then one
   item of the group appears in all exams
 
 - [X] Add support for $\LaTeX$ expressions (inline math) using `\(..\)`
