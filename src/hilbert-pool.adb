@@ -26,7 +26,7 @@ package body Hilbert.Pool is
            with "Pool file '" & Filename & "' does not exist.";
       end if;
 
-      Self.Name := To_UString (Pool_Name);
+      Self.Name := Get_Pool_Name_From_Filename (Filename);
       Self.Items.Clear;
 
       In_File.Open (Name => Filename, Mode => WIO.In_File);

@@ -187,6 +187,14 @@ package Hilbert.Types is
    function Is_Pool_Filename (U : UString) return Boolean
    is (Is_Pool_Filename (To_String (U)));
 
+   function Get_Pool_Name_From_Filename (S : String) return UString
+   is (To_UString (S (S'First .. S'First - 1 + Pool_Name_Length)))
+   with
+     Pre  => Is_Pool_Filename (S),
+     Post => Is_Pool_Name (Get_Pool_Name_From_Filename'Result);
+   function Get_Pool_Name_From_Filename (U : UString) return UString
+   is (Get_Pool_Name_From_Filename (To_String (U)));
+
    function Is_Exam_Name (S : String) return Boolean;
    function Is_Exam_Name (U : UString) return Boolean
    is (Is_Exam_Name (To_String (U)));

@@ -9,6 +9,7 @@ with Simple_Logging;
 with Hilbert_Config;
 with Hilbert.CLI.Generate; use Hilbert.CLI.Generate;
 with Hilbert.CLI.Grade;    use Hilbert.CLI.Grade;
+with Hilbert.CLI.Info;     use Hilbert.CLI.Info;
 
 package body Hilbert.CLI is
 
@@ -122,6 +123,7 @@ package body Hilbert.CLI is
    procedure Initialize is
    begin
       CLI_Command.Register ("Generation", new Generate.Cmd_Type);
+      CLI_Command.Register ("Generation", new Info.Cmd_Type);
       CLI_Command.Register ("Grading", new Grade.Cmd_Type);
    end Initialize;
 
@@ -133,10 +135,10 @@ package body Hilbert.CLI is
    begin
       CLI_Command.Parse_Global_Switches;
 
-      Log.Level := Log.Warning;
+      Log.Level := Log.Info;
 
       if Global_Switch.Verbose then
-         Log.Level := Log.Info;
+         Log.Level := Log.Detail;
       end if;
 
       if Global_Switch.Debug then

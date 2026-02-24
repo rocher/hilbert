@@ -34,7 +34,7 @@
 - [ ] Add support to load only certain types of items, depending on flags or
   its difficulty level
 
-- [ ] Add a command to check Pool correctness and to explore Pool properties
+- [x] Add a command to check Pool correctness and to explore Pool properties
   (number o items, etc)
 
 - [ ] Add support for version number
@@ -77,4 +77,4 @@
 
 - [X] Use new match field of grade file: depends on Type Grade TODO.
 
-- [ ] Improve visual effects, possibly based on the Advent Of Code website.
+- [ ] Improve visual presentation, possibly based on the Advent Of Code website.
