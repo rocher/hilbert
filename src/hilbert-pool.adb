@@ -3,6 +3,7 @@ with Ada.Directories;
 with Hilbert.Constants; use Hilbert.Constants;
 with Hilbert.Convert;   use Hilbert.Convert;
 with Hilbert.Exam;      use Hilbert.Exam;
+with Hilbert.Types;     use Hilbert.Types;
 
 package body Hilbert.Pool is
 
@@ -15,7 +16,10 @@ package body Hilbert.Pool is
    procedure Read (Self : out Pool_Type; Pool_Name : String) is
       In_File  : WIO.File_Type;
       New_Item : Item.Item_Type;
-      Filename : constant String := Pool_Name & Pool_Suffix;
+      Filename : constant String :=
+        (if Is_Pool_Filename (Pool_Name)
+         then Pool_Name
+         else Pool_Name & Pool_Suffix);
    begin
       if Ada.Directories.Exists (Filename) = False then
          raise Constraint_Error

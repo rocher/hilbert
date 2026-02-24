@@ -68,7 +68,10 @@
 
 ### Command Line
 
-- [ ] Accept filenames (also) as Pool names, Exams and Answers.
+- [ ] Accept filenames (also) as names of
+  - [x] Pool
+  - [ ] Exams
+  - [ ] Answers
 
 ### Exam Visualizer
 

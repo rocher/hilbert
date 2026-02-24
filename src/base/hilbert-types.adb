@@ -207,7 +207,7 @@ package body Hilbert.Types is
         S'Length = Pool_Filename_Length
         and then Is_Pool_Name (S (S'First .. β))
         and then S (β + 1) = '_'
-        and then S (β + 2 .. β + S'Last) = Pool_Suffix;
+        and then S (β + 1 .. S'Last) = Pool_Suffix;
    end Is_Pool_Filename;
 
    ------------------
