@@ -87,8 +87,6 @@ package body Hilbert.Exam is
             Index2 : constant Positive := Random_Index (Num_Items);
          begin
             New_Exam.Items.Swap (Index1, Index2);
-            New_Exam.Items (Index1).Number := Index2;
-            New_Exam.Items (Index2).Number := Index1;
          end;
       end loop;
 
