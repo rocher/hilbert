@@ -4,7 +4,7 @@ package body Hilbert.Random is
    -- Initialize --
    ----------------
 
-   procedure Initialize (Initiator : Integer := 123_456_789) is
+   procedure Initialize (Initiator : Integer) is
    begin
       Gen.Reset (Initiator);
    end Initialize;

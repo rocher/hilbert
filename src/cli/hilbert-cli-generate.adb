@@ -44,6 +44,13 @@ package body Hilbert.CLI.Generate is
          Long_Switch => "--date=",
          Help        => "Date, in YYYYMM format",
          Argument    => "DATE");
+      Define_Switch
+        (Config,
+         Cmd.Seed'Access,
+         Switch      => "-s:",
+         Long_Switch => "--seed=",
+         Help        => "Random seed",
+         Argument    => "NUM");
    end Setup_Switches;
 
    -------------
@@ -108,7 +115,12 @@ package body Hilbert.CLI.Generate is
          & " items from pool "
          & Pool_Name);
 
-      Hilbert.Random.Initialize (Random_Seed);
+      if Cmd.Seed = 0 then
+         Hilbert.Random.Initialize (Random_Seed);
+      else
+         Log.Info ("Using random seed" & Cmd.Seed'Image);
+         Hilbert.Random.Initialize (Cmd.Seed);
+      end if;
 
       Pool : Hilbert.Pool.Pool_Type;
       Pool.Read (Pool_Name);
