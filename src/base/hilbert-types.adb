@@ -133,12 +133,17 @@ package body Hilbert.Types is
 
    function Is_RA (S : String) return Boolean is
    begin
-      --  rrr
-      --  RA2
+      --         rrr            rrr
+      --  Total: RA2   Parcial: R8a
       return
-        S'Length = RA_Length
-        and then S (S'First .. S'Last - 1) = "RA"
-        and then Is_Alphanumeric (S (S'Last));
+        (S'Length = RA_Length)
+        and then
+          ((S (S'First .. S'Last - 1) = "RA"
+            and then Is_Alphanumeric (S (S'Last)))
+           or else
+             (S (S'First) = 'R'
+              and then Is_Alphanumeric (S (S'First + 1))
+              and then Is_Alphanumeric (S (S'Last))));
    end Is_RA;
 
    -------------
