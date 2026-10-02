@@ -176,12 +176,9 @@ package body Hilbert.Types is
         and then Is_Cycle (S (S'First .. β))
         and then Is_Level (S (β + 1 .. β + Level_Length))
         and then S (β + Level_Length + 1) = '_'
-        and then Is_Module
-                   (S
-                      (β
-                       + Level_Length
-                       + 2
-                       .. β + Level_Length + Module_Length + 1))
+        and then
+          Is_Module
+            (S (β + Level_Length + 2 .. β + Level_Length + Module_Length + 1))
         and then S (β + Level_Length + Module_Length + 2) = '_'
         and then Is_RA (S (β + Level_Length + Module_Length + 3 .. S'Last));
    end Is_Pool_Name;
@@ -307,12 +304,9 @@ package body Hilbert.Types is
         and then S (β + 1) = '_'
         and then Is_Module (S (β + 2 .. β + Module_Length + 1))
         and then S (β + Module_Length + 2) = '_'
-        and then Is_RA
-                   (S
-                      (β
-                       + Module_Length
-                       + 3
-                       .. β + Module_Length + RA_Length + 2))
+        and then
+          Is_RA
+            (S (β + Module_Length + 3 .. β + Module_Length + RA_Length + 2))
         and then S (β + Module_Length + RA_Length + 3) = '_'
         and then Is_Date (S (β + Module_Length + RA_Length + 4 .. S'Last));
    end Is_Class_Exam_Name;
@@ -497,8 +491,7 @@ package body Hilbert.Types is
          Pool_Name :=
            S (β .. β + Course_Length - 1)
            & S
-               (β
-                + Class_Length
+               (β + Class_Length
                 .. β + Class_Length + Module_Length + 1 + RA_Length);
       end if;
       return Pool_Name;
@@ -521,15 +514,15 @@ package body Hilbert.Types is
          Exam_Name :=
            S (β .. β + Course_Length - 1)
            & S
-               (β
-                + Class_Length
-                .. β
-                   + Class_Length
-                   + Module_Length
-                   + 1
-                   + RA_Length
-                   + 1
-                   + Date_Length);
+               (β + Class_Length
+                ..
+                  β
+                  + Class_Length
+                  + Module_Length
+                  + 1
+                  + RA_Length
+                  + 1
+                  + Date_Length);
       end if;
       return Exam_Name;
    end Get_Exam_Name;
