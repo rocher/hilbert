@@ -49,10 +49,17 @@ package Hilbert.Grade is
       --     'R110g1'     <red>110</red><gray>1</gray>
       --     'g????'      <gray>????</gray>
       --     'g10101'     <gray>10101</gray>
+      --     'i0000'      <invalid>0000</invalid>  Used in Invalid Items,
+      --                            which are ignored when grading exams.
 
       Score : Natural := 0;
       --  The score assigned to this exam based on the total number of
       --  matching bits.
+
+      Total_Valid : Natural;
+      --  Total number of valid items. Invalid items are ignored when grading
+      --  exams. This is used to compute the final score over 10, which is
+      --  calculated as (Score / Total_Valid) * 10.
    end record;
    pragma Style_Checks (Off);
    --  Represents the grading information for a single Bit_Stream_Item (exam

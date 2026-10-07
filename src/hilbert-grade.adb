@@ -119,11 +119,16 @@ package body Hilbert.Grade is
    is
       Min_Items : constant Natural :=
         Natural'Min (Answer.Bit_Stream.Num_Items, Exam.Bit_Stream.Num_Items);
+
+      function Item_Is_Invalid
+        (Item : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type) return Boolean
+      is (for all Bit of Hilbert.Strings.To_String (Item.Bits) => Bit = '0');
    begin
       Self.Answer := Answer;
       Self.Exam := Exam;
       Self.Match := Null_CSV_String;
       Self.Score := 0;
+      Self.Total_Valid := Self.Exam.Num_Items;
 
       for I in 1 .. Min_Items loop
          Answer_Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
@@ -132,7 +137,12 @@ package body Hilbert.Grade is
            Exam.Bit_Stream.Element (I);
 
          if Answer_Item.Bits.Length = Exam_Item.Bits.Length then
-            if Answer_Item.Bits = Exam_Item.Bits then
+            if Item_Is_Invalid (Answer_Item) then
+               --  Invalid item, no score
+               Self.Total_Valid := Self.Total_Valid - 1;
+               Self.Match.Append_Field
+                 (To_UString ("i" & Exam_Item.Bits.To_String));
+            elsif Answer_Item.Bits = Exam_Item.Bits then
                Self.Score := Self.Score + 1;
                Self.Match.Append_Field
                  (To_UString ("G" & Answer_Item.Bits.To_String));
@@ -259,7 +269,7 @@ package body Hilbert.Grade is
             Grade.Write;
 
             Score_F : constant Float :=
-              Float (Grade.Score) / Float (Batch_Item.Num_Items) * 10.0;
+              Float (Grade.Score) / Float (Grade.Total_Valid) * 10.0;
             Score_N : constant Natural :=
               Natural (Float'Truncation (Float'Rounding (Score_F)));
             TIO.Put_Line
