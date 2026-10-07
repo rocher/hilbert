@@ -87,7 +87,7 @@ package Hilbert.Types is
    --  e.g., "MUN", "DIG", "SOS"
 
    subtype RA_Type is String (1 .. RA_Length);
-   --  e.g., "RA1", "RA8", "RAA", "RAF"
+   --  e.g., "RA1", "RA8", "R8a", "R8b", "RAA", "RAF"
 
    subtype Date_Type is String (1 .. Date_Length);
    --  e.g., "202511" (November 2025)
