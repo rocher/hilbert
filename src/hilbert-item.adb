@@ -17,17 +17,28 @@ package body Hilbert.Item is
    begin
       while Low > 0 loop
          High := Line.Index (" ", From => Low);
-         --  High := Line.Index_Non_Blank (High);
          if High = 0 then
             High := Line.Length + 1;
          end if;
 
          declare
+            --  Get the next flag
             Flag : constant Wide_String := Line.Slice (Low + 2, High - 1);
          begin
-            if Flag = "figure" or else Flag = "vspace" or else Flag = "group"
+            --  Get the flag value, if any
+            if Flag = "figure"
+              or else Flag = "vspace"
+              or else Flag = "group"
             then
                Low := Line.Index_Non_Blank (From => High);
+               if Low = 0 then
+                  raise Constraint_Error
+                    with
+                      "line"
+                      & Line_Number'Image
+                      & ": missing value for item flag: "
+                      & To_String (Flag);
+               end if;
                High := Line.Index (" ", From => Low);
                if High = 0 then
                   High := Line.Length + 1;
@@ -36,9 +47,11 @@ package body Hilbert.Item is
                   Self.Flags.Figure := Line.Unbounded_Slice (Low, High - 1);
                elsif Flag = "vspace" then
                   Self.Flags.VSpace := Line.Unbounded_Slice (Low, High - 1);
-               else
+               elsif Flag = "group" then
                   Self.Flags.Group := Line.Unbounded_Slice (Low, High - 1);
                end if;
+            elsif Flag = "invalid" then
+               Self.Flags.Invalid := True;
             else
                raise Constraint_Error
                  with
@@ -83,9 +96,10 @@ package body Hilbert.Item is
          Options     =>
            [others => (Text => Null_UWString, Is_Correct => False)],
          Flags       =>
-           (Figure => Null_UWString,
-            VSpace => Null_UWString,
-            Group  => Null_UWString));
+           (Figure  => Null_UWString,
+            VSpace  => Null_UWString,
+            Group   => Null_UWString,
+            Invalid => False));
 
       declare
          WChar : Wide_Character;
@@ -175,6 +189,13 @@ package body Hilbert.Item is
                if Line (1 .. 2) = "--" then
                   --  Get item's flags
                   Get_Flags (Self, To_UWString (Line), Line_Number);
+
+                  if Self.Flags.Invalid then
+                     --  Mark all options as incorrect if the item is invalid
+                     for I in 1 .. Self.Num_Options loop
+                        Self.Options (I).Is_Correct := False;
+                     end loop;
+                  end if;
                else
                   --  Invalid line between items
                   raise Constraint_Error

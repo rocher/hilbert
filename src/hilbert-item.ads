@@ -34,6 +34,14 @@ package Hilbert.Item is
       --  The group of the item, if any. Group Null_UWString means the item is
       --  not part of any group. Items in the same non-zero group are related,
       --  and at least one item from each group must be included in all exams.
+
+      Invalid : Boolean := False;
+      --  Indicates whether the item is invalid. Invalid items are ignored
+      --  when grading exams. If you already have printed all the exams, you
+      --  can mark an item as invalid to avoid grading it without having to
+      --  reprint the exams, but remember to regenerate the exams to grade
+      --  them correctly. Invalid items are not included in the pool when
+      --  generating exams.
    end record;
 
    type Options_Type is array (Num_Options_Type) of Option_Type;

@@ -45,6 +45,7 @@
   - [x] `vspace {units}`
   - [x] `figure {path}`
   - [x] `group {gid}`
+  - [x] `invalid`
   - [ ] `item-bomb`
   - [ ] `item-approved`
 
