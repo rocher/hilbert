@@ -272,14 +272,17 @@ package body Hilbert.Grade is
               Float (Grade.Score) / Float (Grade.Total_Valid) * 10.0;
             Score_N : constant Natural :=
               Natural (Float'Truncation (Float'Rounding (Score_F)));
-            TIO.Put_Line
+            TIO.Put
               (Answer.Exam_Id
                & "  "
                & To_String (Format (Grade.Score, 2))
                & " "
                & Score_N'Image
                & " "
-               & Score_F'Image);
+               & Score_F'Image
+               & "  ");
+            WIO.Put (To_BWString (Answer.Email));
+            TIO.New_Line;
          end if;
       end loop;
 

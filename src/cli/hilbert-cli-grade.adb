@@ -51,7 +51,7 @@ package body Hilbert.CLI.Grade is
          GNAT.OS_Lib.OS_Exit (1);
       end if;
 
-      Log.Info ("Grading exams " & Class_Exam_Name & "...");
+      Log.Debug ("Grading exams " & Class_Exam_Name & "...");
       Hilbert.Grade.Grade_Class_Exam (Class_Exam_Name);
    end Execute;
 
