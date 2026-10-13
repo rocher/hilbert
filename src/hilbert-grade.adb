@@ -137,7 +137,7 @@ package body Hilbert.Grade is
            Exam.Bit_Stream.Element (I);
 
          if Answer_Item.Bits.Length = Exam_Item.Bits.Length then
-            if Item_Is_Invalid (Answer_Item) then
+            if Item_Is_Invalid (Exam_Item) then
                --  Invalid item, no score
                Self.Total_Valid := Self.Total_Valid - 1;
                Self.Match.Append_Field
