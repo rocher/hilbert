@@ -26,9 +26,7 @@ package body Hilbert.Item is
             Flag : constant Wide_String := Line.Slice (Low + 2, High - 1);
          begin
             --  Get the flag value, if any
-            if Flag = "figure"
-              or else Flag = "vspace"
-              or else Flag = "group"
+            if Flag = "figure" or else Flag = "vspace" or else Flag = "group"
             then
                Low := Line.Index_Non_Blank (From => High);
                if Low = 0 then
@@ -231,6 +229,14 @@ package body Hilbert.Item is
 
       if Self.Flags.Figure /= Null_UWString then
          Out_File.Put ("--figure " & To_BWString (Self.Flags.Figure));
+         Has_Flags := True;
+      end if;
+
+      if Self.Flags.VSpace /= Null_UWString then
+         Out_File.Put
+           ((if Has_Flags then " " else "")
+            & "--vspace "
+            & To_BWString (Self.Flags.VSpace));
          Has_Flags := True;
       end if;
 
