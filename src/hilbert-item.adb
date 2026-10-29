@@ -233,13 +233,7 @@ package body Hilbert.Item is
          Out_File.Put ("--figure " & To_BWString (Self.Flags.Figure));
          Has_Flags := True;
       end if;
-      if Self.Flags.VSpace /= Null_UWString then
-         Out_File.Put
-           ((if Has_Flags then " " else "")
-            & "--vspace "
-            & To_BWString (Self.Flags.VSpace));
-         Has_Flags := True;
-      end if;
+
       if Has_Flags then
          Out_File.New_Line;
       end if;
