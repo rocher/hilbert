@@ -14,6 +14,13 @@ package Hilbert.Item is
 
    type Difficulty_Type is (Easy, Medium, Hard);
 
+   type Points_Type is array (Difficulty_Type) of Positive;
+
+   Default_Item_Points : constant Points_Type :=
+     [Easy => 1, Medium => 2, Hard => 5];
+   --  The points for each difficulty level. This can be changed in the
+   --  command line to adjust the scoring of exams based on difficulty.
+
    type Option_Type is record
       Is_Correct : Boolean;
       --  Indicates whether this option is correct.
@@ -52,6 +59,9 @@ package Hilbert.Item is
       Difficulty : Difficulty_Type;
       --  The difficulty of the item.
 
+      Points : Positive;
+      --  Number of points associated to the item.
+
       Question : UWString;
       --  The text of the question.
 
@@ -75,6 +85,10 @@ package Hilbert.Item is
        and then Left.Num_Options = Right.Num_Options
        and then Left.Options = Right.Options);
    --  Compares two Items for equality based on their fields.
+
+   procedure Set_Difficulty_Points
+     (Difficulty : Difficulty_Type; Points : Positive);
+   --  Sets the points for the specified difficulty level.
 
    procedure Read_From_Pool
      (Self        : out Item_Type;
