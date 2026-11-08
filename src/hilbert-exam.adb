@@ -156,20 +156,9 @@ package body Hilbert.Exam is
          declare
             Item : constant Hilbert.Item.Item_Type := Self.Items.Element (I);
          begin
-            Item.Write_To (Out_File);
+            Item.Write_To_Exam (Out_File);
          end;
       end loop;
    end Write_To;
-
-   --------------------
-   -- Put_Image_Exam --
-   --------------------
-
-   procedure Put_Image_Exam
-     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
-      Self   : Exam_Type) is
-   begin
-      Output.Wide_Put (Self.Title_Line);
-   end Put_Image_Exam;
 
 end Hilbert.Exam;
