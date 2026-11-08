@@ -6,6 +6,9 @@ package Hilbert.Version is
    Null_Version : constant Version_Type := "00.00";
    --  Represents a null version.
 
+   Default_Version : constant Version_Type := "26.10";
+   --  The default version to use when no version is specified.
+
    Version_Prefix : constant String := "HV=";
    --  Version_Format "HV=MM.mm", e.g. HV=25.12
 
