@@ -5,6 +5,8 @@ with Hilbert.Random;  use Hilbert.Random;
 
 package body Hilbert.Item is
 
+   Item_Points : Points_Type := Default_Item_Points;
+
    ---------------
    -- Get_Flags --
    ---------------
@@ -64,11 +66,21 @@ package body Hilbert.Item is
       end loop;
    end Get_Flags;
 
-   ---------------
-   -- Read_From --
-   ---------------
+   ---------------------------
+   -- Set_Difficulty_Points --
+   ---------------------------
 
-   procedure Read_From
+   procedure Set_Difficulty_Points
+     (Difficulty : Difficulty_Type; Points : Positive) is
+   begin
+      Item_Points (Difficulty) := Points;
+   end Set_Difficulty_Points;
+
+   --------------------
+   -- Read_From_Pool --
+   --------------------
+
+   procedure Read_From_Pool
      (Self        : out Item_Type;
       In_File     : in out WIO.File_Type;
       Line_Number : in out Natural)
@@ -89,6 +101,7 @@ package body Hilbert.Item is
       Self :=
         (Number      => 0,
          Difficulty  => Easy,
+         Points      => Item_Points (Easy),
          Question    => Null_UWString,
          Num_Options => 1,
          Options     =>
@@ -125,6 +138,7 @@ package body Hilbert.Item is
                 & ": invalid difficulty level; "
                 & To_String (Line);
          end if;
+         Self.Points := Item_Points (Self.Difficulty);
 
          --  Discard difficulty prefix
          Self.Question := To_UWString (Line (3 .. Line'Length));
@@ -210,13 +224,14 @@ package body Hilbert.Item is
             end if;
          end;
       end if;
-   end Read_From;
+   end Read_From_Pool;
 
-   --------------
-   -- Write_To --
-   --------------
+   -------------------
+   -- Write_To_Exam --
+   -------------------
 
-   procedure Write_To (Self : Item_Type; Out_File : in out WIO.File_Type) is
+   procedure Write_To_Exam (Self : Item_Type; Out_File : in out WIO.File_Type)
+   is
       Has_Flags : Boolean := False;
    begin
       Out_File.Put (Trim (Self.Number) & " ");
@@ -243,7 +258,7 @@ package body Hilbert.Item is
       if Has_Flags then
          Out_File.New_Line;
       end if;
-   end Write_To;
+   end Write_To_Exam;
 
    ---------------------
    -- Shuffle_Options --

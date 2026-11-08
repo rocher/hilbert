@@ -42,7 +42,7 @@ package body Hilbert.Pool is
       Line_Number : Natural := 2;
       loop
          exit when In_File.End_Of_File;
-         New_Item.Read_From (In_File, Line_Number);
+         New_Item.Read_From_Pool (In_File, Line_Number);
 
          if New_Item.Flags.Group = Null_UWString then
             --  Item is not part of any group, add it directly to the pool
