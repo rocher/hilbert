@@ -8,6 +8,17 @@
 - [ ] Explore the possibility to use _recfiles_ as a database instead of text
   or csv files
 
+### Use of difficulty level (HV=26.10)
+
+- [ ] Use difficulty level to grade items. Easy items add 1 point when
+  correct, Medium items add 3 points and Hard items add 5 points.
+
+- [ ] Items must make clear the points associated to it, in Batch and Exams
+  files
+
+- [ ] Adjust in the command line the mapping of difficulty level to items
+  points.
+
 ### In Type `Grade` or Grade Files
 
 - [X] Make `Match` field of `Grade`type more efficient: read description in
@@ -42,12 +53,14 @@
 ### For Items
 
 - [ ] Add support for flags:
-  - [x] `vspace {units}`
-  - [x] `figure {path}`
-  - [x] `group {gid}`
-  - [x] `invalid`
-  - [ ] `item-bomb`
-  - [ ] `item-approved`
+  - [x] `vspace {units}`     add vertical space
+  - [x] `figure {path}`      add a figure
+  - [x] `group {gid}`        select one question from the group
+  - [x] `invalid`            does not count to grade
+  - [ ] `first`              put item on first page (combine it with group)
+  - [ ] `last`               put item on last page  (combine it with group)
+  - [ ] `item-bomb`          option selected suspends exam (to be reviewed)
+  - [ ] `item-jackpot`       item solved approves exam     (to be reviewed)
 
 - [ ] Add support for bomb items (items with options that, if selected,
   suspend the exam immediately)
