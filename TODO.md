@@ -13,7 +13,7 @@
 - [ ] Use difficulty level to grade items. Easy items add 1 point when
   correct, Medium items add 3 points and Hard items add 5 points.
 
-- [ ] Items must make clear the points associated to it, in Batch and Exams
+- [X] Items must make clear the points associated to it, in Batch and Exams
   files
 
 - [ ] Adjust in the command line the mapping of difficulty level to items
@@ -38,17 +38,24 @@
 
 ### In Pool files
 
+- [ ] Allow external files to contain large items. For example:
+   ```txt
+   3 [external_filename.txt]
+   --group 9.1 --last
+   ```
+  This contains the item title and all options.
+
 - [X] Add support for comments
 
 - [X] Add error handling for malformed items with line info
 
-- [ ] Add support to load only certain types of items, depending on flags or
-  its difficulty level
+- [ ] ~~Add support to load only certain types of items, depending on flags or
+  its difficulty level~~
 
 - [x] Add a command to check Pool correctness and to explore Pool properties
   (number o items, etc)
 
-- [ ] Add support for version number
+- [ ] ~~Add support for version number~~
 
 ### For Items
 
@@ -76,7 +83,7 @@
 
 ### Generation of Exams
 
-- [ ] Add new CLI option for a random seed
+- [X] Add new CLI option for a random seed
 
 - [ ] Allow more than one pool to generate exams (useful for June 'repesca')
 
