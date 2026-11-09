@@ -107,7 +107,7 @@ EXAM SMX1_FIN_RA1_202610/001 2 010/002/100 00010 10000
 ### SMX1_FIN_RA1_Exams.txt (HV >= 26.10)
 ```txt
 SMX1 FIN RA1 Fonaments de la Informàtica
-EXAM SMX1_FIN_RA1_202610/001 2/4 1 00010 3 10000
+EXAM SMX1_FIN_RA1_202610/001 002/004 1 00010 3 10000
 1 Passa de binari a decimal el número $1000101_2$ (1 punt)
 5
 1 $69_{10}$
@@ -124,7 +124,7 @@ EXAM SMX1_FIN_RA1_202610/001 2/4 1 00010 3 10000
 1 $101000111_2$
 0 $241_3$
 --vspace 3cm
-EXAM SMX1_FIN_RA1_202610/002 2/4 1 01000 3 00100
+EXAM SMX1_FIN_RA1_202610/002 002/004 1 01000 3 00100
 1 Passa de binari a decimal el número $1001001_2$ (1 punt)
 5
 1 $73_{10}$
@@ -148,8 +148,8 @@ EXAM SMX1_FIN_RA1_202610/002 2/4 1 01000 3 00100
 
 ###### Legend
 ```txt
-EXAM SMX1_FIN_RA1_202610/001 2/4 1 00010 3 10000
---1- --2-------------------- 3 4 5 --6-- 7 --8--
+EXAM SMX1_FIN_RA1_202610/001 002/004 1 00010 3 10000
+--1- --2-------------------- --3 --4 5 --6-- 7 --8--
 
   1 prefix
   2 exam id
