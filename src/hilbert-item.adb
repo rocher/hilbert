@@ -1,3 +1,4 @@
+with Ada.Directories;
 with Ada.Wide_Characters.Handling;
 
 with Hilbert.Convert; use Hilbert.Convert;
@@ -143,6 +144,45 @@ package body Hilbert.Item is
 
          --  Discard difficulty prefix
          Self.Question := To_UWString (Line (3 .. Line'Length));
+
+         case Get_Version is
+            when "26.10" =>
+               if Self.Question.Element (1) = '['
+                 and then Self.Question.Element (Self.Question.Length) = ']'
+               then
+                  File_Name : constant BWString :=
+                    Self.Question.Slice (2, Self.Question.Length - 1);
+
+                  --  Check if the external item file exists
+                  if not Ada.Directories.Exists (To_String (File_Name)) then
+                     raise Constraint_Error
+                       with
+                         "line"
+                         & Line_Number'Image
+                         & ": external item file '"
+                         & To_String (File_Name)
+                         & "' does not exist.";
+                  end if;
+
+                  --  Opena and read the external item file
+                  Item_File : WIO.File_Type;
+                  Item_File.Open
+                    (Name => To_String (File_Name), Mode => WIO.In_File);
+                  Self.Question := Null_UWString;
+                  loop
+                     exit when Item_File.End_Of_File;
+                     Line : constant BWString := Item_File.Get_Line;
+                     if Line'Length > 0 then
+                        Self.Question.Append (To_UWString (Line));
+                     else
+                        Self.Question.Append ("\newline ");
+                     end if;
+                  end loop;
+               end if;
+
+            when others  =>
+               null;
+         end case;
       end;
 
       --  Read Number of Options

@@ -38,12 +38,17 @@
 
 ### In Pool files
 
-- [ ] Allow external files to contain large items. For example:
+- [X] Allow external files to contain large items. For example:
    ```txt
    3 [external_filename.txt]
+   4
+   1 Valid option
+   0 Invalid option
+   0 Invalid option
+   0 Invalid option
    --group 9.1 --last
    ```
-  This contains the item title and all options.
+  This contains the item title. Supported in HV>=26.10
 
 - [X] Add support for comments
 
