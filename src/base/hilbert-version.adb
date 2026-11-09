@@ -2,7 +2,16 @@ with Hilbert.Types; use Hilbert.Types;
 
 package body Hilbert.Version is
 
-   Version : Version_Type := Null_Version;
+   Version : Version_Type := Default_Version;
+
+   ----------------
+   -- Is_Version --
+   ----------------
+
+   function Is_Valid_Version (S : String) return Boolean is
+   begin
+      return (for some V in Valid_Versions'Range => S = Valid_Versions (V));
+   end Is_Valid_Version;
 
    -----------------
    -- Has_Version --
@@ -24,9 +33,12 @@ package body Hilbert.Version is
    -----------------
 
    procedure Set_Version (S : String) is
-      β : constant Natural := S'First + Version_Prefix'Length;
    begin
-      Version := S (β .. β + 4);
+      if Is_Valid_Version (S) then
+         Version := S;
+      else
+         Version := Get_Version_From_String (S);
+      end if;
    end Set_Version;
 
    -----------------

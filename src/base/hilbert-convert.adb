@@ -167,4 +167,32 @@ package body Hilbert.Convert is
       return To_BWString (UStr);
    end Trim;
 
+   ----------
+   -- Trim --
+   ----------
+
+   function Trim (I : Integer) return UString is
+      Str  : BWString (1 .. 20);
+      UStr : UWString;
+   begin
+      IntIO.Put (Str, I);
+      UStr :=
+        Ada.Strings.Wide_Unbounded.Trim (To_UWString (Str), Ada.Strings.Left);
+      return To_UString (UStr);
+   end Trim;
+
+   ----------
+   -- Trim --
+   ----------
+
+   function Trim (F : Float) return UString is
+      Str  : BWString (1 .. 40);
+      UStr : UWString;
+   begin
+      FloatIO.Put (Str, F);
+      UStr :=
+        Ada.Strings.Wide_Unbounded.Trim (To_UWString (Str), Ada.Strings.Left);
+      return To_UString (UStr);
+   end Trim;
+
 end Hilbert.Convert;

@@ -7,6 +7,7 @@ with Hilbert.Constants; use Hilbert.Constants;
 with Hilbert.Pool;
 with Hilbert.Random;
 with Hilbert.Types;     use Hilbert.Types;
+with Hilbert.Version;   use Hilbert.Version;
 
 package body Hilbert.CLI.Generate is
 
@@ -23,6 +24,14 @@ package body Hilbert.CLI.Generate is
      (Cmd    : in out Cmd_Type;
       Config : in out CLIC.Subcommand.Switches_Configuration) is
    begin
+      Define_Switch
+        (Config,
+         Cmd.Hilbert_Version'Access,
+         Switch      => "",
+         Long_Switch => "--hv=",
+         Help        =>
+           "Hilbert version to use (default: " & Default_Version & ")",
+         Argument    => "yy.mm");
       Define_Switch
         (Config,
          Cmd.Num_Exams'Access,
@@ -66,6 +75,16 @@ package body Hilbert.CLI.Generate is
       for I in Args.First_Index .. Args.Last_Index loop
          Log.Debug ("Args(" & I'Image & ") = " & Args.Element (I));
       end loop;
+
+      Log.Debug ("HV: " & Cmd.Hilbert_Version.all'Image);
+      if Cmd.Hilbert_Version.all = "" then
+         Log.Debug ("Using default Hilbert version: " & Default_Version);
+         Set_Version (Default_Version);
+      else
+         Log.Debug
+           ("Using specified Hilbert version: " & Cmd.Hilbert_Version.all);
+         Set_Version (Cmd.Hilbert_Version.all);
+      end if;
 
       if Cmd.Num_Exams = Integer'First then
          Log.Error ("Specify number of exams.");

@@ -28,4 +28,8 @@ package Hilbert.Convert is
 
    function Trim (F : Float) return BWString;
 
+   function Trim (I : Integer) return UString;
+
+   function Trim (F : Float) return UString;
+
 end Hilbert.Convert;
