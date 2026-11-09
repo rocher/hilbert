@@ -104,6 +104,10 @@ package Hilbert.Item is
    procedure Shuffle_Options (Self : in out Item_Type);
    --  Shuffles the options of the item Self randomly.
 
+   function Get_Points (Self : Item_Type) return Positive
+   is (Self.Points);
+   --  Returns the number of points associated with the item.
+
    function Get_Answers_Bits (Self : Item_Type) return UString;
    --  Returns a UString representing the correct answers of the item. The
    --  returned UString consists of '1' and '0' characters, where '1'

@@ -2,6 +2,7 @@ with Ada.Wide_Characters.Handling;
 
 with Hilbert.Convert; use Hilbert.Convert;
 with Hilbert.Random;  use Hilbert.Random;
+with Hilbert.Version; use Hilbert.Version;
 
 package body Hilbert.Item is
 
@@ -234,8 +235,21 @@ package body Hilbert.Item is
    is
       Has_Flags : Boolean := False;
    begin
-      Out_File.Put (Trim (Self.Number) & " ");
-      Out_File.Put_Line (To_BWString (Self.Question));
+      Out_File.Put (Trim (Self.Number) & To_BWString (" "));
+
+      case Get_Version is
+         when "26.10" =>
+            Out_File.Put_Line
+              (To_BWString (Self.Question)
+               & To_BWString (" (")
+               & Trim (Self.Points)
+               & To_BWString (if Self.Points = 1 then " punt" else " punts")
+               & To_BWString (")"));
+
+         when others  =>
+            Out_File.Put_Line (To_BWString (Self.Question));
+      end case;
+
       Out_File.Put_Line (Trim (Self.Num_Options));
       for I in 1 .. Self.Num_Options loop
          Out_File.Put (To_BWString (Self.Options (I).Text));

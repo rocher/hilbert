@@ -21,6 +21,9 @@ package Hilbert.Exam is
 
       Difficulty : Float := 0.0;
       --  The average difficulty of the items in the exam.
+
+      Points : Positive;
+      --  The total number of points of the exam.
    end record
    with Put_Image => Put_Image_Exam;
    --  Represents an exam created from a pool of items.

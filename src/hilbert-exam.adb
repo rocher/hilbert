@@ -1,5 +1,6 @@
 with Hilbert.Convert; use Hilbert.Convert;
 with Hilbert.Random;  use Hilbert.Random;
+with Hilbert.Version; use Hilbert.Version;
 
 package body Hilbert.Exam is
 
@@ -117,7 +118,17 @@ package body Hilbert.Exam is
    begin
       return Result : UString := Null_UString do
          for I in 1 .. Positive (Self.Items.Length) loop
+            case Get_Version is
+               when "26.10" =>
+                  Result.Append (Trim (Self.Items.Element (I).Get_Points));
+                  Result.Append (' ');
+
+               when others  =>
+                  null;
+            end case;
+
             Result.Append (Self.Items.Element (I).Get_Answers_Bits);
+
             if I < Positive (Self.Items.Length) then
                Result.Append (' ');
             end if;
@@ -130,19 +141,43 @@ package body Hilbert.Exam is
    ----------------
 
    function Title_Line (Self : Exam_Type) return BWString is
+
+      function Get_Points (Self : Exam_Type) return Positive is
+         Total_Points : Natural := 0;
+      begin
+         for I in 1 .. Positive (Self.Items.Length) loop
+            Total_Points := Total_Points + Self.Items.Element (I).Points;
+         end loop;
+         return Total_Points;
+      end Get_Points;
+
    begin
-      return
-        "EXAM "
-        & To_BWString (Self.Id)
-        & Integer'Wide_Image (Integer (Self.Items.Length))
-        & " "
-        & Format (Self.Num_Options, 3, '0')
-        & "/"
-        & Format (Self.Num_Trues, 3, '0')
-        & "/"
-        & Trim (Integer (Self.Difficulty * 100.0))
-        & " "
-        & To_BWString (Self.Get_Answers_Bits);
+      case Get_Version is
+         when "26.10" =>
+            return
+              "EXAM "
+              & To_BWString (Self.Id)
+              & " "
+              & Format (Integer (Self.Items.Length), 3, '0')
+              & "/"
+              & Format (Get_Points (Self), 3, '0')
+              & " "
+              & To_BWString (Self.Get_Answers_Bits);
+
+         when others  =>
+            return
+              "EXAM "
+              & To_BWString (Self.Id)
+              & Integer'Wide_Image (Integer (Self.Items.Length))
+              & " "
+              & Format (Self.Num_Options, 3, '0')
+              & "/"
+              & Format (Self.Num_Trues, 3, '0')
+              & "/"
+              & Trim (Integer (Self.Difficulty * 100.0))
+              & " "
+              & To_BWString (Self.Get_Answers_Bits);
+      end case;
    end Title_Line;
 
    --------------
