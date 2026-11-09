@@ -1,3 +1,5 @@
+with Ada.Strings.Text_Buffers;
+
 with Hilbert.Item;
 with Hilbert.Pool;
 with Hilbert.Strings; use Hilbert.Strings;
@@ -19,7 +21,8 @@ package Hilbert.Exam is
 
       Difficulty : Float := 0.0;
       --  The average difficulty of the items in the exam.
-   end record;
+   end record
+   with Put_Image => Put_Image_Exam;
    --  Represents an exam created from a pool of items.
 
    function Create_Exam
@@ -39,5 +42,11 @@ package Hilbert.Exam is
 
    procedure Write_To (Self : Exam_Type; Out_File : in out WIO.File_Type);
    --  Writes the exam Self to the specified output file.
+
+   procedure Put_Image_Exam
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      Self   : Exam_Type);
+   --  Outputs a textual representation of the exam to the specified output
+   --  buffer.
 
 end Hilbert.Exam;

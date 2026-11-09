@@ -161,4 +161,15 @@ package body Hilbert.Exam is
       end loop;
    end Write_To;
 
+   --------------------
+   -- Put_Image_Exam --
+   --------------------
+
+   procedure Put_Image_Exam
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      Self   : Exam_Type) is
+   begin
+      Output.Wide_Put (Self.Title_Line);
+   end Put_Image_Exam;
+
 end Hilbert.Exam;

@@ -304,4 +304,34 @@ package body Hilbert.Item is
       end return;
    end Get_Answers_Bits;
 
+   --------------------
+   -- Put_Image_Item --
+   --------------------
+
+   procedure Put_Image_Item
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      Self   : Item_Type)
+   is
+      Difficulty_Char : constant Character :=
+        (if Self.Difficulty = Easy
+         then '1'
+         elsif Self.Difficulty = Medium
+         then '2'
+         else '3');
+   begin
+      Output.Put (Difficulty_Char & " ");
+      Output.Wide_Put (To_BWString (Self.Question));
+      Output.New_Line;
+      Output.Put (Self.Num_Options'Image (2 .. Self.Num_Options'Image'Length));
+      Output.New_Line;
+
+      for I in 1 .. Self.Num_Options loop
+         Output.Put ((if Self.Options (I).Is_Correct then '1' else '0') & " ");
+         Output.Wide_Put (To_BWString (Self.Options (I).Text));
+         if I < Self.Num_Options then
+            Output.New_Line;
+         end if;
+      end loop;
+   end Put_Image_Item;
+
 end Hilbert.Item;

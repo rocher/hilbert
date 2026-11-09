@@ -1,5 +1,6 @@
 with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Vectors;
+with Ada.Strings.Text_Buffers;
 
 with Hilbert.Strings; use Hilbert.Strings;
 
@@ -73,7 +74,8 @@ package Hilbert.Item is
 
       Flags : Item_Flags_Type;
       --  The flags associated with this item.
-   end record;
+   end record
+   with Put_Image => Put_Image_Item;
    --  Represents an item (question) in a pool or exam.
 
    type Item_Access_Type is access all Item_Type;
@@ -106,6 +108,12 @@ package Hilbert.Item is
    --  Returns a UString representing the correct answers of the item. The
    --  returned UString consists of '1' and '0' characters, where '1'
    --  indicates a correct option and '0' indicates an incorrect option.
+
+   procedure Put_Image_Item
+     (Output : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      Self   : Item_Type);
+   --  Outputs a textual representation of the item to the specified output
+   --  buffer.
 
    package Item_Vector_Package is new
      Ada.Containers.Vectors
