@@ -173,9 +173,7 @@ package body Hilbert.Item is
                      exit when Item_File.End_Of_File;
                      Line : constant BWString := Item_File.Get_Line;
                      if Line'Length > 0 then
-                        Self.Question.Append (To_UWString (Line));
-                     else
-                        Self.Question.Append ("\newline ");
+                        Self.Question.Append (To_UWString (Line & " "));
                      end if;
                   end loop;
                end if;
@@ -275,16 +273,16 @@ package body Hilbert.Item is
    is
       Has_Flags : Boolean := False;
    begin
-      Out_File.Put (Trim (Self.Number) & To_BWString (" "));
+      Out_File.Put (To_BWString ("{\bf ") &Trim (Self.Number) & To_BWString ("} "));
 
       case Get_Version is
          when "26.10" =>
             Out_File.Put_Line
               (To_BWString (Self.Question)
-               & To_BWString (" (")
+               & To_BWString (" {\bf (")
                & Trim (Self.Points)
                & To_BWString (if Self.Points = 1 then " punt" else " punts")
-               & To_BWString (")"));
+               & To_BWString (")}"));
 
          when others  =>
             Out_File.Put_Line (To_BWString (Self.Question));
