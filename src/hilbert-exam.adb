@@ -159,7 +159,7 @@ package body Hilbert.Exam is
               & To_BWString (Self.Id)
               & " "
               & Format (Integer (Self.Items.Length), 3, '0')
-              & "/"
+              & " "
               & Format (Get_Points (Self), 3, '0')
               & " "
               & To_BWString (Self.Get_Answers_Bits);
