@@ -51,33 +51,36 @@ package body Hilbert.Grade is
    procedure Write (Self : Grade_Type) is
 
    begin
-      if Get_Version = Null_Version then
-         Out_File.Put
-           (To_BWString ("ANSWERS")
-            & ","
-            & To_BWString (Self.Answer.Date_Time)
-            & ","
-            & To_BWString (Self.Answer.Email)
-            & ","
-            & To_BWString (Self.Answer.Name_Surname)
-            & ","
-            & To_BWString (Self.Answer.Exam_Id)
-            & ",");
-      elsif Get_Version = "25.12" then
-         Out_File.Put
-           (To_BWString ("ANSWERS")
-            & ","
-            & To_BWString (Self.Answer.Date_Time)
-            & ","
-            & To_BWString (Self.Answer.Email)
-            & ","
-            & To_BWString (Self.Answer.Name_Surname)
-            & ","
-            & To_BWString (Self.Answer.Name)
-            & ","
-            & To_BWString (Self.Answer.Exam_Id)
-            & ",");
-      end if;
+      case Get_Version is
+         when Null_Version =>
+            Out_File.Put
+              (To_BWString ("ANSWERS")
+               & ","
+               & To_BWString (Self.Answer.Date_Time)
+               & ","
+               & To_BWString (Self.Answer.Email)
+               & ","
+               & To_BWString (Self.Answer.Name_Surname)
+               & ","
+               & To_BWString (Self.Answer.Exam_Id)
+               & ",");
+
+         when others       =>
+            --  "25.12" | "26.10"
+            Out_File.Put
+              (To_BWString ("ANSWERS")
+               & ","
+               & To_BWString (Self.Answer.Date_Time)
+               & ","
+               & To_BWString (Self.Answer.Email)
+               & ","
+               & To_BWString (Self.Answer.Name_Surname)
+               & ","
+               & To_BWString (Self.Answer.Name)
+               & ","
+               & To_BWString (Self.Answer.Exam_Id)
+               & ",");
+      end case;
       Self.Answer.Bit_Stream.Write_To (Out_File);
       Out_File.New_Line;
 
@@ -92,20 +95,41 @@ package body Hilbert.Grade is
       Out_File.Put (To_BWString ("MATCHES," & Self.Match.Values));
       Out_File.New_Line;
 
-      Out_File.Put
-        (To_BWString ("SCORE")
-         & ","
-         & Hilbert.Convert.Trim (Self.Score)
-         & "/"
-         & Hilbert.Convert.Trim (Self.Exam.Num_Items)
-         & ","
-         & Trim (Float (Self.Score) / Float (Self.Exam.Num_Items) * 10.0)
-         & ","
-         & Hilbert.Convert.Trim
-             (Integer
-                (Float (Self.Score) / Float (Self.Exam.Num_Items) * 10.0)));
-      Out_File.New_Line;
+      case Get_Version is
+         when Null_Version | "25.12" =>
+            Out_File.Put
+              (To_BWString ("SCORE")
+               & ","
+               & Hilbert.Convert.Trim (Self.Score)
+               & "/"
+               & Hilbert.Convert.Trim (Self.Total_Valid)
+               & ","
+               & Trim (Float (Self.Score) / Float (Self.Total_Valid) * 10.0)
+               & ","
+               & Hilbert.Convert.Trim
+                   (Integer
+                      (Float (Self.Score) / Float (Self.Total_Valid) * 10.0)));
 
+         when "26.10"                =>
+            Out_File.Put
+              (To_BWString ("SCORE")
+               & ","
+               & Hilbert.Convert.Trim (Self.Score)
+               & "/"
+               & Hilbert.Convert.Trim (Self.Total_Points)
+               & ","
+               & Trim (Float (Self.Score) / Float (Self.Total_Points) * 10.0)
+               & ","
+               & Hilbert.Convert.Trim
+                   (Integer
+                      (Float (Self.Score)
+                       / Float (Self.Total_Points)
+                       * 10.0)));
+
+         when others                 =>
+            raise Constraint_Error with "Unsupported version: " & Get_Version;
+      end case;
+      Out_File.New_Line;
    end Write;
 
    ------------------
