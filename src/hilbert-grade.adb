@@ -129,7 +129,7 @@ package body Hilbert.Grade is
       Self.Match := Null_CSV_String;
       Self.Score := 0;
       Self.Total_Valid := Self.Exam.Num_Items;
-      Self.Total_Points := 0;
+      Self.Total_Points := Exam.Num_Points;
 
       for I in 1 .. Min_Items loop
          Answer_Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
@@ -289,15 +289,15 @@ package body Hilbert.Grade is
             case Get_Version is
                when "26.10" =>
                   Score_F :=
-                    Float (Grade.Score) / Float (Grade.Total_Points) * 10.0;
+                    Float (Grade.Score) / Float (Batch_Item.Num_Points) * 10.0;
                   Score_N :=
                     Natural (Float'Truncation (Float'Rounding (Score_F)));
                   TIO.Put
                     (Answer.Exam_Id
-                     & "  " & Get_Version & ":"
-                     & To_String (Format (Grade.Score, 3))
+                     & "  "
+                     & To_String (Format (Grade.Score, 3, '0'))
                      & "/"
-                     & To_String (Format (Grade.Total_Points, 3))
+                     & To_String (Format (Batch_Item.Num_Points, 3, '0'))
                      & " "
                      & Score_N'Image
                      & " "
@@ -311,7 +311,7 @@ package body Hilbert.Grade is
                     Natural (Float'Truncation (Float'Rounding (Score_F)));
                   TIO.Put
                     (Answer.Exam_Id
-                     & "  " & Get_Version & ":"
+                     & "  "
                      & To_String (Format (Grade.Score, 2))
                      & " "
                      & Score_N'Image

@@ -14,9 +14,12 @@ package Hilbert.Bit_Stream is
    type Bit_Stream_Type is new Bit_Stream_Vector_Package.Vector
    with null record;
 
-   procedure Load_From_UString
-     (Self    : in out Bit_Stream_Type;
-      Bits    : UString);
+   procedure Load_From_UString (Self : in out Bit_Stream_Type; Bits : UString);
+   --  Loads the Bit_Stream from a UString by dividing it into chunks of
+   --  and creating a Bit_Stream_Item for each chunk.
+
+   procedure Load_Answers_From_UString
+     (Self : in out Bit_Stream_Type; Bits : UString);
    --  Loads the Bit_Stream from a UString by dividing it into chunks of
    --  and creating a Bit_Stream_Item for each chunk.
 

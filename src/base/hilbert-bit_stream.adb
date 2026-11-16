@@ -69,9 +69,16 @@ package body Hilbert.Bit_Stream is
    function Get_Points_From_UString
      (Bit_String : UString; Cursor : in out Natural) return Natural
    is
-      Low  : constant Natural := Cursor;
-      High : constant Natural := Bit_String.Index (" ", From => Low);
+      Low  : Natural := Cursor;
+      High : Natural;
    begin
+      while Low <= Bit_String.Length and then Bit_String.Element (Low) = ' '
+      loop
+         Low := Low + 1;
+      end loop;
+
+      High := Bit_String.Index (" ", From => Low);
+
       if Low < High then
          Cursor := High;
          return
@@ -95,9 +102,9 @@ package body Hilbert.Bit_Stream is
 
    procedure Load_From_UString (Self : in out Bit_Stream_Type; Bits : UString)
    is
-      Cursor     : Natural := 1;
-      Chunk      : UString;
-      Item       : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
+      Cursor : Natural := 1;
+      Chunk  : UString;
+      Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
    begin
       loop
          case Get_Version is
@@ -117,6 +124,32 @@ package body Hilbert.Bit_Stream is
          Self.Append (Item);
       end loop;
    end Load_From_UString;
+
+   -------------------------------
+   -- Load_Answers_From_UString --
+   -------------------------------
+
+   procedure Load_Answers_From_UString
+     (Self : in out Bit_Stream_Type; Bits : UString)
+   is
+      Cursor : Natural := 1;
+      Chunk  : UString;
+      Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
+   begin
+      loop
+         case Get_Version is
+            when "25.12" | "26.10" =>
+               Chunk := Get_Next_Chunk_25_12 (Bits, Cursor);
+
+            when others            =>
+               Chunk := Get_Next_Chunk_0 (Bits, Cursor);
+         end case;
+         exit when Chunk = Null_UString;
+         Item.Bits := Chunk;
+         Item.Check_Validity;
+         Self.Append (Item);
+      end loop;
+   end Load_Answers_From_UString;
 
    --------------
    -- Write_To --

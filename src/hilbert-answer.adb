@@ -132,7 +132,7 @@ package body Hilbert.Answer is
          end if;
 
          --  Bit_Stream
-         Self.Bit_Stream.Load_From_UString
+         Self.Bit_Stream.Load_Answers_From_UString
            (To_UString (Line.Unbounded_Slice (From, Line.Length)));
       end if;
    end Read_25_12;
@@ -143,11 +143,16 @@ package body Hilbert.Answer is
 
    procedure Read (Self : out Answer_Type; End_Of_File : out Boolean) is
    begin
-      if Get_Version = "25.12" then
-         Read_25_12 (Self, End_Of_File);
-      else
-         Read_0 (Self, End_Of_File);
-      end if;
+      case Get_Version is
+         when Null_Version      =>
+            Read_0 (Self, End_Of_File);
+
+         when "25.12" | "26.10" =>
+            Read_25_12 (Self, End_Of_File);
+
+         when others            =>
+            raise Constraint_Error with "Unsupported version: " & Get_Version;
+      end case;
    end Read;
 
 end Hilbert.Answer;
