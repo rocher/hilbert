@@ -288,7 +288,7 @@ package body Hilbert.Grade is
             case Get_Version is
                when "26.10" =>
                   Score_F :=
-                    Float (Grade.Score) / Float (Batch_Item.Num_Points) * 10.0;
+                    Float (Grade.Score) / Float (Grade.Total_Points) * 10.0;
                   Score_N :=
                     Natural (Float'Truncation (Float'Rounding (Score_F)));
                   TIO.Put
@@ -296,7 +296,7 @@ package body Hilbert.Grade is
                      & "  "
                      & To_String (Format (Grade.Score, 3, '0'))
                      & "/"
-                     & To_String (Format (Batch_Item.Num_Points, 3, '0'))
+                     & To_String (Format (Grade.Total_Points, 3, '0'))
                      & "  "
                      & ASCII.ESC
                      & "[1;"
