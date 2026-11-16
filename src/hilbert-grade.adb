@@ -153,8 +153,7 @@ package body Hilbert.Grade is
                --  Valid items, matching bits, score depends on version
                case Get_Version is
                   when "26.10" =>
-                     Self.Score := Self.Score + Answer_Item.Points;
-                     Self.Total_Points := @ + Answer_Item.Points;
+                     Self.Score := Self.Score + Exam_Item.Points;
 
                   when others  =>
                      Self.Score := Self.Score + 1;
@@ -298,9 +297,14 @@ package body Hilbert.Grade is
                      & To_String (Format (Grade.Score, 3, '0'))
                      & "/"
                      & To_String (Format (Batch_Item.Num_Points, 3, '0'))
-                     & " "
-                     & Score_N'Image
-                     & " "
+                     & "  "
+                     & ASCII.ESC
+                     & "[1;"
+                     & (if Score_N >= 5 then "32" else "31")
+                     & "m"
+                     & To_String (Format (Score_N, 2))
+                     & ASCII.ESC
+                     & "[0m "
                      & Score_F'Image
                      & "  ");
 
