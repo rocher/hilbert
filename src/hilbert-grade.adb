@@ -299,9 +299,9 @@ package body Hilbert.Grade is
                      & To_String (Format (Grade.Total_Points, 3, '0'))
                      & "  "
                      & ASCII.ESC
-                     & "[1;"
-                     & (if Score_N >= 5 then "32" else "31")
-                     & "m"
+                     & "[38;5;"
+                     & (if Score_N >= 5 then "84" else "196")
+                     & ";1m"
                      & To_String (Format (Score_N, 2))
                      & ASCII.ESC
                      & "[0m "
