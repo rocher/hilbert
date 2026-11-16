@@ -1,6 +1,7 @@
 with Ada.Text_IO;
 
 with Hilbert.Constants; use Hilbert.Constants;
+with Hilbert.Version;   use Hilbert.Version;
 
 package body Hilbert.Batch is
 
@@ -8,9 +9,15 @@ package body Hilbert.Batch is
    -- Read --
    ----------
 
+   --  HV<=25.12
    --           111111111122222222223333333333444444444
    --  123456789012345678901234567890123456789012345678
    --  EXAM SMX1_DIG_RA2_202511/011 38 166/085/189 0001
+
+   --  HV>=26.10
+   --           1111111111222222222233333333334444
+   --  1234567890123456789012345678901234567890123
+   --  EXAM SMX1_DIG_RA2_202511/011 038 042 1 0001
 
    procedure Read (Self : out Batch_Type; Exams_Name : Exam_Name_Type) is
       Filename : constant String := Exams_Name & Batch_Suffix;
@@ -38,12 +45,27 @@ package body Hilbert.Batch is
             end if;
             Exam_Id : constant Exam_ID_Type := Exam_ID_Type'(Exam_Id_Str);
             Bit_Stream : Hilbert.Bit_Stream.Bit_Stream_Type;
-            Bit_Stream.Load_From_UString (To_UString (Line (45 .. Line'Last)));
-            Self.Map.Insert
-              (Key      => Exam_Id,
-               New_Item =>
-                 (Num_Items  => Positive'Value (Line (30 .. 31)),
-                  Bit_Stream => Bit_Stream));
+            case Get_Version is
+               when "26.10" =>
+                  Bit_Stream.Load_From_UString
+                    (To_UString (Line (38 .. Line'Last)));
+                  Self.Map.Insert
+                    (Key      => Exam_Id,
+                     New_Item =>
+                       (Num_Items  => Positive'Value (Line (30 .. 32)),
+                        Num_Points => Positive'Value (Line (34 .. 36)),
+                        Bit_Stream => Bit_Stream));
+
+               when others  =>
+                  Bit_Stream.Load_From_UString
+                    (To_UString (Line (45 .. Line'Last)));
+                  Self.Map.Insert
+                    (Key      => Exam_Id,
+                     New_Item =>
+                       (Num_Items  => Positive'Value (Line (30 .. 31)),
+                        Num_Points => 0,
+                        Bit_Stream => Bit_Stream));
+            end case;
          end if;
       end loop;
       Ada.Text_IO.Close (In_File);

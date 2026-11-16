@@ -5,6 +5,9 @@ package Hilbert.Bit_Stream_Item is
    use all type UString;
 
    type Bit_Stream_Item_Type is record
+      Points : Natural := 0;
+      --  The number of points associated with the item.
+
       Bits : UString := Null_UString;
       --  The bit string representing the item, consisting of '0' and '1'
       --  characters.

@@ -26,7 +26,8 @@ package Hilbert.CLI.Grade is
    is (AAA.Strings.Empty_Vector.Append
          ("Grade a collection of exams from a set of answers. ")
          .New_Line
-         .Append ("CLASS_EXAM is <CLASS>_<MODULE>_<RA>_<DATE>. For example, 'SMX1B_MUN_RA8_202511'. Answers are expected to be in a file named <CLASS_EXAM>_Answers.txt. Grades are produced using the correct answers in <EXAM>_Batch.txt and the results will be written to <GROUP_EXAMS>_Grades.txt, being <EXAM> SMX1_MUN_RA8_202511 for this example.")
+         .Append
+            ("CLASS_EXAM is <CLASS>_<MODULE>_<RA>_<DATE>. For example, 'SMX1B_MUN_RA8_202511'. Answers are expected to be in a file named <CLASS_EXAM>_Answers.txt. Grades are produced using the correct answers in <EXAM>_Batch.txt and the results will be written to <GROUP_EXAMS>_Grades.txt, being <EXAM> SMX1_MUN_RA8_202511 for this example.")
          .New_Line
          .Append
             ("Please visit https://rocher.github.io/hilbert for a complete reference.")
@@ -49,8 +50,9 @@ package Hilbert.CLI.Grade is
 private
 
    type Cmd_Type is new CLIC.Subcommand.Command with record
-      Pool_Name : UString := Null_UString;
-      Date      : aliased GNAT.Strings.String_Access := null;
+      Hilbert_Version : aliased GNAT.Strings.String_Access := null;
+      Pool_Name       : UString := Null_UString;
+      Date            : aliased GNAT.Strings.String_Access := null;
    end record;
 
 end Hilbert.CLI.Grade;

@@ -49,8 +49,9 @@ package body Hilbert.Bit_Stream is
       --  find end of binary chunk
       High : Natural := Low;
       while High <= Bit_String.Length
-        and then ((Bit_String.Element (High) = '0'
-                   or else Bit_String.Element (High) = '1'))
+        and then
+          ((Bit_String.Element (High) = '0'
+            or else Bit_String.Element (High) = '1'))
       loop
          High := High + 1;
       end loop;
@@ -61,22 +62,55 @@ package body Hilbert.Bit_Stream is
       return Bit_String.Unbounded_Slice (Low, High);
    end Get_Next_Chunk_25_12;
 
+   -----------------------------
+   -- Get_Points_From_UString --
+   -----------------------------
+
+   function Get_Points_From_UString
+     (Bit_String : UString; Cursor : in out Natural) return Natural
+   is
+      Low  : constant Natural := Cursor;
+      High : constant Natural := Bit_String.Index (" ", From => Low);
+   begin
+      if Low < High then
+         Cursor := High;
+         return
+           Natural'Value
+             (Hilbert.Strings.To_String
+                (Bit_String.Unbounded_Slice (Low, High - 1)));
+      elsif Low < Bit_String.Length and then High = 0 then
+         Cursor := Bit_String.Length;
+         return
+           Natural'Value
+             (Hilbert.Strings.To_String
+                (Bit_String.Unbounded_Slice (Low, Bit_String.Length)));
+      else
+         return 0;
+      end if;
+   end Get_Points_From_UString;
+
    -----------------------
    -- Load_From_UString --
    -----------------------
 
    procedure Load_From_UString (Self : in out Bit_Stream_Type; Bits : UString)
    is
-      Cursor : Natural := 1;
-      Chunk  : UString;
-      Item   : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
+      Cursor     : Natural := 1;
+      Chunk      : UString;
+      Item       : Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type;
    begin
       loop
-         if Get_Version = "25.12" then
-            Chunk := Get_Next_Chunk_25_12 (Bits, Cursor);
-         else
-            Chunk := Get_Next_Chunk_0 (Bits, Cursor);
-         end if;
+         case Get_Version is
+            when "26.10" =>
+               Item.Points := Get_Points_From_UString (Bits, Cursor);
+               Chunk := Get_Next_Chunk_25_12 (Bits, Cursor);
+
+            when "25.12" =>
+               Chunk := Get_Next_Chunk_25_12 (Bits, Cursor);
+
+            when others  =>
+               Chunk := Get_Next_Chunk_0 (Bits, Cursor);
+         end case;
          exit when Chunk = Null_UString;
          Item.Bits := Chunk;
          Item.Check_Validity;

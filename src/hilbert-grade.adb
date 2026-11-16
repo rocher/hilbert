@@ -129,6 +129,7 @@ package body Hilbert.Grade is
       Self.Match := Null_CSV_String;
       Self.Score := 0;
       Self.Total_Valid := Self.Exam.Num_Items;
+      Self.Total_Points := 0;
 
       for I in 1 .. Min_Items loop
          Answer_Item : constant Hilbert.Bit_Stream_Item.Bit_Stream_Item_Type :=
@@ -139,11 +140,25 @@ package body Hilbert.Grade is
          if Answer_Item.Bits.Length = Exam_Item.Bits.Length then
             if Item_Is_Invalid (Exam_Item) then
                --  Invalid item, no score
-               Self.Total_Valid := Self.Total_Valid - 1;
+               case Get_Version is
+                  when "26.10" =>
+                     Self.Total_Points := Self.Total_Points - Exam_Item.Points;
+
+                  when others  =>
+                     Self.Total_Valid := Self.Total_Valid - 1;
+               end case;
                Self.Match.Append_Field
                  (To_UString ("i" & Exam_Item.Bits.To_String));
             elsif Answer_Item.Bits = Exam_Item.Bits then
-               Self.Score := Self.Score + 1;
+               --  Valid items, matching bits, score depends on version
+               case Get_Version is
+                  when "26.10" =>
+                     Self.Score := Self.Score + Answer_Item.Points;
+                     Self.Total_Points := @ + Answer_Item.Points;
+
+                  when others  =>
+                     Self.Score := Self.Score + 1;
+               end case;
                Self.Match.Append_Field
                  (To_UString ("G" & Answer_Item.Bits.To_String));
             else
@@ -268,19 +283,43 @@ package body Hilbert.Grade is
             Grade.Grade_Answer (Answer, Batch_Item);
             Grade.Write;
 
-            Score_F : constant Float :=
-              Float (Grade.Score) / Float (Grade.Total_Valid) * 10.0;
-            Score_N : constant Natural :=
-              Natural (Float'Truncation (Float'Rounding (Score_F)));
-            TIO.Put
-              (Answer.Exam_Id
-               & "  "
-               & To_String (Format (Grade.Score, 2))
-               & " "
-               & Score_N'Image
-               & " "
-               & Score_F'Image
-               & "  ");
+            Score_F : Float;
+            Score_N : Natural;
+
+            case Get_Version is
+               when "26.10" =>
+                  Score_F :=
+                    Float (Grade.Score) / Float (Grade.Total_Points) * 10.0;
+                  Score_N :=
+                    Natural (Float'Truncation (Float'Rounding (Score_F)));
+                  TIO.Put
+                    (Answer.Exam_Id
+                     & "  " & Get_Version & ":"
+                     & To_String (Format (Grade.Score, 3))
+                     & "/"
+                     & To_String (Format (Grade.Total_Points, 3))
+                     & " "
+                     & Score_N'Image
+                     & " "
+                     & Score_F'Image
+                     & "  ");
+
+               when others  =>
+                  Score_F :=
+                    Float (Grade.Score) / Float (Grade.Total_Valid) * 10.0;
+                  Score_N :=
+                    Natural (Float'Truncation (Float'Rounding (Score_F)));
+                  TIO.Put
+                    (Answer.Exam_Id
+                     & "  " & Get_Version & ":"
+                     & To_String (Format (Grade.Score, 2))
+                     & " "
+                     & Score_N'Image
+                     & " "
+                     & Score_F'Image
+                     & "  ");
+            end case;
+
             WIO.Put (To_BWString (Answer.Email));
             TIO.New_Line;
          end if;

@@ -5,6 +5,7 @@ with Simple_Logging;
 
 with Hilbert.Grade;
 with Hilbert.Types;
+with Hilbert.Version; use Hilbert.Version;
 
 package body Hilbert.CLI.Grade is
 
@@ -19,7 +20,14 @@ package body Hilbert.CLI.Grade is
      (Cmd    : in out Cmd_Type;
       Config : in out CLIC.Subcommand.Switches_Configuration) is
    begin
-      null;
+      Define_Switch
+        (Config,
+         Cmd.Hilbert_Version'Access,
+         Switch      => "",
+         Long_Switch => "--hv=",
+         Help        =>
+           "Hilbert version to use (default: " & Default_Version & ")",
+         Argument    => "yy.mm");
    end Setup_Switches;
 
    -------------
@@ -37,6 +45,16 @@ package body Hilbert.CLI.Grade is
       end loop;
       Log.Debug ("Arg_Num =" & Arg_Num'Image);
 
+      Log.Debug ("HV: " & Cmd.Hilbert_Version.all'Image);
+      if Cmd.Hilbert_Version.all = "" then
+         Log.Debug ("Using default Hilbert version: " & Default_Version);
+         Set_Version (Default_Version);
+      else
+         Log.Debug
+           ("Using specified Hilbert version: " & Cmd.Hilbert_Version.all);
+         Set_Version (Cmd.Hilbert_Version.all);
+      end if;
+
       if Arg_Num < 1 then
          Log.Error ("Class exam name is missing.");
          GNAT.OS_Lib.OS_Exit (1);
@@ -51,6 +69,7 @@ package body Hilbert.CLI.Grade is
          GNAT.OS_Lib.OS_Exit (1);
       end if;
 
+      Log.Debug ("Using Hilbert version: " & Get_Version);
       Log.Debug ("Grading exams " & Class_Exam_Name & "...");
       Hilbert.Grade.Grade_Class_Exam (Class_Exam_Name);
    end Execute;

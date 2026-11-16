@@ -15,6 +15,9 @@ package Hilbert.Batch is
       Num_Items : Positive;
       --  The number of items in the Bit_Stream.
 
+      Num_Points : Natural;
+      --  The total number of points in the Bit_Stream.
+
       Bit_Stream : Hilbert.Bit_Stream.Bit_Stream_Type;
       --  The Bit_Stream of the exam.
    end record;

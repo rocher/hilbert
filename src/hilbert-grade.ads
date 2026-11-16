@@ -57,9 +57,15 @@ package Hilbert.Grade is
       --  matching bits.
 
       Total_Valid : Natural;
-      --  Total number of valid items. Invalid items are ignored when grading
-      --  exams. This is used to compute the final score over 10, which is
-      --  calculated as (Score / Total_Valid) * 10.
+      --  HV<=25.12: Total number of valid items. Invalid items are ignored
+      --  when grading exams. This is used to compute the final score over 10,
+      --  which is calculated as (Score / Total_Valid) * 10.
+
+      Total_Points : Natural;
+      --  HV>=26.10: Total number of points. This is used to compute the final
+      --  score according to the points assigned to each item, which is
+      --  calculated as (Score / Total_Points) * 10.
+
    end record;
    pragma Style_Checks (Off);
    --  Represents the grading information for a single Bit_Stream_Item (exam
