@@ -49,6 +49,19 @@ package Hilbert.Item is
       --  reprint the exams, but remember to regenerate the exams to grade
       --  them correctly. Invalid items are not included in the pool when
       --  generating exams.
+
+      First : Boolean := False;
+      --  Indicates whether the item must be the first item in the exam. If
+      --  there are multiple items with this flag set to True, they will be
+      --  put in second, third, etc. position in the exam, in the order they
+      --  appear in the shuffled exam.
+
+      Last : Boolean := False;
+      --  Indicates whether the item must be the last item in the exam. If
+      --  there are multiple items with this flag set to True, they will be
+      --  put in second to last, third to last, etc. position in the exam
+      --  (before the last item), in the order they appear in the shuffled
+      --  exam.
    end record;
 
    type Options_Type is array (Num_Options_Type) of Option_Type;

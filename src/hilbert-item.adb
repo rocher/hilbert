@@ -54,6 +54,10 @@ package body Hilbert.Item is
                end if;
             elsif Flag = "invalid" then
                Self.Flags.Invalid := True;
+            elsif Flag = "first" then
+               Self.Flags.First := True;
+            elsif Flag = "last" then
+               Self.Flags.Last := True;
             else
                raise Constraint_Error
                  with
@@ -112,7 +116,9 @@ package body Hilbert.Item is
            (Figure  => Null_UWString,
             VSpace  => Null_UWString,
             Group   => Null_UWString,
-            Invalid => False));
+            Invalid => False,
+            First   => False,
+            Last    => False));
 
       declare
          WChar : Wide_Character;

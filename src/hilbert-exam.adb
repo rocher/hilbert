@@ -2,7 +2,11 @@ with Hilbert.Convert; use Hilbert.Convert;
 with Hilbert.Random;  use Hilbert.Random;
 with Hilbert.Version; use Hilbert.Version;
 
+with Simple_Logging;
+
 package body Hilbert.Exam is
+
+   package Log renames Simple_Logging;
 
    use Hilbert.Item.Item_Map_Package;
 
@@ -88,6 +92,38 @@ package body Hilbert.Exam is
             Index2 : constant Positive := Random_Index (Num_Items);
          begin
             New_Exam.Items.Swap (Index1, Index2);
+         end;
+      end loop;
+
+      --  Put the items flagged '--first' at the beginning of the exam and the
+      --  items flagged '--last' at the end of the exam. The remaining items
+      --  will be in the middle.
+      Log.Debug ("Reordering items in the exam.");
+      First : Positive := 1;
+      Last : Positive := Num_Items;
+      for I in 1 .. Num_Items loop
+         declare
+            Item : constant Hilbert.Item.Item_Type :=
+              New_Exam.Items.Element (I);
+         begin
+            if Item.Flags.First and then I > First then
+               Log.Debug
+                 ("Item marked as first in group, swap"
+                  & I'Image
+                  & " <--> "
+                  & First'Image);
+               New_Exam.Items.Swap (I, First);
+               First := @ + 1;
+            end if;
+            if Item.Flags.Last and then I < Last then
+               Log.Debug
+                 ("Item marked as last in group, swap"
+                  & I'Image
+                  & " <--> "
+                  & Last'Image);
+               New_Exam.Items.Swap (I, Last);
+               Last := @ - 1;
+            end if;
          end;
       end loop;
 
