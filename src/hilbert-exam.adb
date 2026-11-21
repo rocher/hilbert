@@ -101,31 +101,63 @@ package body Hilbert.Exam is
       Log.Debug ("Reordering items in the exam.");
       First : Positive := 1;
       Last : Positive := Num_Items;
-      for I in 1 .. Num_Items loop
-         declare
+
+      --  Skip the first item if it is flagged '--first' and the last item if
+      --  it is flagged '--last'.
+      loop
+         exit when
+           First = Last or else not New_Exam.Items.Element (First).Flags.First;
+         Log.Debug ("First item is flagged '--first', skipping.");
+         First := First + 1;
+      end loop;
+      loop
+         exit when
+           Last = First or else not New_Exam.Items.Element (Last).Flags.Last;
+         Log.Debug ("Last item is flagged '--last', skipping.");
+         Last := Last - 1;
+      end loop;
+
+      if First = Last then
+         Log.Debug
+           ("All items are ordered according to the flags "
+            & "'--first' or '--last', no reordering needed.");
+         return New_Exam;
+      else
+         I : Natural := First;
+         Has_Swapped : Boolean := True;
+         loop
+            exit when I = Last;
+            Has_Swapped := False;
             Item : constant Hilbert.Item.Item_Type :=
               New_Exam.Items.Element (I);
-         begin
             if Item.Flags.First and then I > First then
                Log.Debug
-                 ("Item marked as first in group, swap"
+                 ("Item marked as first in group, swap I"
                   & I'Image
-                  & " <--> "
+                  & " <--> First"
                   & First'Image);
                New_Exam.Items.Swap (I, First);
                First := @ + 1;
+               Has_Swapped := True;
             end if;
             if Item.Flags.Last and then I < Last then
                Log.Debug
-                 ("Item marked as last in group, swap"
+                 ("Item marked as last in group, swap I"
                   & I'Image
-                  & " <--> "
+                  & " <--> Last"
                   & Last'Image);
                New_Exam.Items.Swap (I, Last);
                Last := @ - 1;
+               Has_Swapped := True;
             end if;
-         end;
-      end loop;
+            if Has_Swapped then
+               --  If we swapped, we need to check the new item at this index.
+               null;
+            else
+               I := @ + 1;
+            end if;
+         end loop;
+      end if;
 
       --  Renumber the items in New_Exam sequentially from 1 to Num_Items.
       for I in 1 .. Num_Items loop
