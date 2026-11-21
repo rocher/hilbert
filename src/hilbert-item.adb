@@ -160,7 +160,9 @@ package body Hilbert.Item is
                     Self.Question.Slice (2, Self.Question.Length - 1);
 
                   --  Check if the external item file exists
-                  if not Ada.Directories.Exists (To_String (File_Name)) then
+                  if not Ada.Directories.Exists
+                           ("tex/" & To_String (File_Name))
+                  then
                      raise Constraint_Error
                        with
                          "line"
