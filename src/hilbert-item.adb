@@ -171,19 +171,6 @@ package body Hilbert.Item is
                          & To_String (File_Name)
                          & "' does not exist.";
                   end if;
-
-                  --  Opena and read the external item file
-                  Item_File : WIO.File_Type;
-                  Item_File.Open
-                    (Name => To_String (File_Name), Mode => WIO.In_File);
-                  Self.Question := Null_UWString;
-                  loop
-                     exit when Item_File.End_Of_File;
-                     Line : constant BWString := Item_File.Get_Line;
-                     if Line'Length > 0 then
-                        Self.Question.Append (To_UWString (Line & " "));
-                     end if;
-                  end loop;
                end if;
 
             when others  =>
