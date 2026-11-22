@@ -269,16 +269,16 @@ package body Hilbert.Item is
       Has_Flags : Boolean := False;
    begin
       Out_File.Put
-        (To_BWString ("{\bf ") & Trim (Self.Number) & To_BWString ("} "));
+        (Trim (Self.Number));
 
       case Get_Version is
          when "26.10" =>
             Out_File.Put_Line
               (To_BWString (Self.Question)
-               & To_BWString (" {\bf (")
+               & To_BWString (" (")
                & Trim (Self.Points)
                & To_BWString (if Self.Points = 1 then " punt" else " punts")
-               & To_BWString (")}"));
+               & To_BWString (")"));
 
          when others  =>
             Out_File.Put_Line (To_BWString (Self.Question));
