@@ -268,7 +268,7 @@ package body Hilbert.Item is
    is
       Has_Flags : Boolean := False;
    begin
-      Out_File.Put (Trim (Self.Number));
+      Out_File.Put (Trim (Self.Number) & To_BWString (" "));
 
       case Get_Version is
          when "26.10" =>
