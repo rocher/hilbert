@@ -126,7 +126,7 @@ package body Hilbert.Exam is
          I : Natural := First;
          Has_Swapped : Boolean := True;
          loop
-            exit when I = Last;
+            exit when I > Last;
             Has_Swapped := False;
             Item : constant Hilbert.Item.Item_Type :=
               New_Exam.Items.Element (I);
